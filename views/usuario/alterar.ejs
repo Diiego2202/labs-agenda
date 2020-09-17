@@ -1,0 +1,85 @@
+﻿
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+		<form id="form" class="panel panel-default" action="#">
+			<div class="panel-heading">Informações do Usuário</div>
+			<div class="panel-body no-bottom">
+				<input type="hidden" id="id" name="id" value="<%=(item ? item.id : 0) %>" />
+				<div class="form-group">
+					<label for="login">Login</label>
+					<input id="login" name="login" maxlength="100" class="form-control upper" type="text" spellcheck="false" value="<%=(item ? item.login : '') %>" <%=(item ? 'readonly="readonly"' : '') %> />
+				</div>
+				<div class="form-group">
+					<label for="nome">Nome</label>
+					<input id="nome" name="nome" maxlength="100" class="form-control upper" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+				</div>
+				<div class="form-group">
+					<label for="idperfil">Perfil</label>
+					<select id="idperfil" name="idperfil" class="form-control" size="1">
+						<option value="">SELECIONE...</option>
+						<% for (let i = 0; i < perfis.length; i++) { %>
+						<option value="<%= perfis[i].id %>" <%-((item && item.idperfil === perfis[i].id) ? 'selected="selected"' : '') %>><%= perfis[i].nome %></option>
+						<% } %>
+					</select>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<input value="<%=(item ? 'Salvar Alterações' : 'Criar Usuário') %>" class="btn btn-primary btn-lg btn-block" type="submit" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<%- contentFor("scripts") %>
+<script type="text/javascript">
+	//<![CDATA[
+	"use strict";
+
+	$("#form").validate({
+		rules: {
+			login: {
+				required: true,
+				minlength: 3,
+				maxlength: 100
+			},
+			nome: {
+				required: true,
+				minlength: 3,
+				maxlength: 100
+			},
+			idperfil: {
+				required: true
+			}
+		},
+
+		submitHandler: function (form) {
+			if (JsonWebApi.active)
+				return;
+
+			Notification.wait();
+
+			//<% if (item) { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/usuario/alterar", form, function (response) {
+				if (response.success)
+					Notification.success("Usuário alterado com sucesso! " + emoji.happy);
+				else
+					Notification.error(response.value, true);
+			});
+
+			//<% } else { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/usuario/criar", form, function (response) {
+				if (response.success) {
+					resetForm("#form");
+					Notification.success("Usuário criado com sucesso (senha padrão: 1234)! " + emoji.happy);
+				} else {
+					Notification.error(response.value, true);
+				}
+			});
+
+			//<% } %>
+		}
+	});
+	//]]>
+</script>

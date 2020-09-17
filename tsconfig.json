@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "lib": ["es2017", "DOM"],
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules",
+    "public",
+    "scripts_sql",
+    "views"
+  ]
+}

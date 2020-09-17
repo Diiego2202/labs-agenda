@@ -1,0 +1,24 @@
+﻿<form method="post" action="<%- root %>/login">
+	<div style="max-width: 400px; margin: 0 auto; padding: 5% 15px 50px;">
+		<div class="panel panel-default no-margin-bottom">
+			<div class="panel-body">
+				<div class="col-xs-space-bottom">
+					<img alt="Agenda da Pós" src="<%- root %>/imagens/logo.png" style="max-width: 100%;" />
+				</div>
+				<hr />
+				<div class="form-group">
+					<label for="login">Usuário</label>
+					<input name="login" type="text" id="login" class="form-control text-uppercase" spellcheck="false" />
+				</div>
+				<div class="form-group">
+					<label for="senha">Senha</label>
+					<input name="senha" type="password" id="senha" class="form-control" />
+				</div>
+				<% if (mensagem) { %>
+				<div class="alert alert-danger"><%=mensagem %></div>
+				<% } %>
+				<input type="submit" value="Login" class="btn btn-primary btn-block" />
+			</div>
+		</div>
+	</div>
+</form>
