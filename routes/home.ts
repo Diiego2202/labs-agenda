@@ -1,5 +1,7 @@
 ﻿import express = require("express");
 import wrap = require("express-async-error-wrapper");
+import DataUtil = require("../utils/dataUtil");
+import Evento = require("../models/evento");
 import Usuario = require("../models/usuario");
 import appsettings = require("../appsettings");
 
@@ -10,7 +12,16 @@ router.all("/", wrap(async (req: express.Request, res: express.Response) => {
 	if (!u) {
 		res.redirect(appsettings.root + "/login");
 	} else {
-		res.render("home/dashboard", { titulo: "Dashboard", usuario: u });
+		let lista = await Evento.listarHoje();
+
+		let opcoes = {
+			titulo: "Dashboard",
+			usuario: u,
+			lista: lista,
+			hoje: DataUtil.hojeISO()
+		};
+
+		res.render("home/dashboard", opcoes);
 	}
 }));
 

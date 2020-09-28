@@ -27,3 +27,13 @@ CREATE TABLE usuario (
 );
 
 INSERT INTO usuario (login, nome, idperfil, senha, token, criacao) VALUES ('ADMIN', 'ADMINISTRADOR', 1, 'peTcC99vkvvLqGQL7mdhGuJZIvL2iMEqvCNvZw3475PJ:JVyo1Pg2HyDyw9aSOd3gNPT30KdEyiUYCjs7RUzSoYGN', NULL, NOW());
+
+CREATE TABLE evento (
+  id int NOT NULL AUTO_INCREMENT,
+  nome varchar(50) NOT NULL,
+  inicio datetime NOT NULL,
+  termino datetime NOT NULL,
+  PRIMARY KEY (id),
+  KEY evento_inicio_termino_ix (inicio, termino),
+  KEY evento_termino_ix (termino)
+);

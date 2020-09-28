@@ -1,13 +1,22 @@
-
-export = function converterDataISO(data: string): string {
-	if (!data || !(data = data.trim()) || data.length > 10)
+function converterEventos(eventos) {
+	if (!eventos)
 		return null;
-	let b1 = data.indexOf("/");
-	let b2 = data.lastIndexOf("/");
-	let dia: number, mes: number, ano: number;
+	for (var i = 0; i < eventos.length; i++) {
+		eventos[i].title = eventos[i].nome;
+		eventos[i].start = eventos[i].inicio;
+		eventos[i].end = eventos[i].termino;
+	}
+}
+
+function converterDataISO(data) {
+	if (!data || !(data = trim(data)) || data.length > 10)
+		return null;
+	var b1 = data.indexOf("/");
+	var b2 = data.lastIndexOf("/");
+	var dia, mes, ano;
 	if (b1 <= 0 || b2 <= b1) {
-		let b1 = data.indexOf("-");
-		let b2 = data.lastIndexOf("-");
+		var b1 = data.indexOf("-");
+		var b2 = data.lastIndexOf("-");
 		if (b1 <= 0 || b2 <= b1)
 			return null;
 		ano = parseInt(data.substring(0, b1));

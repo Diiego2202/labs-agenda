@@ -12,13 +12,52 @@
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-body text-center">
+				<h2 class="no-margin-top col-xs-space-bottom"><i class="fa fa-calendar"></i>Resumo de Hoje</h2>
+
+				<div id="calendario"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <%- contentFor("scripts") %>
 <script type="text/javascript">
 	"use strict";
+
 	var url = location.href, i = url.lastIndexOf("/"), aLink = document.getElementById("aLink");
 	url += ((i !== (url.length - 1)) ? "/hoje" : "hoje");
 	document.getElementById("btnLink").setAttribute("data-clipboard-text", url);
 	aLink.setAttribute("href", url);
 	aLink.textContent = url.substr(url.indexOf("://") + 3);
 	prepareCopyHandler();
+
+	var eventos = <%- JSON.stringify(lista) %>;
+
+	converterEventos(eventos);
+
+	var opcoesCalendario = {
+		headerToolbar: {
+			left: "",
+			center: "title",
+			right: ""
+		},
+		initialDate: "<%= hoje %>",
+		initialView: "timeGridDay",
+		locale: "pt-br",
+		buttonIcons: false,
+		weekNumbers: false,
+		navLinks: false,
+		editable: false,
+		dayMaxEvents: true,
+		events: eventos
+	};
+
+	var calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
+
+	calendario.render();
+
 </script>
