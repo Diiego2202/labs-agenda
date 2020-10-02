@@ -76,6 +76,8 @@ create table evento_turma(
     primary key (id_evento, id_turma)
 );
 
+-- COMENTÁRIO AQUI
+
 
 
 -- insert into evento(nome, inicio, termino) values
