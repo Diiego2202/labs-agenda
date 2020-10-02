@@ -49,11 +49,6 @@ create table sala(
     andar_sala int
 );
 
-create table professor(
-	id_prof int primary key auto_increment,
-    nome_prof varchar(45)
-);
-
 create table evento_prof(
 	id_prof int not null, 
 	foreign key(id_prof) references professor(id_prof),
