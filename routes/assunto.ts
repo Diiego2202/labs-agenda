@@ -11,7 +11,7 @@ router.all("/criar", wrap(async (req: express.Request, res: express.Response) =>
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else
-		res.render("assunto/alterar", { titulo: "Criar Assunto", usuario: u, item: null });
+		res.render("assunto/alterar", { titulo: "Criar Evento", usuario: u, item: null });
 }));
 
 router.all("/alterar", wrap(async (req: express.Request, res: express.Response) => {
@@ -24,7 +24,7 @@ router.all("/alterar", wrap(async (req: express.Request, res: express.Response) 
 		if (isNaN(id) || !(item = await Assunto.obter(id)))
 			res.render("home/nao-encontrado", { usuario: u });
 		else
-			res.render("assunto/alterar", { titulo: "Editar Assunto", usuario: u, item: item });
+			res.render("assunto/alterar", { titulo: "Editar Evento", usuario: u, item: item });
 	}
 }));
 
@@ -33,7 +33,7 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else
-		res.render("assunto/listar", { titulo: "Gerenciar Assuntos", usuario: u, lista: JSON.stringify(await Assunto.listar()) });
+		res.render("assunto/listar", { titulo: "Gerenciar Eventos", usuario: u, lista: JSON.stringify(await Assunto.listar()) });
 }));
 
 export = router;
