@@ -14,7 +14,7 @@ export = class Evento {
 		let lista: Evento[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = (await sql.query("select id, nome, date_format(inicio, '%Y-%m-%dT%T') inicio, date_format(termino, '%Y-%m-%dT%T') termino from evento where inicio <= ? and termino >= ?", [fimDiaHoje, inicioDiaHoje])) as Evento[];
+			lista = (await sql.query("select id_evento, nome_evento, date_format(inicio_evento, '%Y-%m-%dT%T') inicio_evento, date_format(termino_evento, '%Y-%m-%dT%T') termino_evento from evento where inicio_evento <= ? and termino_evento >= ?", [fimDiaHoje, inicioDiaHoje])) as Evento[];
 		});
 
 		//if (lista !== null) {
