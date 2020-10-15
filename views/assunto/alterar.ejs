@@ -5,25 +5,55 @@
 			<div class="panel-body no-bottom">
 				<input type="hidden" id="id" name="id" value="<%=(item ? item.id : 0) %>" />
 				<div class="form-group">
+					<div style = "
+						margin-bottom: 2.5vh;
+					" >
 						<label for="nome">Nome</label>
 						<input id="nome" name="nome" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
-
-					<div id="horario">
-						<label for="horaInicio">Horário de Início</label>
-						<input id="horaInicio" name="horaInicio" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
-						<label for="horaTermino">Horário de Término</label>
-						<input id="horaTermino" name="horaTermino" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
 					</div>
 
-					<div id="sala_turma">
-						<label for="sala">Sala</label>
-						<input id="sala" name="sala" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
-						<label for="turma">Turma</label>
-						<input id="turma" name="turma" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+					<div style = "
+						display: flex;
+						justify-content: space-between;
+						margin-bottom: 2.5vh;
+					" >
+						<div>
+							<label for="inicio">Início</label>
+							<input type="datetime-local" id="inicio" name="inicio" min="08:00" max="22:00" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.nome : '') %>" required>
+						</div>
+
+						<div>
+							<label for="termino">Término</label>
+							<input type="datetime-local" id="termino" name="termino" min="08:00" max="22:00" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.nome : '') %>" required>
+						</div>
 					</div>
 
-					<label for="professor">Professor</label>
-					<input id="professor" name="professor" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+					<div style = "
+						display: flex;
+						justify-content: space-between;
+						margin-bottom: 2.5vh;
+					" >
+						<div>
+							<label for="sala">Sala</label>
+							<input id="sala" name="sala" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" style = "
+								width: 11.6vw;
+							" />
+						</div>
+
+						<div>
+							<label for="turma">Turma</label>
+							<input id="turma" name="turma" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" style = "
+								width: 11.6vw;
+							" />
+						</div>
+					</div>
+
+					<div style = "
+						margin-bottom: 2.5vh;
+					" >
+						<label for="professor">Professor</label>
+						<input id="professor" name="professor" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+					</div>
 				</div>
 			</div>
 			<div class="panel-footer">
