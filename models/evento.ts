@@ -29,28 +29,24 @@ export = class Evento {
 	}
 
 	public static  validar(evento: Evento): string{
-		if(!evento){
-			return "Dados inválidos";
-		}
-		if(!evento.nome_evento || evento.nome_evento.length>50){
-			return "Nome inválido";
-		}
-		if(!evento.desc_evento || evento.desc_evento.length>50){
-			return "Descrição Inválida";
-		}
-		if(!evento.inicio_evento ){
-			//validação de data será aqui?
-			return "Data de Início inválida"
-		}
-		if(!evento.termino_evento ){
-			//validação de data será aqui?
-			return "Data de Término inválida"
-		}
+		// if(!evento){
+		// 	return "Dados inválidos";
+		// }
+		// if(!evento.nome_evento || evento.nome_evento.length>50){
+		// 	return "Nome inválido";
+		// }
+		// if(!evento.desc_evento || evento.desc_evento.length>50){
+		// 	return "Descrição Inválida";
+		// }
+		// if(!evento.inicio_evento ){
+		// 	//validação de data será aqui?
+		// 	return "Data de Início inválida"
+		// }
+		// if(!evento.termino_evento ){
+		// 	//validação de data será aqui?
+		// 	return "Data de Término inválida"
+		// }
 		
-
-
-
-
 		return null;
 	}
 

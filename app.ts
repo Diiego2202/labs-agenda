@@ -99,10 +99,10 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 
 // Cadastros simples
 app.use("/", require("./routes/home"));
-app.use("/assunto", require("./routes/assunto"));
+app.use("/evento", require("./routes/evento"));
 app.use("/usuario", require("./routes/usuario"));
 // API
-app.use("/api/assunto", require("./routes/api/assunto"));
+app.use("/api/evento", require("./routes/api/evento"));
 app.use("/api/usuario", require("./routes/api/usuario"));
 
 // Depois de registrados todos os caminhos das rotas e seus

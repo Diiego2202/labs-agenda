@@ -38,7 +38,7 @@
 		order: [[1, "asc"]],
 		deferRender: true,
 		columns: [
-			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/assunto/alterar?id=" + row.id + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
+			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/evento/alterar?id=" + row.id + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
 			{ title: "Id", "class": "col-min text-right", "type": "number", data: "id" },
 			{ title: "Nome", render: encode, data: "nome" },
 			{ title: "Criação", "class": "col-min text-right", "type": "customdateint", data: "criacao" }
@@ -53,10 +53,10 @@
 		if (JsonWebApi.active)
 			return;
 
-		var assunto = tabela.row(trClicada = this.parentNode.parentNode).data();
+		var evento = tabela.row(trClicada = this.parentNode.parentNode).data();
 
 		if (this.getAttribute("data-excluir")) {
-			$("#lblNome").text(assunto.nome);
+			$("#lblNome").text(evento.nome);
 
 			$("#modalExcluir").modal({
 				backdrop: "static",
@@ -71,11 +71,11 @@
 
 		$("#modalExcluir").modal("hide");
 
-		var assunto = tabela.row(trClicada).data();
+		var evento = tabela.row(trClicada).data();
 
 		Notification.wait();
 
-		JsonWebApi.get("<%- root %>/api/assunto/excluir", function (response) {
+		JsonWebApi.get("<%- root %>/api/evento/excluir", function (response) {
 			if (response.success) {
 				Notification.success("Evento excluído com sucesso! " + emoji.happy);
 				tabela.row(trClicada).remove().draw();
@@ -83,7 +83,7 @@
 				Notification.error(response.value, true);
 			}
 			trClicada = null;
-		}, "id", assunto.id);
+		}, "id", evento.id);
 	}
 
 	//]]>
