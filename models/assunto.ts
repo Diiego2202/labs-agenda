@@ -43,7 +43,7 @@ export = class Assunto {
 				await sql.query("insert into assunto (nome, criacao) values (?, now())", [a.nome]);
 			} catch (e) {
 			if (e.code && e.code === "ER_DUP_ENTRY")
-				res = `O evento ${a.nome} já existe`;
+				res = `O evento ${a.nome} já existe`; 
 			else
 				throw e;
 			}

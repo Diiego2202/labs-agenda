@@ -1,3 +1,4 @@
+drop database agendapos;
 CREATE DATABASE IF NOT EXISTS agendapos;
 USE agendapos;
 
@@ -80,10 +81,10 @@ create table evento_turma(
 
 
 
--- insert into evento(nome_evento, inicio_evento, termino_evento) values
--- ('ev1', '2020-10-02T08:00', '2020-10-02T09:00'),
--- ('ev2', '2020-10-02T08:00', '2020-10-02T09:00'),
--- ('ev3', '2020-10-02T10:00', '2020-10-02T09:00');
+ insert into evento(nome_evento, desc_evento, inicio_evento, termino_evento) values
+ ('ev1', 'Descrição resumida do evento' ,'2020-10-02T08:00', '2020-10-02T09:00'),
+ ('ev2', 'Descrição resumida do evento' , '2020-10-02T08:00', '2020-10-02T09:00'),
+ ('ev3', 'Descrição resumida do evento' , '2020-10-02T10:00', '2020-10-02T09:00');
 
 
 select * from evento;

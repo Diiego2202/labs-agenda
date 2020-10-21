@@ -9,7 +9,7 @@
 						margin-bottom: 2.5vh;
 					" >
 						<label for="nome">Nome</label>
-						<input id="nome" name="nome" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+						<input id="nome" name="nome_evento" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
 					</div>
 
 					<div style = "
@@ -19,12 +19,12 @@
 					" >
 						<div>
 							<label for="inicio">Início</label>
-							<input type="datetime-local" id="inicio" name="inicio" min="08:00" max="22:00" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.nome : '') %>" required>
+							<input type="datetime-local" id="inicio" name="inicio_evento" min="08:00" max="22:00" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.nome : '') %>" required>
 						</div>
 
 						<div>
 							<label for="termino">Término</label>
-							<input type="datetime-local" id="termino" name="termino" min="08:00" max="22:00" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.nome : '') %>" required>
+							<input type="datetime-local" id="termino" name="termino_evento" min="08:00" max="22:00" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.nome : '') %>" required>
 						</div>
 					</div>
 
@@ -93,7 +93,7 @@
 			});
 
 			//<% } else { %>
-
+				console.log(form);
 			JsonWebApi.postFormData("<%- root %>/api/evento/criar", form, function (response) {
 				if (response.success) {
 					resetForm("#form");
