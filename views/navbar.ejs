@@ -60,6 +60,27 @@
 
 				<% if (usuario.admin) { %>
 
+					<li class="sidebar-spacer"></li>
+	
+					<li>
+						<a href="#"><i class="fa fa-user fa-fw"></i>Professores<span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+	
+							<li>
+								<a href="<%- root %>/professor/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+							</li>
+	
+							<li>
+								<a href="<%- root %>/professor/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+							</li>
+	
+						</ul>
+					</li>
+	
+					<% } %>
+
+				<% if (usuario.admin) { %>
+
 				<li class="sidebar-spacer"></li>
 
 				<li>
