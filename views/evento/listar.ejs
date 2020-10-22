@@ -42,6 +42,7 @@
 			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/evento/alterar?id=" + row.id + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
 			{ title: "Id", "class": "col-min text-right", "type": "number", data: "id_evento" },
 			{ title: "Nome", render: encode, data: "nome_evento" },
+			{ title: "Descrição", render: encode, data: "desc_evento" },
 			{ title: "Início", "class": "col-min text-right", "type": "string", data: "inicio_evento" },
 			{ title: "Término", "class": "col-min text-right", "type": "string", data: "termino_evento" }
 		],
@@ -59,6 +60,7 @@
 
 		if (this.getAttribute("data-excluir")) {
 			$("#lblNome").text(evento.nome_evento);
+			$("#lblDescricao").text(evento.desc_evento);
 			$("#lblInicio").text(evento.inicio_evento);
 			$("#lblTermino").text(evento.termino_evento);
 
