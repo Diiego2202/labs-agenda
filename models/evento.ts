@@ -29,6 +29,7 @@ export = class Evento {
 	}
 
 	public static  validar(evento: Evento): string{
+		evento.desc_evento = "Descrição";
 		// if(!evento){
 		// 	return "Dados inválidos";
 		// }
@@ -68,7 +69,7 @@ export = class Evento {
 			try {
 				console.log(typeof evento.inicio_evento);
 				console.log(evento.inicio_evento);
-				await sql.query("insert into evento (nome_evento, desc_evento, inicio_evento, termino_evento) values (?,'descricao',?,'2020-11-02T17:00')",[evento.nome_evento, evento.desc_evento, evento.inicio_evento, evento.termino_evento]);
+				await sql.query("insert into evento (nome_evento, desc_evento, inicio_evento, termino_evento) values (?,?,?,?)",[evento.nome_evento, evento.desc_evento, evento.inicio_evento, evento.termino_evento]);
 			} catch (e) {
 			if (e.code && e.code === "ER_DUP_ENTRY")
 				res = `O evento ${evento.nome_evento} já existe`; // evento.nome que está no alterar.ejs
@@ -86,7 +87,7 @@ export = class Evento {
         let evento: Evento = null;
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("select id_evento, nome_evento, desc_evento, inicio_evento, termino_evento from evento where id_evento = ?",[evento.id_evento]);
+            let lista = await sql.query("select id_evento, nome_evento, desc_evento, date_format(inicio_evento, '%Y-%m-%dT%H:%i') inicio_evento, date_format(termino_evento, '%Y-%m-%dT%H:%i') termino_evento from evento where id_evento = ?",[id_evento]);
          
             if(lista && lista.length){
                 evento = lista[0];
