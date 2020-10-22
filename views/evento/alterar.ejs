@@ -5,57 +5,65 @@
 			<div class="panel-body no-bottom">
 				<input type="hidden" id="id" name="id" value="<%=(item ? item.id : 0) %>" />
 				<div class="form-group">
-					<div style = "
-						margin-bottom: 2.5vh;
-					" >
-						<label for="nome">Nome</label>
-						<input id="nome" name="nome_evento" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+					<div class="form-group">
+						<label for="nome_evento">Nome</label>
+						<input id="nome_evento" name="nome_evento" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_evento : '') %>" />
 					</div>
 
-					<div style = "
-						display: flex;
-						justify-content: space-between;
-						margin-bottom: 2.5vh;
-					" >
-						<div>
-							<label for="inicio">Início</label>
-							<input type="datetime-local" id="inicio" name="inicio_evento" min="08:00" max="22:00" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.nome : '') %>" required>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="inicio_evento">Início</label>
+								<input type="datetime-local" id="inicio_evento" name="inicio_evento" class="form-control" spellcheck="false" value="<%=(item ? item.inicio_evento : '') %>" required>
+							</div>
 						</div>
 
-						<div>
-							<label for="termino">Término</label>
-							<input type="datetime-local" id="termino" name="termino_evento" min="08:00" max="22:00" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.nome : '') %>" required>
-						</div>
-					</div>
-
-					<div style = "
-						display: flex;
-						justify-content: space-between;
-						margin-bottom: 2.5vh;
-					" >
-						<div>
-							<label for="sala">Sala</label>
-							<input id="sala" name="sala" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" style = "
-								width: 11.6vw;
-							" />
-						</div>
-
-						<div>
-							<label for="turma">Turma</label>
-							<input id="turma" name="turma" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" style = "
-								width: 11.6vw;
-							" />
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="termino_evento">Término</label>
+								<input type="datetime-local" id="termino_evento" name="termino_evento" class="form-control" spellcheck="false" value="<%=(item ? item.termino_evento : '') %>" required>
+							</div>
 						</div>
 					</div>
 
-					<div style = "
-						margin-bottom: 2.5vh;
-					" >
-						<label for="professor">Professor</label>
-						<input id="professor" name="professor" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="id_sala">Sala</label>
+								<select size="1" id="id_sala" name="id_sala" class="form-control">
+									<option value="">SELECIONE...</option>
+									<% for (let i = 0; i < salas.length; i++) { %>
+										<option value="<%=salas[i].id_sala %>" <%=((item && item.id_sala == salas[i].id_sala) ? 'selected="selected"' : '')%>><%=salas[i].desc_sala %></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="id_turma">Turma</label>
+								<select size="1" id="id_turma" name="id_turma" class="form-control">
+									<option value="">SELECIONE...</option>
+									<% for (let i = 0; i < turmas.length; i++) { %>
+										<option value="<%=turmas[i].id_turma %>" <%=((item && item.id_turma == turmas[i].id_turma) ? 'selected="selected"' : '')%>><%=turmas[i].desc_turma %></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="id_prof">Professor</label>
+						<select size="1" id="id_prof" name="id_prof" class="form-control">
+							<option value="">SELECIONE...</option>
+							<% for (let i = 0; i < professores.length; i++) { %>
+								<option value="<%=professores[i].id_prof %>" <%=((item && item.id_prof == professores[i].id_prof) ? 'selected="selected"' : '')%>><%=professores[i].nome_prof %></option>
+							<% } %>
+						</select>
 					</div>
 				</div>
 			</div>
+
 			<div class="panel-footer">
 				<input value="<%=(item ? 'Salvar Alterações' : 'Criar Evento') %>" class="btn btn-primary btn-lg btn-block" type="submit" />
 			</div>
