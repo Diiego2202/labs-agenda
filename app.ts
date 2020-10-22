@@ -102,10 +102,14 @@ app.use("/", require("./routes/home"));
 app.use("/evento", require("./routes/evento"));
 app.use("/usuario", require("./routes/usuario"));
 app.use("/professor", require("./routes/professor"));
+app.use("/sala", require("./routes/sala"));
+app.use("/turma", require("./routes/turma"));
 // API
 app.use("/api/evento", require("./routes/api/evento"));
 app.use("/api/usuario", require("./routes/api/usuario"));
 app.use("/api/professor", require("./routes/api/professor"));
+app.use("/api/sala", require("./routes/api/sala"));
+app.use("/api/turma", require("./routes/api/turma"));
 
 // Depois de registrados todos os caminhos das rotas e seus
 // tratadores, registramos os tratadores que serão chamados
