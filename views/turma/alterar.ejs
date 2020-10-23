@@ -9,7 +9,7 @@
 						margin-bottom: 2.5vh;
 					" >
 						<label for="nome">Nome da turma</label>
-						<input id="nome_turma" name="nome_turma" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_turma : '') %>" />
+						<input id="desc_turma" name="desc_turma" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.desc_turma : '') %>" />
                     </div>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 
 	$("#form").validate({
 		rules: {
-			nome_turma: {
+			desc_turma: {
 				required: true,
 				minlength: 3,
 				maxlength: 100
