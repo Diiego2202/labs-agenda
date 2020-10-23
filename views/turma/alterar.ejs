@@ -3,13 +3,13 @@
 		<form id="form" class="panel panel-default" action="#">
 			<div class="panel-heading">Informações da Turma</div>
 			<div class="panel-body no-bottom">
-				<input type="hidden" id="id" name="id" value="<%=(item ? item.id : 0) %>" />
+				<input type="hidden" id="id_turma" name="id_turma" value="<%=(item ? item.id_turma : 0) %>" />
 				<div class="form-group">
 					<div style = "
 						margin-bottom: 2.5vh;
 					" >
 						<label for="nome">Nome da turma</label>
-						<input id="nome" name="nome" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+						<input id="nome_turma" name="nome_turma" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_turma : '') %>" />
                     </div>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 
 	$("#form").validate({
 		rules: {
-			nome: {
+			nome_turma: {
 				required: true,
 				minlength: 3,
 				maxlength: 100
@@ -42,19 +42,19 @@
 
 			//<% if (item) { %>
 
-			JsonWebApi.postFormData("<%- root %>/api/assunto/alterar", form, function (response) {
+			JsonWebApi.postFormData("<%- root %>/api/turma/alterar", form, function (response) {
 				if (response.success)
-					Notification.success("Evento alterado com sucesso! " + emoji.happy);
+					Notification.success("Turma alterada com sucesso! " + emoji.happy);
 				else
 					Notification.error(response.value, true);
 			});
 
 			//<% } else { %>
 
-			JsonWebApi.postFormData("<%- root %>/api/assunto/criar", form, function (response) {
+			JsonWebApi.postFormData("<%- root %>/api/turma/criar", form, function (response) {
 				if (response.success) {
 					resetForm("#form");
-					Notification.success("Evento criado com sucesso! " + emoji.happy);
+					Notification.success("Turma criada com sucesso! " + emoji.happy);
 				} else {
 					Notification.error(response.value, true);
 				}

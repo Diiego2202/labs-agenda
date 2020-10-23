@@ -38,7 +38,7 @@ export = class Sala {
         }
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("insert into sala (desc_sala, andar_sala) values ?,?",[sala.desc_sala, sala.andar_sala]);
+            let lista = await sql.query("insert into sala (desc_sala, andar_sala) values (?,?)",[sala.desc_sala, sala.andar_sala]);
         });
 
         return erro;

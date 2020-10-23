@@ -33,7 +33,7 @@ export = class Turma {
         }
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("insert into turma (desc_turma) values ?",[turma.desc_turma]);
+            let lista = await sql.query("insert into turma (desc_turma) values (?)",[turma.desc_turma]);
         });
 
         return erro;

@@ -32,7 +32,7 @@ export = class Professor {
         }
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("insert into professor (nome_prof) values ?",[professor.nome_prof]);
+            let lista = await sql.query("insert into professor (nome_prof) values (?)",[professor.nome_prof]);
         });
 
         return erro;

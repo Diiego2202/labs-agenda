@@ -3,13 +3,13 @@
 		<form id="form" class="panel panel-default" action="#">
 			<div class="panel-heading">Informações do Professor</div>
 			<div class="panel-body no-bottom">
-				<input type="hidden" id="id" name="id" value="<%=(item ? item.id : 0) %>" />
+				<input type="hidden" id="id_prof" name="id_prof" value="<%=(item ? item.id_prof : 0) %>" />
 				<div class="form-group">
 					<div style = "
 						margin-bottom: 2.5vh;
 					" >
 						<label for="nome">Nome</label>
-						<input id="nome" name="nome" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome : '') %>" />
+						<input id="nome_prof" name="nome_prof" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_prof : '') %>" />
 					</div>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 
 	$("#form").validate({
 		rules: {
-			nome: {
+			nome_prof: {
 				required: true,
 				minlength: 3,
 				maxlength: 100
@@ -56,6 +56,7 @@
 					resetForm("#form");
 					Notification.success("Professor cadastrado com sucesso! " + emoji.happy);
 				} else {
+					
 					Notification.error(response.value, true);
 				}
 			});
