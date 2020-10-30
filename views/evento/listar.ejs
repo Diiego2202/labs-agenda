@@ -18,8 +18,9 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					Tem certeza que deseja excluir o assunto <span id="lblNome"></span>? Esta operação <b class="col-h">NÃO</b> pode ser desfeita, e <b class="col-h">TODAS AS RESPOSTAS</b> deste assunto, de <b class="col-h">TODAS AS PESSOAS</b>, também serão <b class="col-h">EXCLUÍDAS</b>!
+					Tem certeza que deseja excluir o evento <span id="lblNome"></span>? Esta operação <b class="col-h">NÃO</b> pode ser desfeita, e <b class="col-h">TODAS AS RESPOSTAS</b> deste evento, de <b class="col-h">TODAS AS PESSOAS</b>, também serão <b class="col-h">EXCLUÍDAS</b>!
 				</p>
+				
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" onclick="excluir()"><i class="fa fa-check"></i>Excluir</button>
@@ -38,13 +39,15 @@
 		order: [[1, "asc"]],
 		deferRender: true,
 		columns: [
-			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/assunto/alterar?id=" + row.id + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
-			{ title: "Id", "class": "col-min text-right", "type": "number", data: "id" },
-			{ title: "Nome", render: encode, data: "nome" },
-			{ title: "Criação", "class": "col-min text-right", "type": "customdateint", data: "criacao" }
+			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_evento", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/evento/alterar?id_evento=" + row.id_evento + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
+			{ title: "Id", "class": "col-min text-right", "type": "number", data: "id_evento" },
+			{ title: "Nome", render: encode, data: "nome_evento" },
+			{ title: "Descrição", render: encode, data: "desc_evento" },
+			{ title: "Início", "class": "col-min text-right", "type": "string", data: "inicio_evento" },
+			{ title: "Término", "class": "col-min text-right", "type": "string", data: "termino_evento" }
 		],
 		data: <%- lista %>,
-		export: { title: "Assuntos" }
+		export: { title: "Eventos" }
 	});
 
 	var trClicada;
@@ -53,10 +56,13 @@
 		if (JsonWebApi.active)
 			return;
 
-		var assunto = tabela.row(trClicada = this.parentNode.parentNode).data();
+		var evento = tabela.row(trClicada = this.parentNode.parentNode).data();
 
 		if (this.getAttribute("data-excluir")) {
-			$("#lblNome").text(assunto.nome);
+			$("#lblNome").text(evento.nome_evento);
+			$("#lblDescricao").text(evento.desc_evento);
+			$("#lblInicio").text(evento.inicio_evento);
+			$("#lblTermino").text(evento.termino_evento);
 
 			$("#modalExcluir").modal({
 				backdrop: "static",
@@ -71,20 +77,19 @@
 
 		$("#modalExcluir").modal("hide");
 
-		var assunto = tabela.row(trClicada).data();
+		var evento = tabela.row(trClicada).data();
 
 		Notification.wait();
 
-		JsonWebApi.get("<%- root %>/api/assunto/excluir", function (response) {
+		JsonWebApi.get("<%- root %>/api/evento/excluir", function (response) {
 			if (response.success) {
-				Notification.success("Assunto excluído com sucesso! " + emoji.happy);
+				Notification.success("Evento excluído com sucesso! " + emoji.happy);
 				tabela.row(trClicada).remove().draw();
 			} else {
 				Notification.error(response.value, true);
 			}
 			trClicada = null;
-		}, "id", assunto.id);
+		}, "id_evento", evento.id_evento);
 	}
-
 	//]]>
 </script>

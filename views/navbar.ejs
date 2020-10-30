@@ -42,21 +42,85 @@
 					<li class="sidebar-spacer"></li>
 
 					<li>
-						<a href="#"><i class="fa fa-comment-o fa-fw"></i>Assuntos<span class="fa arrow"></span></a>
+						<a href="#"><i class="fa fa-comment-o fa-fw"></i>Eventos<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 
 							<li>
-								<a href="<%- root %>/assunto/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+								<a href="<%- root %>/evento/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
 							</li>
 
 							<li>
-								<a href="<%- root %>/assunto/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+								<a href="<%- root %>/evento/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
 							</li>
 
 						</ul>
 					</li>
 
 				<% } %>
+
+				<% if (usuario.admin) { %>
+
+					<li class="sidebar-spacer"></li>
+	
+					<li>
+						<a href="#"><i class="fa fa-user fa-fw"></i>Salas<span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+	
+							<li>
+								<a href="<%- root %>/sala/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+							</li>
+	
+							<li>
+								<a href="<%- root %>/sala/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+							</li>
+	
+						</ul>
+					</li>
+	
+					<% } %>
+
+					<% if (usuario.admin) { %>
+
+					<li class="sidebar-spacer"></li>
+	
+					<li>
+						<a href="#"><i class="fa fa-user fa-fw"></i>Turmas<span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+	
+							<li>
+								<a href="<%- root %>/turma/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+							</li>
+	
+							<li>
+								<a href="<%- root %>/turma/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+							</li>
+	
+						</ul>
+					</li>
+	
+					<% } %>
+				
+
+				<% if (usuario.admin) { %>
+
+					<li class="sidebar-spacer"></li>
+	
+					<li>
+						<a href="#"><i class="fa fa-user fa-fw"></i>Professores<span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level collapse">
+	
+							<li>
+								<a href="<%- root %>/professor/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+							</li>
+	
+							<li>
+								<a href="<%- root %>/professor/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+							</li>
+	
+						</ul>
+					</li>
+	
+					<% } %>
 
 				<% if (usuario.admin) { %>
 

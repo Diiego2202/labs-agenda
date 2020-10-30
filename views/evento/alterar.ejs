@@ -1,0 +1,118 @@
+﻿<div class="row">
+	<div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+		<form id="form" class="panel panel-default" action="#">
+			<div class="panel-heading">Informações do Evento</div>
+			<div class="panel-body no-bottom">
+				<input type="hidden" id="id" name="id" value="<%=(item ? item.id : 0) %>" />
+				<div class="form-group">
+					<div class="form-group">
+						<label for="nome_evento">Nome</label>
+						<input id="nome_evento" name="nome_evento" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_evento : '') %>" />
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="inicio_evento">Início</label>
+								<input type="datetime-local" id="inicio_evento" name="inicio_evento" class="form-control" spellcheck="false" value="<%=(item ? item.inicio_evento : '') %>" required>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="termino_evento">Término</label>
+								<input type="datetime-local" id="termino_evento" name="termino_evento" class="form-control" spellcheck="false" value="<%=(item ? item.termino_evento : '') %>" required>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="id_sala">Sala</label>
+								<select size="1" id="id_sala" name="id_sala" class="form-control">
+									<option value="">SELECIONE...</option>
+									<% for (let i = 0; i < salas.length; i++) { %>
+										<option value="<%=salas[i].id_sala %>" <%=((item && item.id_sala == salas[i].id_sala) ? 'selected="selected"' : '')%>><%=salas[i].desc_sala %></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="id_turma">Turma</label>
+								<select size="1" id="id_turma" name="id_turma" class="form-control">
+									<option value="">SELECIONE...</option>
+									<% for (let i = 0; i < turmas.length; i++) { %>
+										<option value="<%=turmas[i].id_turma %>" <%=((item && item.id_turma == turmas[i].id_turma) ? 'selected="selected"' : '')%>><%=turmas[i].desc_turma %></option>
+									<% } %>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="id_prof">Professor</label>
+						<select size="1" id="id_prof" name="id_prof" class="form-control">
+							<option value="">SELECIONE...</option>
+							<% for (let i = 0; i < professores.length; i++) { %>
+								<option value="<%=professores[i].id_prof %>" <%=((item && item.id_prof == professores[i].id_prof) ? 'selected="selected"' : '')%>><%=professores[i].nome_prof %></option>
+							<% } %>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel-footer">
+				<input value="<%=(item ? 'Salvar Alterações' : 'Criar Evento') %>" class="btn btn-primary btn-lg btn-block" type="submit" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<%- contentFor("scripts") %>
+<script type="text/javascript">
+	//<![CDATA[
+	"use strict";
+
+	$("#form").validate({
+		rules: {
+			nome: {
+				required: true,
+				minlength: 3,
+				maxlength: 100
+			}
+		},
+
+		submitHandler: function (form) {
+			if (JsonWebApi.active)
+				return;
+
+			Notification.wait();
+
+			//<% if (item) { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/evento/alterar", form, function (response) {
+				if (response.success)
+					Notification.success("Evento alterado com sucesso! " + emoji.happy);
+				else
+					Notification.error(response.value, true);
+			});
+
+			//<% } else { %>
+				console.log(form);
+			JsonWebApi.postFormData("<%- root %>/api/evento/criar", form, function (response) {
+				if (response.success) {
+					resetForm("#form");
+					Notification.success("Evento criado com sucesso! " + emoji.happy);
+				} else {
+					Notification.error(response.value, true);
+				}
+			});
+
+			//<% } %>
+		}
+	});
+	//]]>
+</script>
