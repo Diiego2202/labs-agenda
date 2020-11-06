@@ -3,11 +3,15 @@
 		<form id="form" class="panel panel-default" action="#">
 			<div class="panel-heading">Informações do Evento</div>
 			<div class="panel-body no-bottom">
-				<input type="hidden" id="id" name="id" value="<%=(item ? item.id : 0) %>" />
+				<input type="hidden" id="id_evento" name="id_evento" value="<%=(item ? item.id_evento : 0) %>" />
 				<div class="form-group">
 					<div class="form-group">
 						<label for="nome_evento">Nome</label>
 						<input id="nome_evento" name="nome_evento" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_evento : '') %>" />
+					</div>
+					<div class="form-group">
+						<label for="desc_evento">Descrição</label>
+						<input id="desc_evento" name="desc_evento" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.desc_evento : '') %>" />
 					</div>
 
 					<div class="row">
@@ -78,11 +82,17 @@
 
 	$("#form").validate({
 		rules: {
-			nome: {
+			nome_evento: {
 				required: true,
 				minlength: 3,
-				maxlength: 100
+				maxlength: 50
+			},
+			desc_evento: {
+				required: true,
+				minlength: 3,
+				maxlength: 50
 			}
+			//validações de data, sala, turma e professor
 		},
 
 		submitHandler: function (form) {
@@ -101,7 +111,7 @@
 			});
 
 			//<% } else { %>
-				console.log(form);
+		
 			JsonWebApi.postFormData("<%- root %>/api/evento/criar", form, function (response) {
 				if (response.success) {
 					resetForm("#form");

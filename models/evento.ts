@@ -29,7 +29,7 @@ export = class Evento {
 	}
 
 	public static  validar(evento: Evento): string{
-		evento.desc_evento = "Descrição";
+		
 		// if(!evento){
 		// 	return "Dados inválidos";
 		// }
@@ -67,8 +67,6 @@ export = class Evento {
 
 		await Sql.conectar(async (sql: Sql) => {
 			try {
-				console.log(typeof evento.inicio_evento);
-				console.log(evento.inicio_evento);
 				await sql.query("insert into evento (nome_evento, desc_evento, inicio_evento, termino_evento) values (?,?,?,?)",[evento.nome_evento, evento.desc_evento, evento.inicio_evento, evento.termino_evento]);
 			} catch (e) {
 			if (e.code && e.code === "ER_DUP_ENTRY")
@@ -100,14 +98,11 @@ export = class Evento {
 
 	public static async alterar(evento: Evento): Promise<string>{
         let erro: string = Evento.validar(evento);
-
-
         if(erro){
             return erro;
         }
-
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("update evento set nome_evento = ?, desc_evento = ?, inicio_evento = ?,  termino_evento = ? where id_evento = ?",[evento.nome_evento, evento.id_evento]);
+            let lista = await sql.query("update evento set nome_evento = ?, desc_evento = ?, inicio_evento = ?,  termino_evento = ? where id_evento = ?",[evento.nome_evento, evento.desc_evento, evento.inicio_evento, evento.termino_evento, evento.id_evento]);
         });
 
         return erro;

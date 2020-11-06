@@ -48,7 +48,7 @@ export = class Sala {
         let sala: Sala = null;
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("select id_sala, desc_sala, andar_sala from sala where id_sala = ?",[sala.id_sala]);
+            let lista = await sql.query("select id_sala, desc_sala, andar_sala from sala where id_sala = ?",[id_sala]);
          
             if(lista && lista.length){
                 sala = lista[0];

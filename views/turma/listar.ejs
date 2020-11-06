@@ -39,7 +39,7 @@
 		order: [[1, "asc"]],
 		deferRender: true,
 		columns: [
-			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_turma", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/evento/alterar?id_evento=" + row.id_evento + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
+			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_turma", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/turma/alterar?id_turma=" + row.id_turma + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
 			{ title: "Id", "class": "col-min text-right", "type": "number", data: "id_turma" },
 			{ title: "Descrição", render: encode, data: "desc_turma" },
 		],
@@ -53,10 +53,10 @@
 		if (JsonWebApi.active)
 			return;
 
-		var evento = tabela.row(trClicada = this.parentNode.parentNode).data();
+		var turma = tabela.row(trClicada = this.parentNode.parentNode).data();
 
 		if (this.getAttribute("data-excluir")) {
-			$("#lblDescricao").text(evento.desc_turma);
+			$("#lblDescricao").text(turma.desc_turma);
 
 			$("#modalExcluir").modal({
 				backdrop: "static",

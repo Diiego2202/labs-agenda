@@ -36,7 +36,7 @@ router.post("/alterar", wrap(async (req: express.Request, res: express.Response)
 		return;
 	let p = req.body as Professor;
 	if (p)
-		p.id_prof = parseInt(req.body.id);
+		p.id_prof = parseInt(req.body.id_prof);
 	jsonRes(res, 400, (p && !isNaN(p.id_prof)) ? await Professor.alterar(p) : "Dados inválidos");
 }));
 

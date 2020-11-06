@@ -35,7 +35,7 @@ router.post("/alterar", wrap(async (req: express.Request, res: express.Response)
 		return;
 	let s = req.body as Sala;
 	if (s)
-		s.id_sala = parseInt(req.body.id);
+		s.id_sala = parseInt(req.body.id_sala);
 	jsonRes(res, 400, (s && !isNaN(s.id_sala)) ? await Sala.alterar(s) : "Dados inválidos");
 }));
 

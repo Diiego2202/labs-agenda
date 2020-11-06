@@ -42,7 +42,7 @@ export = class Professor {
         let professor: Professor = null;
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("select id_prof, nome_prof from professor where id_prof=?",[professor.id_prof]);
+            let lista = await sql.query("select id_prof, nome_prof from professor where id_prof=?",[id_prof]);
          
             if(lista && lista.length){
                 professor = lista[0];

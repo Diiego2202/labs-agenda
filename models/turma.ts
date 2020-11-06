@@ -6,15 +6,15 @@ export = class Turma {
 	public desc_turma: string;
 	
 	public static  validar(turma: Turma): string{
-		if(!turma){
-			return "Dados inválidos";
-		}
-		if(!turma.desc_turma || turma.desc_turma.length>45){
-			return "Descrição inválida";
-		}
+		// if(!turma){
+		// 	return "Dados inválidos";
+		// }
+		// if(!turma.desc_turma || turma.desc_turma.length>45){
+		// 	return "Descrição inválida";
+		// }
 		
 		
-		return null;
+		 return null;
 	}
 
 	public static async listar(): Promise<Turma[]>{
@@ -43,7 +43,7 @@ export = class Turma {
         let turma: Turma = null;
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("select id_turma, desc_turma from turma where id_turma = ?",[turma.id_turma]);
+            let lista = await sql.query("select id_turma, desc_turma from turma where id_turma = ?",[id_turma]);
          
             if(lista && lista.length){
                 turma = lista[0];

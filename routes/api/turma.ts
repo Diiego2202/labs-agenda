@@ -36,7 +36,7 @@ router.post("/alterar", wrap(async (req: express.Request, res: express.Response)
 		return;
 	let t = req.body as Turma;
 	if (t)
-		t.id_turma = parseInt(req.body.id);
+		t.id_turma = parseInt(req.body.id_turma);
 	jsonRes(res, 400, (t && !isNaN(t.id_turma)) ? await Turma.alterar(t) : "Dados inválidos");
 }));
 

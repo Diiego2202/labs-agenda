@@ -33,10 +33,10 @@ router.post("/alterar", wrap(async (req: express.Request, res: express.Response)
 	let u = await Usuario.cookie(req, res, true);
 	if (!u)
 		return;
-	let p = req.body as Evento;
-	if (p)
-		p.id_evento = parseInt(req.body.id);
-	jsonRes(res, 400, (p && !isNaN(p.id_evento)) ? await Evento.alterar(p) : "Dados inválidos");
+	let e = req.body as Evento;
+	if (e)
+		e.id_evento = parseInt(req.body.id);
+	jsonRes(res, 400, (e && !isNaN(e.id_evento)) ? await Evento.alterar(e) : "Dados inválidos");
 }));
 
 router.get("/excluir", wrap(async (req: express.Request, res: express.Response) => {
