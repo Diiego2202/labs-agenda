@@ -57,10 +57,14 @@ export = class Evento {
 		return null;
 	}
 
-	public static async listar(): Promise<Evento[]>{
+	public static async listar(id_turma?: number): Promise<Evento[]>{
         let lista: Evento[] = null;
         await Sql.conectar(async (sql) =>{
-            lista = await sql.query("select id_evento, nome_evento, desc_evento, inicio_evento, termino_evento from evento");
+			lista = await sql.query("select e.id_evento, e.nome_evento, e.desc_evento, date_format(e.inicio_evento, '%d/%m/%Y %H:%i') inicio_evento, date_format(e.termino_evento, '%d/%m/%Y %H:%i') termino_evento from evento e " +
+				(id_turma > 0 ?
+					" inner join evento_turma et on e.id_evento = et.id_evento where et.id_turma = ?" :
+					""
+				), [id_turma]);
         });
         return lista;
 	}

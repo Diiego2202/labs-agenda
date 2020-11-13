@@ -50,7 +50,12 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else
-		res.render("evento/listar", { titulo: "Gerenciar Eventos", usuario: u, lista: JSON.stringify(await Evento.listar()) });
+		res.render("evento/listar", {
+			titulo: "Gerenciar Eventos",
+			usuario: u,
+			lista: JSON.stringify(await Evento.listar()),
+			turmas: await Turma.listar()
+		});
 }));
 
 

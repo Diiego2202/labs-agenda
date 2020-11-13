@@ -10,7 +10,7 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	let u = await Usuario.cookie(req, res);
 	if (!u)
 		return;
-	res.json(await Evento.listar());
+	res.json(await Evento.listar(parseInt(req.query["id_turma"] as string)));
 }));
 
 router.get("/obter", wrap(async (req: express.Request, res: express.Response) => {

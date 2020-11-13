@@ -84,8 +84,16 @@
 	color: #6bf;
 }
 
-#side-menu a:hover i, #side-menu a:focus i, #side-menu a:active i, #side-menu a.active i {
+#side-menu a:hover > i, #side-menu a:focus > i, #side-menu a:active > i, #side-menu a.active > i, #side-menu > li.active > a > i {
 	color: #fff;
+}
+
+#side-menu > li > a {
+	border-left: 4px solid transparent;
+}
+
+#side-menu > li > a:focus, #side-menu > li > a:hover, #side-menu > li.active > a {
+	border-left-color: #6bf;
 }
 
 .navbar-top-links {

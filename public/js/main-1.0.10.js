@@ -1531,6 +1531,8 @@ window.BlobDownloader = {
 
 		switch (keyCode) {
 			case 9: // tab
+				if (data.menuVisible && data.selection >= 0)
+					data.select();
 			case 16: // shift
 			case 17: // ctrl
 			case 37: // left
