@@ -108,6 +108,39 @@ export = class Evento {
 
     }
 
+	public static async obterPorSala(id_sala:number): Promise<Evento[]>{
+        let lista: Evento[] = null;
+
+        await Sql.conectar(async(sql)=>{
+            let lista = await sql.query("select id_evento, nome_evento, desc_evento, date_format(inicio_evento, '%Y-%m-%dT%H:%i') inicio_evento, date_format(termino_evento, '%Y-%m-%dT%H:%i') termino_evento from evento inner join evento_sala on evento.id_evento = evento_sala.id_evento where id_sala = ?",[id_sala]);
+        });
+
+        return lista;
+
+	}
+	
+	public static async obterPorTurma(id_turma:number): Promise<Evento[]>{
+        let lista: Evento[] = null;
+
+        await Sql.conectar(async(sql)=>{
+            let lista = await sql.query("select id_evento, nome_evento, desc_evento, date_format(inicio_evento, '%Y-%m-%dT%H:%i') inicio_evento, date_format(termino_evento, '%Y-%m-%dT%H:%i') termino_evento from evento inner join evento_turma on evento.id_evento = evento_turma.id_evento where id_turma = ?",[id_turma]);
+        });
+
+        return lista;
+
+	}
+
+	public static async obterPorProf(id_prof:number): Promise<Evento[]>{
+        let lista: Evento[] = null;
+
+        await Sql.conectar(async(sql)=>{
+            let lista = await sql.query("select id_evento, nome_evento, desc_evento, date_format(inicio_evento, '%Y-%m-%dT%H:%i') inicio_evento, date_format(termino_evento, '%Y-%m-%dT%H:%i') termino_evento from evento inner join evento_prof on evento.id_evento = evento_prof.id_evento where id_prof = ?",[id_prof]);
+        });
+
+        return lista;
+
+	}
+	
 	public static async alterar(evento: Evento): Promise<string>{
         let erro: string = Evento.validar(evento);
         if(erro){
