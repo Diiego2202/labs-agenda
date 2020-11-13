@@ -91,7 +91,17 @@
 				required: true,
 				minlength: 3,
 				maxlength: 50
+			},
+			id_sala:{
+				required:true
+			},
+			id_turma:{
+				required:true
+			},
+			id_prof:{
+				required:true
 			}
+			
 			//validações de data, sala, turma e professor
 		},
 
@@ -104,8 +114,10 @@
 			//<% if (item) { %>
 
 			JsonWebApi.postFormData("<%- root %>/api/evento/alterar", form, function (response) {
-				if (response.success)
+				if (response.success){
+					
 					Notification.success("Evento alterado com sucesso! " + emoji.happy);
+				}
 				else
 					Notification.error(response.value, true);
 			});

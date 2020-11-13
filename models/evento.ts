@@ -1,12 +1,17 @@
 ﻿import Sql = require("../infra/sql");
 import DataUtil = require("../utils/dataUtil");
 
+
 export = class Evento {
 	public id_evento: number;
 	public nome_evento: string;
 	public desc_evento: string;
 	public inicio_evento: string;
 	public termino_evento: string;
+	public id_prof:number;
+	public id_turma:number;
+	public id_sala:number;
+
 
 	public static async listarHoje(): Promise<Evento[]> {
 		let inicioDiaHoje = DataUtil.hojeISOInicioDoDia();
@@ -16,6 +21,7 @@ export = class Evento {
 
 		await Sql.conectar(async (sql: Sql) => {
 			lista = (await sql.query("select id_evento, nome_evento, desc_evento, date_format(inicio_evento, '%Y-%m-%dT%T') inicio_evento, date_format(termino_evento, '%Y-%m-%dT%T') termino_evento from evento where inicio_evento <= ? and termino_evento >= ?", [fimDiaHoje, inicioDiaHoje])) as Evento[];
+		
 		});
 
 		//if (lista !== null) {
@@ -66,8 +72,14 @@ export = class Evento {
 			return res;
 
 		await Sql.conectar(async (sql: Sql) => {
+			await sql.beginTransaction();
 			try {
 				await sql.query("insert into evento (nome_evento, desc_evento, inicio_evento, termino_evento) values (?,?,?,?)",[evento.nome_evento, evento.desc_evento, evento.inicio_evento, evento.termino_evento]);
+				const id_evento = await sql.scalar("select last_insert_id()") as number;
+				await sql.query(" insert into evento_prof(id_prof, id_evento) values (?, ?)", [evento.id_prof, id_evento]);
+				await sql.query(" insert into evento_turma(id_turma, id_evento) values (?, ?)", [evento.id_turma, id_evento]);
+				await sql.query(" insert into evento_sala(id_sala, id_evento) values (?, ?)", [evento.id_sala, id_evento]);
+	
 			} catch (e) {
 			if (e.code && e.code === "ER_DUP_ENTRY")
 				res = `O evento ${evento.nome_evento} já existe`; // evento.nome que está no alterar.ejs

@@ -11,7 +11,6 @@ CREATE TABLE perfil (
 );
 
 
-
 INSERT INTO perfil (nome) VALUES ('ADMINISTRADOR'), ('COMUM');
 
 -- DROP TABLE IF EXISTS usuario;
@@ -50,6 +49,14 @@ create table sala(
     andar_sala int
 );
 
+create table evento_sala(
+	id_evento int not null,
+    foreign key(id_evento) references evento(id_evento),
+    id_sala int not null,
+    foreign key(id_sala) references sala(id_sala),
+    primary key (id_evento, id_sala)
+);
+
 create table professor(
 	id_prof int primary key auto_increment,
     nome_prof varchar(45)
@@ -86,5 +93,10 @@ create table evento_turma(
  ('ev2', 'Descrição resumida do evento' , '2020-10-02T08:00', '2020-10-02T09:00'),
  ('ev3', 'Descrição resumida do evento' , '2020-10-02T10:00', '2020-10-02T09:00');
 
+ insert into evento(nome_evento, desc_evento, inicio_evento, termino_evento) values
+ ('ev1', 'Descrição resumida do evento' ,'2020-10-02T08:00', '2020-10-02T09:00');
+ insert into evento_prof(id_prof, id_evento) values (1, 1);
+ insert into evento_turma(id_evento, id_turma) values(1, 1);
+ insert into evento_sala(id_evento, id_sala) values(1,1);
 
 select * from evento;
