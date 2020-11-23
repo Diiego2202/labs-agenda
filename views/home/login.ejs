@@ -2,17 +2,19 @@
 	<div style="max-width: 400px; margin: 0 auto; padding: 5% 15px 50px;">
 		<div class="panel panel-default no-margin-bottom">
 			<div class="panel-body">
-				<div class="col-xs-space-bottom">
-					<img alt="Agenda da Pós" src="<%- root %>/imagens/logo.png" style="max-width: 100%;" />
+				<div class="col-xs-space-bottom" id="container-titulo">
+					<h1 id="titulo-login">Agenda</h1>
+					<!-- <p id="barra">|</p> -->
+					<img alt="Agenda da Pós" id="logo-login" src="<%- root %>/imagens/logo-espm.png" style="max-width: 100%;" />
 				</div>
-				<hr />
+				<p id="info-cadastro">*Entre com seu cadastro ESPM</p>
 				<div class="form-group">
-					<label for="login">Usuário</label>
-					<input name="login" type="text" id="login" class="form-control text-uppercase" spellcheck="false" />
+					<label for="login" class="label-login">Usuário</label>
+					<input name="login" type="text" id="login" class="form-control text-uppercase input-login" spellcheck="false" />
 				</div>
 				<div class="form-group">
-					<label for="senha">Senha</label>
-					<input name="senha" type="password" id="senha" class="form-control" />
+					<label for="senha" class="label-login">Senha</label>
+					<input name="senha" type="password" id="senha" class="form-control input-login" />
 				</div>
 				<% if (mensagem) { %>
 				<div class="alert alert-danger"><%=mensagem %></div>

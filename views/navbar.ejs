@@ -1,5 +1,5 @@
 ﻿<div id="sidebar-fake-bg" class="sidebar-fake-bg"></div>
-<nav class="navbar navbar-default navbar-static-top nav-shadow " role="navigation" style="margin-bottom: 0">
+<nav class="navbar navbar-default navbar-static-top nav-shadow " role="navigation" style="margin-bottom: 0; background: #c2c2c2; border-bottom: 1px; box-shadow: 5px 1px 5px #a1a1a1;">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 			<span class="sr-only">Alterar menu</span>
@@ -7,13 +7,13 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="<%- root %>/"><img alt="Logo" src="<%- root %>/imagens/logo-cabecalho.png" /></a>
+		<!-- <a class="navbar-brand" href="<%- root %>/"><img alt="Logo" src="<%- root %>/imagens/logo-cabecalho.png" /></a> -->
 	</div>
 
 	<ul class="nav navbar-top-links navbar-right">
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-				<img class="profile-img" alt="Perfil" src="<%- root %>/imagens/user.png" width="40" height="40" /><%=usuario.login %> <i class="fa fa-caret-down"></i>
+				<img class="profile-img" alt="Perfil" src="<%- root %>/imagens/logo-espm-quadrado.png" width="40" height="40" /><div style="display: inline-block; color: black;"><%=usuario.login %></div> <i class="fa fa-caret-down nome-usuario"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
 				<li>
@@ -30,7 +30,7 @@
 	<div id="sidebar" class="sidebar" role="navigation">
 		<div id="navbar-collapse" class="sidebar-nav navbar-collapse collapse">
 			<ul class="nav" id="side-menu">
-				<li class="hidden-xs"><button id="btn-sidebar" type="button" class="btn btn-outline btn-default btn-sidebar" title="Ocultar Menu"><i class="fa fa-bars fa-fw fa-nomargin"></i></button></li>
+				<li class="hidden-xs"><button id="btn-sidebar" type="button" class="btn btn-outline btn-default btn-sidebar" title="Ocultar Menu" style="color: white;"><i class="fa fa-bars fa-fw fa-nomargin"></i></button></li>
 				<li class="sidebar-spacer"></li>
 
 				<li>
@@ -46,11 +46,11 @@
 						<ul class="nav nav-second-level collapse">
 
 							<li>
-								<a href="<%- root %>/evento/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+								<a href="<%- root %>/evento/criar" style="color: black;"><i class="fa fa-plus fa-fw"></i>Criar</a>
 							</li>
 
 							<li>
-								<a href="<%- root %>/evento/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+								<a href="<%- root %>/evento/listar" style="color: black;"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
 							</li>
 
 						</ul>
@@ -67,11 +67,11 @@
 						<ul class="nav nav-second-level collapse">
 	
 							<li>
-								<a href="<%- root %>/sala/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+								<a href="<%- root %>/sala/criar" style="color: black;"><i class="fa fa-plus fa-fw"></i>Criar</a>
 							</li>
 	
 							<li>
-								<a href="<%- root %>/sala/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+								<a href="<%- root %>/sala/listar" style="color: black;"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
 							</li>
 	
 						</ul>
@@ -88,11 +88,11 @@
 						<ul class="nav nav-second-level collapse">
 	
 							<li>
-								<a href="<%- root %>/turma/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+								<a href="<%- root %>/turma/criar" style="color: black;"><i class="fa fa-plus fa-fw"></i>Criar</a>
 							</li>
 	
 							<li>
-								<a href="<%- root %>/turma/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+								<a href="<%- root %>/turma/listar" style="color: black;"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
 							</li>
 	
 						</ul>
@@ -110,11 +110,11 @@
 						<ul class="nav nav-second-level collapse">
 	
 							<li>
-								<a href="<%- root %>/professor/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+								<a href="<%- root %>/professor/criar" style="color: black;"><i class="fa fa-plus fa-fw"></i>Criar</a>
 							</li>
 	
 							<li>
-								<a href="<%- root %>/professor/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+								<a href="<%- root %>/professor/listar" style="color: black;"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
 							</li>
 	
 						</ul>
@@ -131,11 +131,11 @@
 					<ul class="nav nav-second-level collapse">
 
 						<li>
-							<a href="<%- root %>/usuario/criar"><i class="fa fa-plus fa-fw"></i>Criar</a>
+							<a href="<%- root %>/usuario/criar" style="color: black;"><i class="fa fa-plus fa-fw"></i>Criar</a>
 						</li>
 
 						<li>
-							<a href="<%- root %>/usuario/listar"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
+							<a href="<%- root %>/usuario/listar" style="color: black;"><i class="fa fa-tasks fa-fw"></i>Gerenciar</a>
 						</li>
 
 					</ul>

@@ -34,12 +34,12 @@
 
 	.btn-sidebar:hover, .btn-sidebar:focus {
 		color: #aaa;
-		background-color: #555;
+		background-color: rgb(0, 0, 8, 0.15);
 	}
 
 	.btn-sidebar:active {
 		color: #aaa;
-		background-color: #444;
+		background-color: rgb(68, 68, 68);
 		-webkit-box-shadow: none;
 		box-shadow: none;
 	}
@@ -73,7 +73,7 @@
 }
 
 #side-menu > li > a > i {
-	color: #6bf;
+	color: rgb(255, 255, 255);
 }
 
 #side-menu i.fa-plus, #side-menu i.fa-link {
@@ -92,9 +92,9 @@
 	border-left: 4px solid transparent;
 }
 
-#side-menu > li > a:focus, #side-menu > li > a:hover, #side-menu > li.active > a {
+/*#side-menu > li > a:focus, #side-menu > li > a:hover, #side-menu > li.active > a {
 	border-left-color: #6bf;
-}
+}*/
 
 .navbar-top-links {
 	margin-right: 0;
@@ -114,9 +114,16 @@
 		}
 
 .profile-img {
+	width: 35px;
+	height: 35px;
+	object-fit:cover;
 	border: 0;
-	border-radius: 50px;
+	border-radius: 50%;
 	margin: 0 0.5em 0 0;
+}
+
+.nome-usuario{
+	color: black;
 }
 
 .navbar-top-links .dropdown-menu li {
@@ -167,7 +174,7 @@
 }
 
 	.sidebar ul li a.active:active {
-		background-color: #444;
+		background-color: rgb(196, 218, 100);
 	}
 
 .sidebar .arrow {
@@ -188,7 +195,7 @@
 
 .sidebar .nav-second-level li {
 	margin: 0 16px;
-	background: #222;
+	background: #ffffff;
 }
 
 	.sidebar .nav-second-level li:first-child {
@@ -215,9 +222,13 @@
 	}
 }
 
+.collapse-sidebar{
+	color: black;
+}
+
 /* workaround to avoid blurry fonts in Chrome, because they are rendered on top of a fixed element (sidebar-fake-bg) */
 .sidebar {
-	background: #333;
+	background: #a70230;
 	backface-visibility: hidden;
 }
 
@@ -237,24 +248,24 @@
 	.sidebar {
 		z-index: 1;
 		position: absolute;
-		width: 250px;
+		width: 200px;
 		top: 50px;
 		left: 0;
 		min-height: 100px;
 	}
 
 	.sidebar-safari {
-		background: #333;
+		background: #a70230;
 	}
 
 	.sidebar-fake-bg {
 		z-index: 0;
 		position: fixed;
-		width: 250px;
+		width: 200px;
 		top: 0;
 		bottom: 0;
 		left: 0;
-		background: #333;
+		background: #a70230;
 	}
 }
 
@@ -335,7 +346,7 @@ i.fa-nomargin {
 }
 
 .col-no-h {
-	color: #333;
+	color: rgb(51, 51, 51);
 	font-weight: bold;
 }
 
