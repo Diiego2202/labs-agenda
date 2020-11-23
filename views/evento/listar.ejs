@@ -10,7 +10,7 @@
 							<select size="1" id="turma" class="form-control" onchange="atualizar()">
 								<option value="0">Todas</option>
 								<% for (let i = 0; i < turmas.length; i++) { %>
-								<option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
+									<option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
 								<% } %>
 							</select>
 						</div>
@@ -64,6 +64,9 @@
 				{ title: "Id", "class": "col-min text-right", "type": "number", data: "id_evento" },
 				{ title: "Nome", render: encode, data: "nome_evento" },
 				{ title: "Descrição", render: encode, data: "desc_evento" },
+				{ title: "Turma", render: encode, data: "desc_turma" },
+				{ title: "Sala", render: encode, data: "desc_sala" },
+				{ title: "Professor", render: encode, data: "nome_prof" },
 				{ title: "Início", "class": "col-min text-right", "type": "customdatetimeint", data: "inicio_evento" },
 				{ title: "Término", "class": "col-min text-right", "type": "customdatetimeint", data: "termino_evento" }
 			],
@@ -80,6 +83,9 @@
 			if (this.getAttribute("data-excluir")) {
 				$("#lblNome").text(evento.nome_evento);
 				$("#lblDescricao").text(evento.desc_evento);
+				$("#lblTurma").text(turma.desc_turma);
+				$("#lblSala").text(sala.desc_sala);
+				$("#lblProfessor").text(prof.nome_prof);
 				$("#lblInicio").text(evento.inicio_evento);
 				$("#lblTermino").text(evento.termino_evento);
 

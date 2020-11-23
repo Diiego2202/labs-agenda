@@ -4,6 +4,9 @@ import DataUtil = require("../utils/dataUtil");
 import Evento = require("../models/evento");
 import Usuario = require("../models/usuario");
 import appsettings = require("../appsettings");
+import Turma = require("../models/turma");
+import Professor = require("../models/professor");
+import Sala = require("../models/sala");
 
 const router = express.Router();
 
@@ -12,13 +15,16 @@ router.all("/", wrap(async (req: express.Request, res: express.Response) => {
 	if (!u) {
 		res.redirect(appsettings.root + "/login");
 	} else {
-		let lista = await Evento.listarHoje();
+		let lista = await Evento.listar();
 
 		let opcoes = {
 			titulo: "Dashboard",
 			usuario: u,
 			lista: lista,
-			hoje: DataUtil.hojeISO()
+			hoje: DataUtil.hojeISO(),
+			turmas: await Turma.listar(),
+			prof: await Professor.listar(),
+			sala: await Sala.listar()
 		};
 
 		res.render("home/dashboard", opcoes);

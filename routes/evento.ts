@@ -49,13 +49,16 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	let u = await Usuario.cookie(req);
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
-	else
+	else{
 		res.render("evento/listar", {
 			titulo: "Gerenciar Eventos",
 			usuario: u,
 			lista: JSON.stringify(await Evento.listar()),
 			turmas: await Turma.listar()
 		});
+	}
+		
+		
 }));
 
 

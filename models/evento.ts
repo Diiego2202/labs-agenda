@@ -36,23 +36,23 @@ export = class Evento {
 
 	public static  validar(evento: Evento): string{
 		
-		// if(!evento){
-		// 	return "Dados inválidos";
-		// }
-		// if(!evento.nome_evento || evento.nome_evento.length>50){
-		// 	return "Nome inválido";
-		// }
-		// if(!evento.desc_evento || evento.desc_evento.length>50){
-		// 	return "Descrição Inválida";
-		// }
-		// if(!evento.inicio_evento ){
-		// 	//validação de data será aqui?
-		// 	return "Data de Início inválida"
-		// }
-		// if(!evento.termino_evento ){
-		// 	//validação de data será aqui?
-		// 	return "Data de Término inválida"
-		// }
+		if(!evento){
+			return "Dados inválidos";
+		}
+		if(!evento.nome_evento || evento.nome_evento.length>50){
+			return "Nome inválido";
+		}
+		if(!evento.desc_evento || evento.desc_evento.length>50){
+			return "Descrição Inválida";
+		}
+		if(!evento.inicio_evento ){
+			//validação de data será aqui?
+			return "Data de Início inválida"
+		}
+		if(!evento.termino_evento ){
+			//validação de data será aqui?
+			return "Data de Término inválida"
+		}
 		
 		return null;
 	}
@@ -83,7 +83,7 @@ export = class Evento {
 				await sql.query(" insert into evento_prof(id_prof, id_evento) values (?, ?)", [evento.id_prof, id_evento]);
 				await sql.query(" insert into evento_turma(id_turma, id_evento) values (?, ?)", [evento.id_turma, id_evento]);
 				await sql.query(" insert into evento_sala(id_sala, id_evento) values (?, ?)", [evento.id_sala, id_evento]);
-	
+
 			} catch (e) {
 			if (e.code && e.code === "ER_DUP_ENTRY")
 				res = `O evento ${evento.nome_evento} já existe`; // evento.nome que está no alterar.ejs
