@@ -61,5 +61,10 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 		
 }));
 
+router.post('/importar', async(req: express.Request) => {
+	let arquivo = req.body;
+
+	await Evento.importar(arquivo);
+});
 
 export = router;

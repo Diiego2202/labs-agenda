@@ -170,5 +170,25 @@ export = class Evento {
 
         return erro;
 
-    }
+	}
+	
+	public static async importar(evento: Evento) : Promise<Evento[]> {
+		let res : any;
+
+		await Sql.conectar(async(sql : Sql) => {
+			await sql.beginTransaction();
+
+			try {
+				await sql.query('INSERT INTO evento (nome_evento, desc_evento, inicio_evento, termino_evento) VALUES(?, ?, ?, ?)', [evento.nome_evento, evento.desc_evento, evento.inicio_evento, evento.termino_evento]);
+			} catch(err) {
+				if (err.code && err.code === "ER_DUP_ENTRY") {
+					res = `O evento ${evento.nome_evento} já existe`;
+				} else {
+					throw err;
+				}
+			}
+		})
+
+		return res;
+	}
 }
