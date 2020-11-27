@@ -39,6 +39,11 @@
 	</div>
 </div>
 
+<form id="formUpload">
+	<input type="file" accept=".csv" id="arquivoCSV" name="arquivoCSV"  />
+	<input type="submit" value="Importar" />
+</form>
+
 <%- contentFor("scripts") %>
 <script type="text/javascript">
 	"use strict";
@@ -78,4 +83,53 @@
 	
 	console.log(eventos);
 
+</script>
+
+<script type="text/javascript">
+
+	$("#formUpload").validate({
+		
+		rules: {
+			
+			arquivoCSV: {
+				required: true
+			}
+			
+		},
+		
+		submitHandler: function (form) {
+
+			if ($.active) {
+				return;
+			}
+			
+			let opcoes = {
+				
+				url: "<%- root %>/evento/importar",
+				
+				// Não precisa do cache para POST e PUT!
+				method: "POST",
+				
+				// Só com campos de texto/data/número
+				//data: $("#formCriar").serialize(),
+
+				// Geral (incluindo um ou mais arquivos)
+				data: new FormData(form),
+				processData: false,
+				contentType: false,
+
+				success: function (dadosDeRetorno) {
+					alert("Sucesso! " + dadosDeRetorno);
+				},
+				
+				error: function () {
+					alert("Deu ruim! :(");
+				}
+				
+			};
+			
+			$.ajax(opcoes);
+		}
+		
+	});
 </script>

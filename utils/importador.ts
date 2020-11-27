@@ -18,9 +18,9 @@ let importador = fastCSV.parse()
         Sql.conectar(async(sql : Sql) => {
             await sql.beginTransaction();
 
-            try {
+            /*try {
                 Evento.importar();
-            }
+            }*/
         });
     })
 

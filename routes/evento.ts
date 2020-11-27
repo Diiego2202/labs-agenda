@@ -1,5 +1,6 @@
 import express = require("express");
 import wrap = require("express-async-error-wrapper");
+import multer = require("multer");
 import Evento = require("../models/evento");
 import Professor = require("../models/professor");
 import Sala = require("../models/sala");
@@ -61,10 +62,36 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 		
 }));
 
-router.post('/importar', async(req: express.Request) => {
-	let arquivo = req.body;
+router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express.Request, res: express.Response) => {
+	debugger;
 
-	await Evento.importar(arquivo);
-});
+	let arquivo = req["file"];
+
+	if (!arquivo) {
+		res.status(400).json("CSV faltando");
+		return;
+	}
+
+	if (!arquivo.buffer || !arquivo.size) {
+		res.status(400).json("CSV inválido");
+		return;
+	}
+
+	if (arquivo.size > (1024 * 1024)) {
+		res.status(400).json("CSV muito grande");
+		return;
+	}
+
+	const buffer = arquivo.buffer as Buffer;
+	let csv = buffer.toString("utf-8");
+	csv = csv.replace(/\r/g, "");
+	let linhas = csv.split("\n");
+
+	debugger;
+
+	//await Evento.importar(arquivo);
+
+	res.json(true);
+}));
 
 export = router;
