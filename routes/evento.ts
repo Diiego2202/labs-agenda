@@ -89,7 +89,7 @@ router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express
 
 	debugger;
 
-	//await Evento.importar(arquivo);
+	await Evento.importar(arquivo);
 
 	res.json(true);
 }));

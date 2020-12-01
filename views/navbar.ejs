@@ -145,6 +145,17 @@
 
 				<li class="sidebar-spacer"></li>
 
+				<% if (usuario.admin) { %>
+
+					<li class="sidebar-spacer"></li>
+	
+					<li>
+						<a href="<%- root %>/evento/importar"><i class="fa fa-user fa-fw"></i>Importar CSV<span class="fa arrow"></span></a>
+					</li>
+	
+				<% } %>
+	
+
 			</ul>
 		</div>
 	</div>

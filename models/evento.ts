@@ -179,7 +179,11 @@ export = class Evento {
 			await sql.beginTransaction();
 
 			try {
-				await sql.query('INSERT INTO evento (nome_evento, desc_evento, inicio_evento, termino_evento) VALUES(?, ?, ?, ?)', [evento.nome_evento, evento.desc_evento, evento.inicio_evento, evento.termino_evento]);
+				await sql.query("insert into evento (nome_evento, desc_evento, inicio_evento, termino_evento) values (?,?,?,?)",[evento.nome_evento, evento.desc_evento, evento.inicio_evento, evento.termino_evento]);
+				const id_evento = await sql.scalar("select last_insert_id()") as number;
+				await sql.query(" insert into evento_prof(id_prof, id_evento) values (?, ?)", [evento.id_prof, id_evento]);
+				await sql.query(" insert into evento_turma(id_turma, id_evento) values (?, ?)", [evento.id_turma, id_evento]);
+				await sql.query(" insert into evento_sala(id_sala, id_evento) values (?, ?)", [evento.id_sala, id_evento]);
 			} catch(err) {
 				if (err.code && err.code === "ER_DUP_ENTRY") {
 					res = `O evento ${evento.nome_evento} já existe`;
