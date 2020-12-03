@@ -1,31 +1,31 @@
 
 export = class DataUtil {
-	private static formatar(ano: number, mes: number, dia: number): string {
+	public static formatar(ano: number, mes: number, dia: number): string {
 		return ano + "-" + ((mes < 10) ? ("0" + mes) : mes) + "-" + ((dia < 10) ? ("0" + dia) : dia);
 	}
 
-	private static formatarComHorario(ano: number, mes: number, dia: number, hora: number, minuto: number, segundo: number): string {
+	public static formatarComHorario(ano: number, mes: number, dia: number, hora: number, minuto: number, segundo: number): string {
 		return ano + "-" + ((mes < 10) ? ("0" + mes) : mes) + "-" + ((dia < 10) ? ("0" + dia) : dia) + "T" + ((hora < 10) ? ("0" + hora) : hora) + ":" + ((minuto < 10) ? ("0" + minuto) : minuto) + ":" + ((segundo < 10) ? ("0" + segundo) : segundo);
 	}
 
-	public static converterDataISO(data: string): string {
-		if (!data || !(data = data.trim()) || data.length > 10)
+	public static converterDataISO(dataComOuSemHorario: string): string {
+		if (!dataComOuSemHorario || !(dataComOuSemHorario = dataComOuSemHorario.trim()))
 			return null;
-		let b1 = data.indexOf("/");
-		let b2 = data.lastIndexOf("/");
+		let b1 = dataComOuSemHorario.indexOf("/");
+		let b2 = dataComOuSemHorario.lastIndexOf("/");
 		let dia: number, mes: number, ano: number;
 		if (b1 <= 0 || b2 <= b1) {
-			let b1 = data.indexOf("-");
-			let b2 = data.lastIndexOf("-");
+			let b1 = dataComOuSemHorario.indexOf("-");
+			let b2 = dataComOuSemHorario.lastIndexOf("-");
 			if (b1 <= 0 || b2 <= b1)
 				return null;
-			ano = parseInt(data.substring(0, b1));
-			mes = parseInt(data.substring(b1 + 1, b2));
-			dia = parseInt(data.substring(b2 + 1));
+			ano = parseInt(dataComOuSemHorario.substring(0, b1));
+			mes = parseInt(dataComOuSemHorario.substring(b1 + 1, b2));
+			dia = parseInt(dataComOuSemHorario.substring(b2 + 1));
 		} else {
-			dia = parseInt(data.substring(0, b1));
-			mes = parseInt(data.substring(b1 + 1, b2));
-			ano = parseInt(data.substring(b2 + 1));
+			dia = parseInt(dataComOuSemHorario.substring(0, b1));
+			mes = parseInt(dataComOuSemHorario.substring(b1 + 1, b2));
+			ano = parseInt(dataComOuSemHorario.substring(b2 + 1));
 		}
 		if (isNaN(dia) || isNaN(mes) || isNaN(ano) ||
 			dia < 1 || mes < 1 || ano < 1 ||
@@ -48,6 +48,20 @@ export = class DataUtil {
 				if (dia > 30)
 					return null;
 				break;
+		}
+		let sepHorario = dataComOuSemHorario.indexOf(" ");
+		if (sepHorario < 0)
+			sepHorario = dataComOuSemHorario.indexOf("T");
+		if (sepHorario >= 0) {
+			const horario = dataComOuSemHorario.substr(sepHorario + 1);
+			const sepMinuto = horario.indexOf(":");
+			if (sepMinuto >= 0) {
+				const hora = parseInt(horario);
+				const minuto = parseInt(horario.substr(sepMinuto + 1));
+				if (hora >= 0 && hora <= 23 && minuto >= 0 && minuto <= 59)
+					return DataUtil.formatarComHorario(ano, mes, dia, hora, minuto, 0);
+			}
+			return null;
 		}
 		return DataUtil.formatar(ano, mes, dia);
 	}

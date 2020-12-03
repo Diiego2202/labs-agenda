@@ -95,6 +95,9 @@ create table evento_turma(
 
  insert into evento(nome_evento, desc_evento, inicio_evento, termino_evento) values
  ('ev1', 'Descrição resumida do evento' ,'2020-10-02T08:00', '2020-10-02T09:00');
+ insert into professor(nome_prof) values ('Professor');
+ insert into turma(desc_turma) values ('Turma');
+ insert into sala(desc_sala, andar_sala) values ('Sala', 1);
  insert into evento_prof(id_prof, id_evento) values (1, 1);
  insert into evento_turma(id_evento, id_turma) values(1, 1);
  insert into evento_sala(id_evento, id_sala) values(1,1);

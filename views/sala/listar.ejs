@@ -40,9 +40,8 @@
 		deferRender: true,
 		columns: [
 			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_sala", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/sala/alterar?id_sala=" + row.id_sala + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
-			{ title: "Id", "class": "col-min text-right", "type": "number", data: "id_sala" },
 			{ title: "Descrição", render: encode, data: "desc_sala" },
-			{ title: "Andar", "class": "col-min text-right", "type": "string", data: "andar_sala" },
+			{ title: "Andar", "class": "col-min text-right", "type": "number", data: "andar_sala" },
 		],
 		data: <%- lista %>,
 		export: { title: "Salas" }

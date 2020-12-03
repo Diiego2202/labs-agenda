@@ -51,11 +51,14 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else{
+		const anoAtual = (new Date()).getFullYear();
 		res.render("evento/listar", {
 			titulo: "Gerenciar Eventos",
 			usuario: u,
-			lista: JSON.stringify(await Evento.listar()),
-			turmas: await Turma.listar()
+			anoAtual: anoAtual,
+			lista: JSON.stringify(await Evento.listar(0, 0, anoAtual)),
+			turmas: await Turma.listar(),
+			salas: await Sala.listar()
 		});
 	}
 		

@@ -40,7 +40,6 @@
 		deferRender: true,
 		columns: [
 			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_prof", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/professor/alterar?id_prof=" + row.id_prof + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
-			{ title: "Id", "class": "col-min text-right", "type": "number", data: "id_prof" },
 			{ title: "Nome", render: encode, data: "nome_prof" },
 		],
 		data: <%- lista %>,
