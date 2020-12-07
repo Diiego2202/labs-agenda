@@ -3,29 +3,29 @@
 		<form id="form" class="panel panel-default" action="#">
 			<div class="panel-heading">Informações da Aula</div>
 			<div class="panel-body no-bottom">
-				<input type="hidden" id="id_evento" name="id_evento" value="<%=(item ? item.id_evento : 0) %>" />
+				<input type="hidden" id="id_aula" name="id_aula" value="<%=(item ? item.id_aula : 0) %>" />
 				<div class="form-group">
 					<div class="form-group">
-						<label for="nome_evento">Nome</label>
-						<input id="nome_evento" name="nome_evento" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_evento : '') %>" />
+						<label for="nome_aula">Nome</label>
+						<input id="nome_aula" name="nome_aula" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_aula : '') %>" />
 					</div>
 					<div class="form-group">
-						<label for="desc_evento">Descrição</label>
-						<input id="desc_evento" name="desc_evento" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.desc_evento : '') %>" />
+						<label for="desc_aula">Descrição</label>
+						<input id="desc_aula" name="desc_aula" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.desc_aula : '') %>" />
 					</div>
 
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="inicio_evento">Início</label>
-								<input type="datetime-local" id="inicio_evento" name="inicio_evento" class="form-control" spellcheck="false" value="<%=(item ? item.inicio_evento : '') %>" required>
+								<label for="inicio_aula">Início</label>
+								<input type="datetime-local" id="inicio_aula" name="inicio_aula" class="form-control" spellcheck="false" value="<%=(item ? item.inicio_aula : '') %>" required>
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="termino_evento">Término</label>
-								<input type="datetime-local" id="termino_evento" name="termino_evento" class="form-control" spellcheck="false" value="<%=(item ? item.termino_evento : '') %>" required>
+								<label for="termino_aula">Término</label>
+								<input type="datetime-local" id="termino_aula" name="termino_aula" class="form-control" spellcheck="false" value="<%=(item ? item.termino_aula : '') %>" required>
 							</div>
 						</div>
 					</div>
@@ -84,12 +84,12 @@
 
 	$("#form").validate({
 		rules: {
-			nome_evento: {
+			nome_aula: {
 				required: true,
 				minlength: 3,
 				maxlength: 50
 			},
-			desc_evento: {
+			desc_aula: {
 				required: true,
 				minlength: 3,
 				maxlength: 50
@@ -115,7 +115,7 @@
 
 			//<% if (item) { %>
 
-			JsonWebApi.postFormData("<%- root %>/api/evento/alterar", form, function (response) {
+			JsonWebApi.postFormData("<%- root %>/api/aula/alterar", form, function (response) {
 				if (response.success){
 					
 					Notification.success("Aula alterada com sucesso! " + emoji.happy);
@@ -126,7 +126,7 @@
 
 			//<% } else { %>
 		
-			JsonWebApi.postFormData("<%- root %>/api/evento/criar", form, function (response) {
+			JsonWebApi.postFormData("<%- root %>/api/aula/criar", form, function (response) {
 				if (response.success) {
 					resetForm("#form");
 					Notification.success("Aula criada com sucesso! " + emoji.happy);

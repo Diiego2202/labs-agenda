@@ -1,10 +1,10 @@
-function converterEventos(eventos) {
-	if (!eventos)
+function converterAulas(aulas) {
+	if (!aulas)
 		return null;
-	for (var i = 0; i < eventos.length; i++) {
-		eventos[i].title = eventos[i].nome_evento;
-		eventos[i].start = converterDataISO(eventos[i].inicio_evento);
-		eventos[i].end = converterDataISO(eventos[i].termino_evento);
+	for (var i = 0; i < aulas.length; i++) {
+		aulas[i].title = aulas[i].nome_aula;
+		aulas[i].start = converterDataISO(aulas[i].inicio_aula);
+		aulas[i].end = converterDataISO(aulas[i].termino_aula);
 	}
 }
 

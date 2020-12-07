@@ -107,14 +107,14 @@
 			order: [[6, "asc"], [7, "asc"]],
 			deferRender: true,
 			columns: [
-				{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_evento", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/evento/alterar?id_evento=" + row.id_evento + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
-				{ title: "Nome", render: encode, data: "nome_evento" },
-				{ title: "Descrição", render: encode, data: "desc_evento" },
+				{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_aula", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/aula/alterar?id_aula=" + row.id_aula + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
+				{ title: "Nome", render: encode, data: "nome_aula" },
+				{ title: "Descrição", render: encode, data: "desc_aula" },
 				{ title: "Turma", render: encode, data: "desc_turma" },
 				{ title: "Sala", render: encode, data: "desc_sala" },
 				{ title: "Professor", render: encode, data: "nome_prof" },
-				{ title: "Início", "class": "col-min text-right", "type": "customdatetimeint", data: "inicio_evento" },
-				{ title: "Término", "class": "col-min text-right", "type": "customdatetimeint", data: "termino_evento" }
+				{ title: "Início", "class": "col-min text-right", "type": "customdatetimeint", data: "inicio_aula" },
+				{ title: "Término", "class": "col-min text-right", "type": "customdatetimeint", data: "termino_aula" }
 			],
 			data: dados,
 			export: { title: "Aulas" }
@@ -124,16 +124,16 @@
 			if (JsonWebApi.active)
 				return;
 
-			var evento = tabela.row(trClicada = this.parentNode.parentNode).data();
+			var aula = tabela.row(trClicada = this.parentNode.parentNode).data();
 
 			if (this.getAttribute("data-excluir")) {
-				$("#lblNome").text(evento.nome_evento);
-				$("#lblDescricao").text(evento.desc_evento);
+				$("#lblNome").text(aula.nome_aula);
+				$("#lblDescricao").text(aula.desc_aula);
 				$("#lblTurma").text(turma.desc_turma);
 				$("#lblSala").text(sala.desc_sala);
 				$("#lblProfessor").text(prof.nome_prof);
-				$("#lblInicio").text(evento.inicio_evento);
-				$("#lblTermino").text(evento.termino_evento);
+				$("#lblInicio").text(aula.inicio_aula);
+				$("#lblTermino").text(aula.termino_aula);
 
 				$("#modalExcluir").modal({
 					backdrop: "static",
@@ -149,11 +149,11 @@
 
 		$("#modalExcluir").modal("hide");
 
-		var evento = tabela.row(trClicada).data();
+		var aula = tabela.row(trClicada).data();
 
 		Notification.wait();
 
-		JsonWebApi.get("<%- root %>/api/evento/excluir", function (response) {
+		JsonWebApi.get("<%- root %>/api/aula/excluir", function (response) {
 			if (response.success) {
 				Notification.success("Aula excluída com sucesso! " + emoji.happy);
 				tabela.row(trClicada).remove().draw();
@@ -161,7 +161,7 @@
 				Notification.error(response.value, true);
 			}
 			trClicada = null;
-		}, "id_evento", evento.id_evento);
+		}, "id_aula", aula.id_aula);
 	}
 
 	function atualizar() {
@@ -173,7 +173,7 @@
 
 		Notification.wait();
 
-		JsonWebApi.get("<%- root %>/api/evento/listar", function (response) {
+		JsonWebApi.get("<%- root %>/api/aula/listar", function (response) {
 			if (response.success) {
 				Notification.hide();
 				turmaAtual = turma;
@@ -210,7 +210,7 @@
 			
 			let opcoes = {
 				
-				url: "<%- root %>/evento/importar",
+				url: "<%- root %>/aula/importar",
 				
 				// Não precisa do cache para POST e PUT!
 				method: "POST",

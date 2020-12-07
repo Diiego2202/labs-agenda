@@ -52,9 +52,9 @@
 	aLink.textContent = url.substr(url.indexOf("://") + 3);
 	prepareCopyHandler();
 
-	var eventos = <%- JSON.stringify(lista) %>;
+	var aulas = <%- JSON.stringify(lista) %>;
 
-	converterEventos(eventos);
+	converterAulas(aulas);
 
 	var opcoesCalendario = {
 		headerToolbar: {
@@ -70,7 +70,7 @@
 		navLinks: false,
 		editable: false,
 		dayMaxEvents: true,
-		events: eventos
+		events: aulas
 	};
 
 	var calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
@@ -83,12 +83,12 @@
 			return;
 		Notification.wait();
 
-		JsonWebApi.get("<%- root %>/api/evento/listar", function (response) {
+		JsonWebApi.get("<%- root %>/api/aula/listar", function (response) {
 			if (response.success) {
 				Notification.hide();
 				turmaAtual = turma;
-				eventos = <%- JSON.stringify(lista) %>;
-				console.log(eventos);
+				aulas = <%- JSON.stringify(lista) %>;
+				console.log(aulas);
 			
 				calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
 

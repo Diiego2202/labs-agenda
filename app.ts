@@ -99,13 +99,13 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 
 // Cadastros simples
 app.use("/", require("./routes/home"));
-app.use("/evento", require("./routes/evento"));
+app.use("/aula", require("./routes/aula"));
 app.use("/usuario", require("./routes/usuario"));
 app.use("/professor", require("./routes/professor"));
 app.use("/sala", require("./routes/sala"));
 app.use("/turma", require("./routes/turma"));
 // API
-app.use("/api/evento", require("./routes/api/evento"));
+app.use("/api/aula", require("./routes/api/aula"));
 app.use("/api/usuario", require("./routes/api/usuario"));
 app.use("/api/professor", require("./routes/api/professor"));
 app.use("/api/sala", require("./routes/api/sala"));

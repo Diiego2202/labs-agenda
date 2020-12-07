@@ -1,7 +1,7 @@
 import express = require("express");
 import wrap = require("express-async-error-wrapper");
 import multer = require("multer");
-import Evento = require("../models/evento");
+import Aula = require("../models/aula");
 import Professor = require("../models/professor");
 import Sala = require("../models/sala");
 import Turma = require("../models/turma");
@@ -15,8 +15,8 @@ router.all("/criar", wrap(async (req: express.Request, res: express.Response) =>
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else
-		res.render("evento/alterar", {
-			titulo: "Criar Evento",
+		res.render("aula/alterar", {
+			titulo: "Criar Aula",
 			usuario: u,
 			professores: await Professor.listar(),
 			salas: await Sala.listar(),
@@ -30,13 +30,13 @@ router.all("/alterar", wrap(async (req: express.Request, res: express.Response) 
 	if (!u || !u.admin) {
 		res.redirect(appsettings.root + "/acesso");
 	} else {
-		let id = parseInt(req.query["id_evento"] as string);
-		let item: Evento = null;
-		if (isNaN(id) || !(item = await Evento.obter(id)))
+		let id = parseInt(req.query["id_aula"] as string);
+		let item: Aula = null;
+		if (isNaN(id) || !(item = await Aula.obter(id)))
 			res.render("home/nao-encontrado", { usuario: u });
 		else
-			res.render("evento/alterar", {
-				titulo: "Editar Evento",
+			res.render("aula/alterar", {
+				titulo: "Editar Aula",
 				usuario: u,
 				professores: await Professor.listar(),
 				salas: await Sala.listar(),
@@ -52,11 +52,11 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 		res.redirect(appsettings.root + "/acesso");
 	else{
 		const anoAtual = (new Date()).getFullYear();
-		res.render("evento/listar", {
+		res.render("aula/listar", {
 			titulo: "Gerenciar Aulas",
 			usuario: u,
 			anoAtual: anoAtual,
-			lista: JSON.stringify(await Evento.listar(0, 0, anoAtual)),
+			lista: JSON.stringify(await Aula.listar(0, 0, anoAtual)),
 			turmas: await Turma.listar(),
 			salas: await Sala.listar()
 		});
@@ -92,7 +92,7 @@ router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express
 
 	debugger;
 
-	await Evento.importar(arquivo);
+	await Aula.importar(arquivo);
 
 	res.json(true);
 }));
