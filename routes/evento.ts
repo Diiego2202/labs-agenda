@@ -53,7 +53,7 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	else{
 		const anoAtual = (new Date()).getFullYear();
 		res.render("evento/listar", {
-			titulo: "Gerenciar Eventos",
+			titulo: "Gerenciar Aulas",
 			usuario: u,
 			anoAtual: anoAtual,
 			lista: JSON.stringify(await Evento.listar(0, 0, anoAtual)),

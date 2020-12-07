@@ -16,7 +16,7 @@
 		<div class="col-sm-5">
 			<div class="form-group">
 				<label for="turma">Filtrar por Turma</label>
-				<select size="1" id="turma" class="form-control">
+				<select size="1" id="turma" class="form-control" onchange="atualizar()">
 					<option value="0">Todas</option>
 					<% for (let i = 0; i < turmas.length; i++) { %>
 						<option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
@@ -42,7 +42,8 @@
 <%- contentFor("scripts") %>
 <script type="text/javascript">
 	"use strict";
-
+	prepareCbSearch(document.getElementById("turma"));
+	var turmaAtual = 0;
 
 	var url = location.href, i = url.lastIndexOf("/"), aLink = document.getElementById("aLink");
 	url += ((i !== (url.length - 1)) ? "/hoje" : "hoje");
@@ -75,7 +76,31 @@
 	var calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
 
 	calendario.render();
-	
-	console.log(eventos);
+
+	function atualizar() {
+		var turma = parseInt($("#turma").val());
+		if ((turmaAtual === turma) || JsonWebApi.active)
+			return;
+		Notification.wait();
+
+		JsonWebApi.get("<%- root %>/api/evento/listar", function (response) {
+			if (response.success) {
+				Notification.hide();
+				turmaAtual = turma;
+				eventos = <%- JSON.stringify(lista) %>;
+				console.log(eventos);
+			
+				calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
+
+				calendario.render();
+			} else {
+				Notification.error(response.value, true);
+			}
+		}, "id_turma", turma);
+
+
+		
+
+	}
 
 </script>

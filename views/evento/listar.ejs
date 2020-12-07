@@ -49,7 +49,7 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					Tem certeza que deseja excluir o evento <span id="lblNome"></span>? Esta operação <b class="col-h">NÃO</b> pode ser desfeita, e <b class="col-h">TODAS AS RESPOSTAS</b> deste evento, de <b class="col-h">TODAS AS PESSOAS</b>, também serão <b class="col-h">EXCLUÍDAS</b>!
+					Tem certeza que deseja excluir a aula <span id="lblNome"></span>? Esta operação <b class="col-h">NÃO</b> pode ser desfeita, e <b class="col-h">TODAS AS RESPOSTAS</b> desta aula, de <b class="col-h">TODAS AS PESSOAS</b>, também serão <b class="col-h">EXCLUÍDAS</b>!
 				</p>
 				
 			</div>
@@ -64,7 +64,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div id="tabela_container" style='  display: flex; justify-content: center; align-items: center;' class="panel-body dataTable_wrapper">
+			<div id="tabela_container" style='display: flex; justify-content: center; align-items: center;' class="panel-body dataTable_wrapper">
 				<div class="row" >
 					<div class="col-sm-5" >
 						<div class="form-group">
@@ -117,7 +117,7 @@
 				{ title: "Término", "class": "col-min text-right", "type": "customdatetimeint", data: "termino_evento" }
 			],
 			data: dados,
-			export: { title: "Eventos" }
+			export: { title: "Aulas" }
 		});
 
 		$("#tabela").on("click", "tbody button", function () {
@@ -155,7 +155,7 @@
 
 		JsonWebApi.get("<%- root %>/api/evento/excluir", function (response) {
 			if (response.success) {
-				Notification.success("Evento excluído com sucesso! " + emoji.happy);
+				Notification.success("Aula excluída com sucesso! " + emoji.happy);
 				tabela.row(trClicada).remove().draw();
 			} else {
 				Notification.error(response.value, true);
