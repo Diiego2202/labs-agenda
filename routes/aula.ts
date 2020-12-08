@@ -90,7 +90,20 @@ router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express
 	csv = csv.replace(/\r/g, "");
 	let linhas = csv.split("\n");
 	let dados = linhas.shift();
+
+	// Excluir linhas vazias
+	// linhas.forEach(linha => function(index) {
+	// 	if(linha.length <= 0) {
+	// 		linhas.splice(index, 1);
+	// 	}
+	// });
+
+
+	// Retira o último elemento para teste: caso não seja vazia reinsere novamente
 	let excluido = linhas.pop();
+	if(excluido.length >= 1) {
+		linhas.push(excluido);
+	}
 
 	debugger;
 
