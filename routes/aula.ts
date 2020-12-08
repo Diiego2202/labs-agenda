@@ -89,10 +89,13 @@ router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express
 	let csv = buffer.toString("utf-8");
 	csv = csv.replace(/\r/g, "");
 	let linhas = csv.split("\n");
+	let dados = linhas.shift();
+	let excluido = linhas.pop();
 
 	debugger;
 
-	await Aula.importar(arquivo);
+	// await Aula.importar(arquivo);
+	console.log(linhas);
 
 	res.json(true);
 }));
