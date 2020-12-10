@@ -5,7 +5,7 @@
 			<div id="tabela_container" class="panel-body dataTable_wrapper">
 				<h3 class="no-margin-top">Filtro</h3>
 				<div class="row">
-					<div class="col-sm-5">
+					<div class="col-sm-6">
 						<div class="form-group">
 							<label for="turma">Turma</label>
 							<select size="1" id="turma" class="form-control" onchange="atualizar()">
@@ -16,7 +16,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-6">
 						<div class="form-group">
 							<label for="sala">Sala</label>
 							<select size="1" id="sala" class="form-control" onchange="atualizar()">
@@ -27,10 +27,32 @@
 							</select>
 						</div>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col-sm-2">
 						<div class="form-group">
 							<label for="ano">Ano</label>
 							<input id="ano" type="number" class="form-control" onchange="atualizar()" value="<%- anoAtual %>" />
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label for="mes">Mês</label>
+							<select size="1" id="mes" class="form-control" onchange="atualizar()">
+								<option value="0">Todos</option>
+								<option value="1" <%- (mesAtual === 1 ? 'selected="selected"' : '') %>>Janeiro</option>
+								<option value="2" <%- (mesAtual === 2 ? 'selected="selected"' : '') %>>Fevereiro</option>
+								<option value="3" <%- (mesAtual === 3 ? 'selected="selected"' : '') %>>Março</option>
+								<option value="4" <%- (mesAtual === 4 ? 'selected="selected"' : '') %>>Abril</option>
+								<option value="5" <%- (mesAtual === 5 ? 'selected="selected"' : '') %>>Maio</option>
+								<option value="6" <%- (mesAtual === 6 ? 'selected="selected"' : '') %>>Junho</option>
+								<option value="7" <%- (mesAtual === 7 ? 'selected="selected"' : '') %>>Julho</option>
+								<option value="8" <%- (mesAtual === 8 ? 'selected="selected"' : '') %>>Agosto</option>
+								<option value="9" <%- (mesAtual === 9 ? 'selected="selected"' : '') %>>Setembro</option>
+								<option value="10" <%- (mesAtual === 10 ? 'selected="selected"' : '') %>>Outubro</option>
+								<option value="11" <%- (mesAtual === 11 ? 'selected="selected"' : '') %>>Novembro</option>
+								<option value="12" <%- (mesAtual === 12 ? 'selected="selected"' : '') %>>Dezembro</option>
+							</select>
 						</div>
 					</div>
 				</div>
@@ -96,8 +118,9 @@
 	window.prepareCbSearchAllowLower = true;
 	prepareCbSearch(document.getElementById("turma"));
 	prepareCbSearch(document.getElementById("sala"));
+	prepareCbSearch(document.getElementById("mes"));
 
-	var trClicada, tabela, turmaAtual = 0, salaAtual = 0, anoAtual = <%- anoAtual %>;
+	var trClicada, tabela, turmaAtual = 0, salaAtual = 0, mesAtual = <%- mesAtual %>, anoAtual = <%- anoAtual %>;
 
 	function criarTabela(dados) {
 		$("#tabela_wrapper").remove();
@@ -113,8 +136,8 @@
 				{ title: "Turma", render: encode, data: "desc_turma" },
 				{ title: "Sala", render: encode, data: "desc_sala" },
 				{ title: "Professor", render: encode, data: "nome_prof" },
-				{ title: "Início", "class": "col-min text-right", "type": "customdatetimeint", data: "inicio_aula" },
-				{ title: "Término", "class": "col-min text-right", "type": "customdatetimeint", data: "termino_aula" }
+				{ title: "Início", "class": "text-right", "type": "customdatetimeint", data: "inicio_aula" },
+				{ title: "Término", "class": "text-right", "type": "customdatetimeint", data: "termino_aula" }
 			],
 			data: dados,
 			export: { title: "Aulas" }
@@ -168,7 +191,9 @@
 		var turma = parseInt($("#turma").val());
 		var sala = parseInt($("#sala").val());
 		var ano = (parseInt($("#ano").val()) || 0);
-		if ((turmaAtual === turma && salaAtual === sala && ano === anoAtual) || JsonWebApi.active)
+		var mes = (parseInt($("#mes").val()) || 0);
+
+		if ((turmaAtual === turma && salaAtual === sala && ano === anoAtual && mes === mesAtual) || JsonWebApi.active)
 			return;
 
 		Notification.wait();
@@ -179,11 +204,12 @@
 				turmaAtual = turma;
 				salaAtual = sala;
 				anoAtual = ano;
+				mesAtual = mes;
 				criarTabela(response.value);
 			} else {
 				Notification.error(response.value, true);
 			}
-		}, "id_turma", turma, "id_sala", sala, "ano", ano);
+		}, "id_turma", turma, "id_sala", sala, "ano", ano, "mes", mes);
 	}
 
 	criarTabela(<%- lista %>);

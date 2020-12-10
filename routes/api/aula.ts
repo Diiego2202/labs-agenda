@@ -13,7 +13,8 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	res.json(await Aula.listar(
 		parseInt(req.query["id_turma"] as string),
 		parseInt(req.query["id_sala"] as string),
-		parseInt(req.query["ano"] as string)
+		parseInt(req.query["ano"] as string),
+		parseInt(req.query["mes"] as string)
 	));
 }));
 

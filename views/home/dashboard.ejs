@@ -11,29 +11,74 @@
 		</div>
 	</div>
 </div>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-sm-5">
-			<div class="form-group">
-				<label for="turma">Filtrar por Turma</label>
-				<select size="1" id="turma" class="form-control" onchange="atualizar()">
-					<option value="0">Todas</option>
-					<% for (let i = 0; i < turmas.length; i++) { %>
-						<option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
-					<% } %>
-				</select>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-body no-bottom">
+				<h2 class="no-margin-top col-xs-space-bottom text-center"><i class="fa fa-filter"></i>Filtro</h2>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="turma">Turma</label>
+							<select size="1" id="turma" class="form-control" onchange="atualizar()">
+								<option value="0">Todas</option>
+								<% for (let i = 0; i < turmas.length; i++) { %>
+									<option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
+								<% } %>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="sala">Sala</label>
+							<select size="1" id="sala" class="form-control" onchange="atualizar()">
+								<option value="0">Todas</option>
+								<% for (let i = 0; i < salas.length; i++) { %>
+									<option value="<%- salas[i].id_sala %>"><%= salas[i].desc_sala %></option>
+								<% } %>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-2">
+						<div class="form-group">
+							<label for="ano">Ano</label>
+							<input id="ano" type="number" class="form-control" onchange="atualizar()" value="<%- anoAtual %>" />
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<label for="mes">Mês</label>
+							<select size="1" id="mes" class="form-control" onchange="atualizar()">
+								<option value="1" <%- (mesAtual === 1 ? 'selected="selected"' : '') %>>Janeiro</option>
+								<option value="2" <%- (mesAtual === 2 ? 'selected="selected"' : '') %>>Fevereiro</option>
+								<option value="3" <%- (mesAtual === 3 ? 'selected="selected"' : '') %>>Março</option>
+								<option value="4" <%- (mesAtual === 4 ? 'selected="selected"' : '') %>>Abril</option>
+								<option value="5" <%- (mesAtual === 5 ? 'selected="selected"' : '') %>>Maio</option>
+								<option value="6" <%- (mesAtual === 6 ? 'selected="selected"' : '') %>>Junho</option>
+								<option value="7" <%- (mesAtual === 7 ? 'selected="selected"' : '') %>>Julho</option>
+								<option value="8" <%- (mesAtual === 8 ? 'selected="selected"' : '') %>>Agosto</option>
+								<option value="9" <%- (mesAtual === 9 ? 'selected="selected"' : '') %>>Setembro</option>
+								<option value="10" <%- (mesAtual === 10 ? 'selected="selected"' : '') %>>Outubro</option>
+								<option value="11" <%- (mesAtual === 11 ? 'selected="selected"' : '') %>>Novembro</option>
+								<option value="12" <%- (mesAtual === 12 ? 'selected="selected"' : '') %>>Dezembro</option>
+							</select>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
-	
+
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-body text-center">
 				<h2 class="no-margin-top col-xs-space-bottom"><i class="fa fa-calendar"></i>Resumo de Hoje</h2>
-
-				<div id="calendario"></div>
+				<div id="calendarioPlaceholder"></div>
 			</div>
 		</div>
 	</div>
@@ -42,8 +87,13 @@
 <%- contentFor("scripts") %>
 <script type="text/javascript">
 	"use strict";
+
+	window.prepareCbSearchAllowLower = true;
 	prepareCbSearch(document.getElementById("turma"));
-	var turmaAtual = 0;
+	prepareCbSearch(document.getElementById("sala"));
+	prepareCbSearch(document.getElementById("mes"));
+
+	var turmaAtual = 0, salaAtual = 0, mesAtual = <%- mesAtual %>, anoAtual = <%- anoAtual %>;
 
 	var url = location.href, i = url.lastIndexOf("/"), aLink = document.getElementById("aLink");
 	url += ((i !== (url.length - 1)) ? "/hoje" : "hoje");
@@ -52,55 +102,61 @@
 	aLink.textContent = url.substr(url.indexOf("://") + 3);
 	prepareCopyHandler();
 
-	var aulas = <%- JSON.stringify(lista) %>;
+	var aulas = <%- JSON.stringify(lista) %>, calendario = null;
 
-	converterAulas(aulas);
+	function desenharCalendario() {
+		converterAulas(aulas);
 
-	var opcoesCalendario = {
-		headerToolbar: {
-			left: "",
-			center: "title",
-			right: ""
-		},
-		initialDate: "<%= hoje %>",
-		initialView: "dayGridMonth",
-		locale: "pt-br",
-		buttonIcons: false,
-		weekNumbers: false,
-		navLinks: false,
-		editable: false,
-		dayMaxEvents: true,
-		events: aulas
-	};
+		$("#calendarioPlaceholder").html('<div id="calendario"></div>');
 
-	var calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
+		var opcoesCalendario = {
+			headerToolbar: {
+				left: "",
+				center: "title",
+				right: ""
+			},
+			initialDate: ((anoAtual == "<%- anoAtual %>" && mesAtual == "<%- mesAtual %>") ? "<%- hoje %>" : (anoAtual + "-" + format2(mesAtual) + "-01")),
+			initialView: "dayGridMonth",
+			locale: "pt-br",
+			buttonIcons: false,
+			weekNumbers: false,
+			navLinks: false,
+			editable: false,
+			dayMaxEvents: true,
+			events: aulas
+		};
 
-	calendario.render();
+		calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
+
+		calendario.render();
+	}
 
 	function atualizar() {
 		var turma = parseInt($("#turma").val());
-		if ((turmaAtual === turma) || JsonWebApi.active)
+		var sala = parseInt($("#sala").val());
+		var ano = (parseInt($("#ano").val()) || 0);
+		var mes = (parseInt($("#mes").val()) || 0);
+
+		if ((turmaAtual === turma && salaAtual === sala && ano === anoAtual && mes === mesAtual) || JsonWebApi.active)
 			return;
+
 		Notification.wait();
 
 		JsonWebApi.get("<%- root %>/api/aula/listar", function (response) {
 			if (response.success) {
 				Notification.hide();
 				turmaAtual = turma;
-				aulas = <%- JSON.stringify(lista) %>;
-				console.log(aulas);
-			
-				calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
-
-				calendario.render();
+				salaAtual = sala;
+				anoAtual = ano;
+				mesAtual = mes;
+				aulas = response.value;
+				desenharCalendario();
 			} else {
 				Notification.error(response.value, true);
 			}
-		}, "id_turma", turma);
-
-
-		
-
+		}, "id_turma", turma, "id_sala", sala, "ano", ano, "mes", mes);
 	}
+
+	desenharCalendario();
 
 </script>

@@ -51,12 +51,15 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else{
-		const anoAtual = (new Date()).getFullYear();
+		const hoje = new Date(),
+			anoAtual = hoje.getFullYear(),
+			mesAtual = hoje.getMonth() + 1;
 		res.render("aula/listar", {
 			titulo: "Gerenciar Aulas",
 			usuario: u,
 			anoAtual: anoAtual,
-			lista: JSON.stringify(await Aula.listar(0, 0, anoAtual)),
+			mesAtual: mesAtual,
+			lista: JSON.stringify(await Aula.listar(0, 0, anoAtual, mesAtual)),
 			turmas: await Turma.listar(),
 			salas: await Sala.listar()
 		});

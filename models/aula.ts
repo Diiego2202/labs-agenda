@@ -73,7 +73,7 @@ export = class Aula {
 		return null;
 	}
 
-	public static async listar(id_turma?: number, id_sala?: number, ano?: number): Promise<Aula[]>{
+	public static async listar(id_turma?: number, id_sala?: number, ano?: number, mes?: number, dia?: number): Promise<Aula[]>{
         let lista: Aula[] = null;
         await Sql.conectar(async (sql) => {
 			let where = "";
@@ -96,8 +96,26 @@ export = class Aula {
 			if (ano > 0) {
 				if (where)
 					where += " and ";
-				const inicio = DataUtil.formatar(ano, 1, 1);
-				const fim = DataUtil.formatar(ano + 1, 1, 1);
+				let inicio: string, fim: string;
+				if (mes >= 1 && mes <= 12) {
+					if (dia >= 1 && dia <= 31) {
+						inicio = DataUtil.formatar(ano, mes, dia);
+						const dateInicial = new Date(ano, mes - 1, dia),
+							dateFinal = new Date(dateInicial.getTime() + 100800000);
+						fim = DataUtil.formatar(dateFinal.getFullYear(), dateFinal.getMonth() + 1, dateFinal.getDate());
+					} else {
+						inicio = DataUtil.formatar(ano, mes, 1);
+						mes++;
+						if (mes > 12) {
+							mes = 1;
+							ano++;
+						}
+						fim = DataUtil.formatar(ano, mes, 1);
+					}
+				} else {
+					inicio = DataUtil.formatar(ano, 1, 1);
+					fim = DataUtil.formatar(ano + 1, 1, 1);
+				}
 				where += " e.inicio_aula < ? and e.termino_aula >= ?";
 				parametros.push(fim, inicio);
 			}

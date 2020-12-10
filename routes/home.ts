@@ -5,7 +5,6 @@ import Aula = require("../models/aula");
 import Usuario = require("../models/usuario");
 import appsettings = require("../appsettings");
 import Turma = require("../models/turma");
-import Professor = require("../models/professor");
 import Sala = require("../models/sala");
 
 const router = express.Router();
@@ -15,16 +14,20 @@ router.all("/", wrap(async (req: express.Request, res: express.Response) => {
 	if (!u) {
 		res.redirect(appsettings.root + "/login");
 	} else {
-		let lista = await Aula.listar();
+		const hoje = new Date(),
+			anoAtual = hoje.getFullYear(),
+			mesAtual = hoje.getMonth() + 1,
+			lista = await Aula.listar(0, 0, anoAtual, mesAtual);
 
 		let opcoes = {
 			titulo: "Dashboard",
 			usuario: u,
+			anoAtual: anoAtual,
+			mesAtual: mesAtual,
 			lista: lista,
 			hoje: DataUtil.hojeISO(),
 			turmas: await Turma.listar(),
-			prof: await Professor.listar(),
-			sala: await Sala.listar()
+			salas: await Sala.listar()
 		};
 
 		res.render("home/dashboard", opcoes);
