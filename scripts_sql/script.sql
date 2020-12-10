@@ -11,15 +11,15 @@ CREATE TABLE perfil (
 );
 
 
-INSERT INTO perfil (nome) VALUES ('ADMINISTRADOR'), ('COMUM');
+INSERT INTO perfil (nome) VALUES ('Administrador'), ('Comum');
 
 -- DROP TABLE IF EXISTS usuario;
 CREATE TABLE usuario (
   id int NOT NULL AUTO_INCREMENT,
   login varchar(100) NOT NULL,
   nome varchar(100) NOT NULL,
+  email varchar(100) NOT NULL,
   idperfil int NOT NULL,
-  senha varchar(100) NOT NULL,
   token char(32) DEFAULT NULL,
   criacao datetime NOT NULL,
   PRIMARY KEY (id),
@@ -28,7 +28,7 @@ CREATE TABLE usuario (
   CONSTRAINT idperfil_FK FOREIGN KEY (idperfil) REFERENCES perfil (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-INSERT INTO usuario (login, nome, idperfil, senha, token, criacao) VALUES ('ADMIN', 'ADMINISTRADOR', 1, 'peTcC99vkvvLqGQL7mdhGuJZIvL2iMEqvCNvZw3475PJ:JVyo1Pg2HyDyw9aSOd3gNPT30KdEyiUYCjs7RUzSoYGN', NULL, NOW());
+INSERT INTO usuario (login, nome, idperfil, token, criacao) VALUES ('admin', 'Administrador', 1, NULL, NOW());
 
 
 CREATE TABLE aula (
