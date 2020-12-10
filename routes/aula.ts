@@ -69,51 +69,15 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 }));
 
 router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express.Request, res: express.Response) => {
-	debugger;
-
-	let arquivo = req["file"];
-
-	if (!arquivo) {
-		res.status(400).json("CSV faltando");
+	let u = await Usuario.cookie(req, res, true);
+	if (!u)
 		return;
-	}
 
-	if (!arquivo.buffer || !arquivo.size) {
-		res.status(400).json("CSV inválido");
-		return;
-	}
-
-	if (arquivo.size > (1024 * 1024)) {
-		res.status(400).json("CSV muito grande");
-		return;
-	}
-
-	const buffer = arquivo.buffer as Buffer;
-	let csv = buffer.toString("utf-8");
-	csv = csv.replace(/\r/g, "");
-	let linhas = csv.split("\n");
-	let dados = linhas.shift();
-
-	// Excluir linhas vazias
-	// linhas.forEach(linha => function(index) {
-	// 	if(linha.length <= 0) {
-	// 		linhas.splice(index, 1);
-	// 	}
-	// });
-
-
-	// Retira o último elemento para teste: caso não seja vazia reinsere novamente
-	let excluido = linhas.pop();
-	if(excluido.length >= 1) {
-		linhas.push(excluido);
-	}
-
-	debugger;
-
-	// await Aula.importar(arquivo);
-	console.log(linhas);
-
-	res.json(true);
+	const erro = await Aula.importar(req["file"]);
+	if (erro)
+		res.status(400).json(erro);
+	else
+		res.json(true);
 }));
 
 export = router;

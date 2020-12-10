@@ -219,27 +219,95 @@ inner join sala s on s.id_sala = es.id_sala ` +
 
 	}
 	
-	public static async importar(aula: Aula) : Promise<Aula[]> {
-		let res : any;
+	public static async importar(arquivo: any) : Promise<string> {
+		if (!arquivo)
+			return "CSV faltando";
+	
+		if (!arquivo.buffer || !arquivo.size)
+			return "CSV inválido";
+	
+		if (arquivo.size > (4 * 1024 * 1024))
+			return "CSV muito grande";
+	
+		const buffer = arquivo.buffer as Buffer;
+		let csv = buffer.toString("utf-8");
+		csv = csv.replace(/\r/g, "");
+		let linhas = csv.split("\n");
+		linhas.splice(0, 1);
+		// Excluir linhas vazias
+		for (let i = linhas.length - 1; i >= 0; i--) {
+			if (linhas[i]) {
+				linhas[i] = linhas[i].trim();
+				if (!linhas[i])
+					linhas.splice(i, 1);
+			} else {
+				linhas.splice(i, 1);
+			}
+		}
+
+		if (!linhas.length)
+			return "CSV vazio";
+
+		const registros: string[][] = new Array(linhas.length);
+		for (let i = 0; i < linhas.length; i++) {
+			const registro = linhas[i].split(";");
+			if (registro.length !== 7)
+				return `Linha ${(i + 2)} não contém 7 campos`;
+			for (let c = 0; c < registro.length; c++) {
+				registro[c] = registro[c].normalize().trim();
+				if (!registro[c])
+					return `Linha ${(i + 2)}, coluna ${(c + 1)} em branco`;
+			}
+			// Nome;Descrição;Turma;Sala;Professor;Início;Término
+			registro[5] = DataUtil.converterDataISO(registro[5]);
+			if (!registro[5])
+				return `Coluna 6 (data e hora de início) da linha ${(i + 2)} inválida`;
+			registro[6] = DataUtil.converterDataISO(registro[5]);
+			if (!registro[6])
+				return `Coluna 7 (data e hora de término) da linha ${(i + 2)} inválida`;
+			registros[i] = registro;
+		}
+
+		let erro: string = null;
 
 		await Sql.conectar(async(sql : Sql) => {
-			await sql.beginTransaction();
 
-			try {
-				await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula) values (?,?,?,?)",[aula.nome_aula, aula.desc_aula, aula.inicio_aula, aula.termino_aula]);
-				const id_aula = await sql.scalar("select last_insert_id()") as number;
-				await sql.query(" insert into aula_prof(id_prof, id_aula) values (?, ?)", [aula.id_prof, id_aula]);
-				await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [aula.id_turma, id_aula]);
-				await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [aula.id_sala, id_aula]);
-			} catch(err) {
-				if (err.code && err.code === "ER_DUP_ENTRY") {
-					res = `A aula ${aula.nome_aula} já existe`;
-				} else {
-					throw err;
+			for (let i = 0; i < registros.length; i++) {
+				// Nome;Descrição;Turma;Sala;Professor;Início;Término
+				let temp = registros[i][2];
+				registros[i][2] = await sql.scalar("select id_turma from turma where desc_turma = ?", [temp]);
+				if (!registros[i][2]) {
+					erro = `Turma "${temp}", da linha ${(i + 2)}, não encontrada`;
+					return;
+				}
+				temp = registros[i][3];
+				registros[i][3] = await sql.scalar("select id_sala from sala where desc_sala = ?", [temp]);
+				if (!registros[i][3]) {
+					erro = `Sala "${temp}", da linha ${(i + 2)}, não encontrada`;
+					return;
+				}
+				temp = registros[i][4];
+				registros[i][4] = await sql.scalar("select id_prof from professor where nome_prof = ?", [temp]);
+				if (!registros[i][4]) {
+					erro = `Professor "${temp}", da linha ${(i + 2)}, não encontrado`;
+					return;
 				}
 			}
+	
+			await sql.beginTransaction();
+
+			for (let i = 0; i < registros.length; i++) {
+				// Nome;Descrição;Turma;Sala;Professor;Início;Término
+				await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula) values (?,?,?,?)", [registros[i][0], registros[i][1], registros[i][5], registros[i][6]]);
+				const id_aula = await sql.scalar("select last_insert_id()") as number;
+				await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [registros[i][2], id_aula]);
+				await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [registros[i][3], id_aula]);
+				await sql.query(" insert into aula_prof(id_prof, id_aula) values (?, ?)", [registros[i][4], id_aula]);
+			}
+
+			await sql.commit();
 		})
 
-		return res;
+		return erro;
 	}
 }
