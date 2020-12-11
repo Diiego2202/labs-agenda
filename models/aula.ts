@@ -208,11 +208,18 @@ inner join sala s on s.id_sala = es.id_sala ` +
         let erro: string = null;
 
         await Sql.conectar(async(sql)=>{
+			await sql.beginTransaction();
+			await sql.query("delete from aula_turma where id_aula=?;",[id_aula]);
+			await sql.query("delete from aula_sala where id_aula=?;",[id_aula]);
+			await sql.query("delete from aula_prof where id_aula=?;",[id_aula]);
             let lista = await sql.query("delete from aula where id_aula=?;",[id_aula]);
-         
+
             if(!sql.linhasAfetadas){
                 erro = 'Aula não encontrada';
-            }
+			}
+			
+			await sql.commit();
+
         });
 
         return erro;

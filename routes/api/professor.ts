@@ -50,4 +50,5 @@ router.get("/excluir", wrap(async (req: express.Request, res: express.Response) 
 
 
 
+
 export = router;

@@ -1,4 +1,4 @@
-drop database agendapos;
+-- drop database agendapos;
 CREATE DATABASE IF NOT EXISTS agendapos;
 USE agendapos;
 
@@ -28,7 +28,7 @@ CREATE TABLE usuario (
   CONSTRAINT idperfil_FK FOREIGN KEY (idperfil) REFERENCES perfil (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-INSERT INTO usuario (login, nome, idperfil, token, criacao) VALUES ('admin', 'Administrador', 1, NULL, NOW());
+INSERT INTO usuario (login, nome, email, idperfil, token, criacao) VALUES ('julia.rolemberg', 'Julia Rolemberg', 'julia@mail.com', 1, NULL, NOW());
 
 
 CREATE TABLE aula (
@@ -103,3 +103,9 @@ create table aula_turma(
  insert into aula_sala(id_aula, id_sala) values(1,1);
 
 select * from aula;
+
+delete from aula_turma where id_aula =1;
+delete from aula_prof where id_aula = 1;
+delete from aula_sala where id_aula = 1;
+delete from aula where id_aula=1;
+
