@@ -121,12 +121,12 @@ export = class Aula {
 			}
 
 			lista = await sql.query(`select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%d/%m/%Y %H:%i') inicio_aula, date_format(e.termino_aula, '%d/%m/%Y %H:%i') termino_aula, ep.id_prof, p.nome_prof, et.id_turma, t.desc_turma, es.id_sala, s.desc_sala from aula e 
-inner join aula_prof ep on ep.id_aula = e.id_aula
-inner join aula_turma et on et.id_aula = e.id_aula
-inner join aula_sala es on es.id_aula = e.id_aula
-inner join professor p on p.id_prof = ep.id_prof
-inner join turma t on t.id_turma = et.id_turma
-inner join sala s on s.id_sala = es.id_sala ` +
+			inner join aula_prof ep on ep.id_aula = e.id_aula
+			inner join aula_turma et on et.id_aula = e.id_aula
+			inner join aula_sala es on es.id_aula = e.id_aula
+			inner join professor p on p.id_prof = ep.id_prof
+			inner join turma t on t.id_turma = et.id_turma
+			inner join sala s on s.id_sala = es.id_sala ` +
 				(where ?
 					(" where " + where) :
 					""

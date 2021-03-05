@@ -47,8 +47,13 @@
 						</svg>
 						Dashboard</a>
 				</li>
-
 				<% if (usuario.admin) { %>
+
+					<li class="sidebar-spacer"></li>
+					<li>
+						<a href="<%- root %>/aula/upload"><i class="fa fa-upload"></i>Upload de aulas</a>
+					</li>
+	
 
 					<li class="sidebar-spacer"></li>
 
@@ -81,8 +86,7 @@
 						</ul>
 					</li>
 
-				<% } %>
-				<% if (usuario.admin) { %>
+			
 
 					<li class="sidebar-spacer"></li>
 	
@@ -119,8 +123,7 @@
 						</ul>
 					</li>
 	
-					<% } %>
-				<% if (usuario.admin) { %>
+				
 
 					<li class="sidebar-spacer"></li>
 	
@@ -191,14 +194,12 @@
 						</ul>
 					</li>
 	
-					<% } %>
-
-					<% if (usuario.admin) { %>
+				
 
 					<li class="sidebar-spacer"></li>
 	
 					<li>
-						<a href="#"><i class="fa fa-users pr-2" ></i>Turmas<span class="fa arrow"></span></a>
+						<a href="#"><i class="fa fa-users " ></i>Turmas<span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level collapse">
 	
 							<li>
@@ -212,17 +213,11 @@
 						</ul>
 					</li>
 	
-					<% } %>
-				
-
-
-
-				<% if (usuario.admin) { %>
 
 				<li class="sidebar-spacer"></li>
 
 				<li>
-					<a href="#"><i class="fa fa-user fa-fw "></i>Usuários<span class="fa arrow"></span></a>
+					<a href="#"><i class="fa fa-user "></i>Usuários<span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level collapse">
 
 						<li>
@@ -237,6 +232,9 @@
 				</li>
 
 				<% } %>
+
+				
+	
 
 				<li class="sidebar-spacer"></li>
 

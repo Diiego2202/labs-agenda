@@ -67,6 +67,20 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 		
 		
 }));
+router.all("/upload", wrap(async (req: express.Request, res: express.Response) => {
+	let u = await Usuario.cookie(req);
+	if (!u || !u.admin)
+		res.redirect(appsettings.root + "/acesso");
+	else{
+
+		res.render("aula/upload", {
+			titulo: "Upload de Aulas",
+			usuario: u
+		});
+		
+	}
+
+}));
 
 router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express.Request, res: express.Response) => {
 	let u = await Usuario.cookie(req, res, true);
@@ -74,9 +88,9 @@ router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express
 		return;
 
 	const erro = await Aula.importar(req["file"]);
-	if (erro)
+	if (erro){
 		res.status(400).json(erro);
-	else
+	}else
 		res.json(true);
 }));
 

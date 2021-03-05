@@ -68,15 +68,26 @@ export = class Professor {
     }
 
 	public static async excluir(id_prof:number): Promise<string>{
+       
         let erro: string = null;
 
         await Sql.conectar(async(sql)=>{
+			await sql.beginTransaction();
+			await sql.query("delete from professor where id_prof=?;",[id_prof]);
+			// await sql.query("delete from aula_prof where id_prof=?;",[id_prof]);
+			
             let lista = await sql.query("delete from professor where id_prof=?;",[id_prof]);
-         
-            if(!sql.linhasAfetadas){
+           
+            
+            if(lista.length == 0){ // não reconhece o !sql.linhasAfetadas quando é uma transação incompleta, então joga o erro
                 erro = 'Professor não encontrado';
-            }
+			}
+			
+            await sql.commit();
+			
+
         });
+
         return erro;
 
     }
