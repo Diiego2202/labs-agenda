@@ -81,6 +81,28 @@ router.all("/upload", wrap(async (req: express.Request, res: express.Response) =
 	}
 
 }));
+router.all("/download", wrap(async (req: express.Request, res: express.Response) => {
+	let u = await Usuario.cookie(req);
+	if (!u || !u.admin)
+		res.redirect(appsettings.root + "/acesso");
+	else{
+		const hoje = new Date(),
+		anoAtual = hoje.getFullYear(),
+		mesAtual = hoje.getMonth() + 1;
+
+		res.render("aula/download", {
+			titulo: "Plano de Aulas",
+			usuario: u,
+			anoAtual: anoAtual,
+			mesAtual: mesAtual,
+			lista: await Aula.listar(0, 0, anoAtual, mesAtual),
+			turmas: await Turma.listar(),
+			salas: await Sala.listar()
+		});
+		
+	}
+
+}));
 
 router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express.Request, res: express.Response) => {
 	let u = await Usuario.cookie(req, res, true);
