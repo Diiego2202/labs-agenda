@@ -79,7 +79,7 @@
 				Notification.success("Turma excluída com sucesso! " + emoji.happy);
 				tabela.row(trClicada).remove().draw();
 			} else {
-				Notification.error(response.value, true);
+				Notification.error("A turma não pode ser excluída, porque pertence a uma aula. ", true);
 			}
 			trClicada = null;
 		}, "id_turma", turma.id_turma);

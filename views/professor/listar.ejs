@@ -79,8 +79,8 @@
 				Notification.success("Professor excluído com sucesso! " + emoji.happy);
 				tabela.row(trClicada).remove().draw();
 			} else {
-				
-				Notification.error(response.value, true);
+				Notification.error("O professor não pode ser excluído, porque pertence a uma aula.\n", true);
+				// Notification.error(response.value, true);
 			}
 			trClicada = null;
 		}, "id_prof", professor.id_prof);

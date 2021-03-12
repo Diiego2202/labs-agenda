@@ -81,7 +81,8 @@
 				Notification.success("Sala excluída com sucesso! " + emoji.happy);
 				tabela.row(trClicada).remove().draw();
 			} else {
-				Notification.error(response.value, true);
+				Notification.error("A sala não pode ser excluída, porque pertence a uma aula.\n", true);
+				// Notification.error(response.value, true);
 			}
 			trClicada = null;
 		}, "id_sala", sala.id_sala);

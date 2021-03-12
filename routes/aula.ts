@@ -94,14 +94,10 @@ router.all("/download", wrap(async (req: express.Request, res: express.Response)
 			titulo: "Plano de Aulas",
 			usuario: u,
 			anoAtual: anoAtual,
-			mesAtual: mesAtual,
 			lista: await Aula.listar(0, 0, anoAtual, mesAtual),
-			turmas: await Turma.listar(),
-			salas: await Sala.listar()
-		});
-		
+			turmas: await Turma.listar()
+		});	
 	}
-
 }));
 
 router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express.Request, res: express.Response) => {

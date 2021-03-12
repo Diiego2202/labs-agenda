@@ -1,13 +1,82 @@
 <!-- <body class ="A5 "> -->
-
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body no-bottom">
+                    <h2 class="no-margin-top col-xs-space-bottom text-center"><i class="fa fa-filter"></i>Filtro</h2>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="turma">Turma</label>
+                                <select size="1" id="turma" class="form-control" onchange="atualizar()">
+                                    <option value="0">Todas</option>
+                                    <% for (let i = 0; i < turmas.length; i++) { %>
+                                        <option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <section class= "sheet padding-10mm">
-        <% for (let i = 0; i < lista.length; i++) { %>
-            <p><%= lista[i].nome_aula%> - <%= lista[i].desc_aula%> <br> <%= lista[i].inicio_aula%> - <%= lista[i].termino_aula%>
-                <br> Professor: <%= lista[i].nome_prof%> - Sala: <%= lista[i].desc_sala%> - Turma: <%= lista[i].desc_turma%> 
-            </p> 
-            <hr> 
-        <% } %>
+        <div id="body">
+
+        </div>
+
     </section>
    
 
-<!-- </body> -->
+    <%- contentFor("scripts") %>
+    <script type="text/javascript">
+        "use strict";
+    
+        window.prepareCbSearchAllowLower = true;
+        prepareCbSearch(document.getElementById("turma"));
+
+        var turmaAtual = 0, anoAtual = <%- anoAtual %>;
+        var aulas;
+        function atualizar() {
+            var turma = parseInt($("#turma").val());
+            var ano = (parseInt($("#ano").val()) || 0);
+    
+            if ((turmaAtual === turma && ano === anoAtual) || JsonWebApi.active)
+                return;
+    
+            Notification.wait();
+    
+            JsonWebApi.get("<%- root %>/api/aula/listar", function (response) {
+                if (response.success) {
+                    Notification.hide();
+                    turmaAtual = turma;
+                    anoAtual = ano;
+                    aulas = response.value;
+                    console.log(aulas);
+                    montarPagina(aulas);
+                } else {
+                    Notification.error(response.value, true);
+                }
+            }, "id_turma", turma, "ano", ano);
+        }
+        function montarPagina(aulas){
+            var body = document.getElementById('body');
+            body.innerHTML = "";
+
+            for(var i = 0; i< aulas.length; i++){
+                var nome_aula = aulas[i].nome_aula;
+                var desc_aula = aulas[i].desc_aula;
+                var desc_sala = aulas[i].desc_sala;
+                var nome_prof = aulas[i].nome_prof;
+                var inicio_aula = aulas[i].inicio_aula;
+                var termino_aula = aulas[i].termino_aula;
+                body.innerHTML +=  nome_aula +" - " + desc_aula+ "<br> Sala: " + desc_sala+ "<br> Professor: "+ nome_prof+ "<br>" +
+                inicio_aula +" - "+ termino_aula + "<hr>";
+            }
+        }
+    
+    
+    </script>
+    
