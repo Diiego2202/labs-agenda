@@ -1,4 +1,4 @@
-﻿<div class="row">
+﻿<!-- <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-body text-center">
@@ -10,7 +10,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
@@ -104,12 +104,12 @@
 
 	var turmaAtual = 0, salaAtual = 0, mesAtual = <%- mesAtual %>, anoAtual = <%- anoAtual %>;
 
-	var url = location.href, i = url.lastIndexOf("/"), aLink = document.getElementById("aLink");
-	url += ((i !== (url.length - 1)) ? "/hoje" : "hoje");
-	document.getElementById("btnLink").setAttribute("data-clipboard-text", url);
-	aLink.setAttribute("href", url);
-	aLink.textContent = url.substr(url.indexOf("://") + 3);
-	prepareCopyHandler();
+	// var url = location.href, i = url.lastIndexOf("/"), aLink = document.getElementById("aLink");
+	// url += ((i !== (url.length - 1)) ? "/hoje" : "hoje");
+	// document.getElementById("btnLink").setAttribute("data-clipboard-text", url);
+	// aLink.setAttribute("href", url);
+	// aLink.textContent = url.substr(url.indexOf("://") + 3);
+	// prepareCopyHandler();
 
 	var aulas = <%- JSON.stringify(lista) %>, calendario = null;
 
