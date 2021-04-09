@@ -1,4 +1,4 @@
--- drop database agendapos;
+drop database agendapos;
 CREATE DATABASE IF NOT EXISTS agendapos;
 USE agendapos;
 
@@ -34,9 +34,10 @@ INSERT INTO usuario (login, nome, email, idperfil, token, criacao) VALUES ('juli
 CREATE TABLE aula (
   id_aula int NOT NULL AUTO_INCREMENT,
   nome_aula varchar(50) NOT NULL,
-  desc_aula varchar(50) not null,
+  desc_aula varchar(50) NOT NULL	,
   inicio_aula datetime NOT NULL,
   termino_aula datetime NOT NULL,
+  carga_horaria int NOT NULL,
   PRIMARY KEY (id_aula),
   KEY aula_inicio_termino_ix (inicio_aula, termino_aula),
   KEY aula_termino_ix (termino_aula)
@@ -88,13 +89,11 @@ create table aula_turma(
 
 
 
- insert into aula(nome_aula, desc_aula, inicio_aula, termino_aula) values
- ('aula1', 'Descrição resumida do aula' ,'2020-10-02T08:00', '2020-10-02T09:00'),
- ('aula2', 'Descrição resumida do aula' , '2020-10-02T08:00', '2020-10-02T09:00'),
- ('aula3', 'Descrição resumida do aula' , '2020-10-02T10:00', '2020-10-02T09:00');
-
- insert into aula(nome_aula, desc_aula, inicio_aula, termino_aula) values
- ('aula4', 'Descrição resumida da aula' ,'2020-10-02T08:00', '2020-10-02T09:00');
+ insert into aula(nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values
+ ('aula1', 'Descrição resumida do aula' ,'2020-10-02T08:00', '2020-10-02T09:00', 4),
+ ('aula2', 'Descrição resumida do aula' , '2020-10-02T08:00', '2020-10-02T09:00', 4),
+ ('aula3', 'Descrição resumida do aula' , '2020-10-02T10:00', '2020-10-02T09:00', 4),
+ ('aula4', 'Descrição resumida da aula' ,'2020-10-02T08:00', '2020-10-02T09:00', 4);
  insert into professor(nome_prof) values ('Professor');
  insert into turma(desc_turma) values ('Turma');
  insert into sala(desc_sala, andar_sala) values ('Sala', 1);
@@ -109,3 +108,7 @@ delete from aula_prof where id_aula = 1;
 delete from aula_sala where id_aula = 1;
 delete from aula where id_aula=1;
 
+insert into usuario(id, login, nome, email, idperfil, criacao) 
+values(2, 'pedro.heck', 'Pedro Heck', 'pedro@mail.com', 1, now());
+
+select * from usuario;

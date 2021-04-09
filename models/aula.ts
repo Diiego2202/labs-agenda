@@ -8,6 +8,7 @@ export = class Aula {
 	public desc_aula: string;
 	public inicio_aula: string;
 	public termino_aula: string;
+	public carga_horaria: number;
 	public id_prof:number;
 	public id_turma:number;
 	public id_sala:number;
@@ -20,7 +21,7 @@ export = class Aula {
 		let lista: Aula[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = (await sql.query("select id_aula, nome_aula, desc_aula, date_format(inicio_aula, '%Y-%m-%dT%T') inicio_aula, date_format(termino_aula, '%Y-%m-%dT%T') termino_aula from aula where inicio_aula <= ? and termino_aula >= ?", [fimDiaHoje, inicioDiaHoje])) as Aula[];
+			lista = (await sql.query("select id_aula, nome_aula, desc_aula, date_format(inicio_aula, '%Y-%m-%dT%T') inicio_aula, date_format(termino_aula, '%Y-%m-%dT%T') termino_aula, carga_horaria from aula where inicio_aula <= ? and termino_aula >= ?", [fimDiaHoje, inicioDiaHoje])) as Aula[];
 		
 		});
 
@@ -58,6 +59,10 @@ export = class Aula {
 			//validação de data será aqui?
 			return "Data de Término inválida"
 		}
+		// aula.carga_horaria = parseInt(aula.carga_horaria as any);
+		// if (isNaN(aula.carga_horaria)){
+		// 	return "Carga horária inválida";
+		// }
 		aula.id_prof = parseInt(aula.id_prof as any);
 		if (isNaN(aula.id_prof)) {
 			return "Professor inválido";
@@ -120,7 +125,7 @@ export = class Aula {
 				parametros.push(fim, inicio);
 			}
 
-			lista = await sql.query(`select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%d/%m/%Y %H:%i') inicio_aula, date_format(e.termino_aula, '%d/%m/%Y %H:%i') termino_aula, ep.id_prof, p.nome_prof, et.id_turma, t.desc_turma, es.id_sala, s.desc_sala from aula e 
+			lista = await sql.query(`select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%d/%m/%Y %H:%i') inicio_aula, date_format(e.termino_aula, '%d/%m/%Y %H:%i') termino_aula, e.carga_horaria, ep.id_prof, p.nome_prof, et.id_turma, t.desc_turma, es.id_sala, s.desc_sala from aula e 
 			inner join aula_prof ep on ep.id_aula = e.id_aula
 			inner join aula_turma et on et.id_aula = e.id_aula
 			inner join aula_sala es on es.id_aula = e.id_aula
@@ -145,7 +150,7 @@ export = class Aula {
 			try {
 				await sql.beginTransaction();
 
-				await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula) values (?,?,?,?)",[aula.nome_aula, aula.desc_aula, aula.inicio_aula, aula.termino_aula]);
+				await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values (?,?,?,?,?)",[aula.nome_aula, aula.desc_aula, aula.inicio_aula, aula.termino_aula, aula.carga_horaria]);
 				const id_aula = await sql.scalar("select last_insert_id()") as number;
 				await sql.query(" insert into aula_prof(id_prof, id_aula) values (?, ?)", [aula.id_prof, id_aula]);
 				await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [aula.id_turma, id_aula]);
@@ -169,7 +174,7 @@ export = class Aula {
         let aula: Aula = null;
 
         await Sql.conectar(async(sql)=>{
-			let lista = await sql.query("select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%Y-%m-%dT%H:%i') inicio_aula, date_format(e.termino_aula, '%Y-%m-%dT%H:%i') termino_aula, ep.id_prof, et.id_turma, es.id_sala from aula e inner join aula_prof ep on ep.id_aula = e.id_aula inner join aula_turma et on et.id_aula = e.id_aula inner join aula_sala es on es.id_aula = e.id_aula where e.id_aula = ?",[id_aula]);
+			let lista = await sql.query("select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%Y-%m-%dT%H:%i') inicio_aula, date_format(e.termino_aula, '%Y-%m-%dT%H:%i') termino_aula, e.carga_horaria, ep.id_prof, et.id_turma, es.id_sala from aula e inner join aula_prof ep on ep.id_aula = e.id_aula inner join aula_turma et on et.id_aula = e.id_aula inner join aula_sala es on es.id_aula = e.id_aula where e.id_aula = ?",[id_aula]);
          
             if(lista && lista.length){
                 aula = lista[0];
@@ -188,7 +193,7 @@ export = class Aula {
         await Sql.conectar(async(sql)=>{
 			await sql.beginTransaction();
 
-			await sql.query("update aula set nome_aula = ?, desc_aula = ?, inicio_aula = ?,  termino_aula = ? where id_aula = ?",[aula.nome_aula, aula.desc_aula, aula.inicio_aula, aula.termino_aula, aula.id_aula]);
+			await sql.query("update aula set nome_aula = ?, desc_aula = ?, inicio_aula = ?,  termino_aula = ?, carga_horaria = ? where id_aula = ?",[aula.nome_aula, aula.desc_aula, aula.inicio_aula, aula.termino_aula, aula.carga_horaria, aula.id_aula]);
             if(!sql.linhasAfetadas){
 				erro = 'Aula não encontrada';
 				return;

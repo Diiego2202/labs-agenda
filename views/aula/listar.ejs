@@ -110,6 +110,7 @@
 				{ title: "Turma", render: encode, data: "desc_turma" },
 				{ title: "Sala", render: encode, data: "desc_sala" },
 				{ title: "Professor", render: encode, data: "nome_prof" },
+				{ title: "Carga Horária", "class": "text-center", data: "carga_horaria"},
 				{ title: "Início", "class": "text-right", "type": "customdatetimeint", data: "inicio_aula" },
 				{ title: "Término", "class": "text-right", "type": "customdatetimeint", data: "termino_aula" }
 			],
@@ -129,6 +130,7 @@
 				$("#lblTurma").text(turma.desc_turma);
 				$("#lblSala").text(sala.desc_sala);
 				// $("#lblProfessor").text(professor.nome_prof);
+				$("#lblCarga").text(aula.carga_horaria);
 				$("#lblInicio").text(aula.inicio_aula);
 				$("#lblTermino").text(aula.termino_aula);
 

@@ -5,10 +5,18 @@
 			<div class="panel-body no-bottom">
 				<input type="hidden" id="id_aula" name="id_aula" value="<%=(item ? item.id_aula : 0) %>" />
 				<div class="form-group">
-					<div class="form-group">
-						<label for="nome_aula">Nome</label>
-						<input id="nome_aula" name="nome_aula" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_aula : '') %>" />
+					<div class="row">
+						<div class="col-sm-6" style="margin-bottom: 15px">
+							<label for="nome_aula">Nome</label>
+							<input id="nome_aula" name="nome_aula" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_aula : '') %>" />
+						</div>
+
+						<div class="col-sm-6" style="margin-bottom: 15px">
+							<label for="carga_horaria">Carga Horária</label>
+							<input id="carga_horaria" name="carga_horaria" maxlength="100" class="form-control" spellcheck="false" value="<%=(item ? item.carga_horaria : '') %>" />
+						</div>
 					</div>
+					
 					<div class="form-group">
 						<label for="desc_aula">Descrição</label>
 						<input id="desc_aula" name="desc_aula" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.desc_aula : '') %>" />
@@ -93,6 +101,9 @@
 				required: true,
 				minlength: 3,
 				maxlength: 50
+			},
+			carga_horaria: {
+				required: true,
 			},
 			id_sala:{
 				required:true
