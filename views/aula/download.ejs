@@ -1,283 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-body no-bottom">
-                    <h2 class="no-margin-top col-xs-space-bottom text-center"><i class="fa fa-filter"></i>Filtro</h2>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="turma">Turma</label>
-                                <select size="1" id="turma" class="form-control" onchange="atualizar()">
-                                    <option value="0">Todas</option>
-                                    <% for (let i = 0; i < turmas.length; i++) { %>
-                                        <option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
-                                    <% } %>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<body class ="A4">
-    <section class="sheet" style="padding: 10px; margin: 0 auto">
-        <div id="calendar" class="calendar">
+	<title><%=((typeof titulo === "undefined" || !titulo) ? "Agenda da Pós" : (titulo + " - Agenda da Pós")) %></title>
 
-        </div>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet" />
+    <link rel="stylesheet" href="<%- root %>/lib/bootstrap/css/bootstrap-1.0.28.min.css" />
+    <link rel="stylesheet" href="<%- root %>/lib/font-awesome/css/font-awesome-1.0.2.min.css" />
+    <link rel="stylesheet" href="<%- root %>/lib/paper-css/paper.css" />
+    <link rel="stylesheet" href="<%- root %>/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
+    <script type="text/javascript" src="<%- root %>/lib/jquery/js/jquery-1.0.1.min.js"></script>
+    <script type="text/javascript" src="<%- root %>/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.js"></script>
+    <script type="text/javascript" src="<%- root %>/lib/bootstrap-year-calendar/js/languages/bootstrap-year-calendar.pt.js"></script>
 
-    </section>
-</body>  
+    <style type="text/css">
+        #btnImprimir {
+            position: fixed;
+            left: 10px;
+            top: 10px;
+            box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+        }
 
-    <%- contentFor("scripts") %>
-    <script type="text/javascript">
-        "use strict";
-        
-        function gerarCalendario(){
-
-            var aulas = <%- JSON.stringify(lista) %>;
-            console.log(aulas);
-            console.log(lista);
-
-
-            function editEvent(event) {
-                $('#event-modal input[name="event-index"]').val(event ? event.id : '');
-                $('#event-modal input[name="event-name"]').val(event ? event.name : '');
-                $('#event-modal input[name="event-location"]').val(event ? event.location : '');
-                $('#event-modal input[name="event-start-date"]').datepicker('update', event ? event.startDate : '');
-                $('#event-modal input[name="event-end-date"]').datepicker('update', event ? event.endDate : '');
-                $('#event-modal').modal();
+        @media print {
+            body {
+                background: #fff;
             }
 
-            function deleteEvent(event) {
-                var dataSource = $('#calendar').data('calendar').getDataSource();
+            th.prev, th.next {
+                color: #fff;
+            }
 
+            #btnImprimir {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class ="A4">
+<section class="sheet" style="padding: 10px; margin: 0 auto">
+    <div id="calendar" class="calendar"></div>
+    <button type="button" class="btn btn-primary" id="btnImprimir" onclick="window.print()"><i class="fa fa-print"></i> Imprimir / PDF</button>
+</section>
+<script type="text/javascript" src="<%- root %>/lib/bootstrap/js/bootstrap-1.0.1.min.js"></script>
+<script type="text/javascript">
+    "use strict";
+    
+    function gerarCalendario(){
+
+        var aulas = <%- lista %>;
+        console.log(aulas);
+
+
+        function editEvent(event) {
+            $('#event-modal input[name="event-index"]').val(event ? event.id : '');
+            $('#event-modal input[name="event-name"]').val(event ? event.name : '');
+            $('#event-modal input[name="event-location"]').val(event ? event.location : '');
+            $('#event-modal input[name="event-start-date"]').datepicker('update', event ? event.startDate : '');
+            $('#event-modal input[name="event-end-date"]').datepicker('update', event ? event.endDate : '');
+            $('#event-modal').modal();
+        }
+
+        function deleteEvent(event) {
+            var dataSource = $('#calendar').data('calendar').getDataSource();
+
+            for(var i in dataSource) {
+                if(dataSource[i].id == event.id) {
+                    dataSource.splice(i, 1);
+                    break;
+                }
+            }
+            
+            $('#calendar').data('calendar').setDataSource(dataSource);
+        }
+
+        function saveEvent() {
+            var event = {
+                id: $('#event-modal input[name="event-index"]').val(),
+                name: $('#event-modal input[name="event-name"]').val(),
+                location: $('#event-modal input[name="event-location"]').val(),
+                startDate: $('#event-modal input[name="event-start-date"]').datepicker('getDate'),
+                endDate: $('#event-modal input[name="event-end-date"]').datepicker('getDate')
+            }
+            
+            var dataSource = $('#calendar').data('calendar').getDataSource();
+
+            if(event.id) {
                 for(var i in dataSource) {
                     if(dataSource[i].id == event.id) {
-                        dataSource.splice(i, 1);
-                        break;
+                        dataSource[i].name = event.name;
+                        dataSource[i].location = event.location;
+                        dataSource[i].startDate = event.startDate;
+                        dataSource[i].endDate = event.endDate;
                     }
                 }
-                
-                $('#calendar').data('calendar').setDataSource(dataSource);
             }
-
-            function saveEvent() {
-                var event = {
-                    id: $('#event-modal input[name="event-index"]').val(),
-                    name: $('#event-modal input[name="event-name"]').val(),
-                    location: $('#event-modal input[name="event-location"]').val(),
-                    startDate: $('#event-modal input[name="event-start-date"]').datepicker('getDate'),
-                    endDate: $('#event-modal input[name="event-end-date"]').datepicker('getDate')
-                }
-                
-                var dataSource = $('#calendar').data('calendar').getDataSource();
-
-                if(event.id) {
-                    for(var i in dataSource) {
-                        if(dataSource[i].id == event.id) {
-                            dataSource[i].name = event.name;
-                            dataSource[i].location = event.location;
-                            dataSource[i].startDate = event.startDate;
-                            dataSource[i].endDate = event.endDate;
-                        }
+            else
+            {
+                var newId = 0;
+                for(var i in dataSource) {
+                    if(dataSource[i].id > newId) {
+                        newId = dataSource[i].id;
                     }
                 }
-                else
-                {
-                    var newId = 0;
-                    for(var i in dataSource) {
-                        if(dataSource[i].id > newId) {
-                            newId = dataSource[i].id;
-                        }
-                    }
-                    
-                    newId++;
-                    event.id = newId;
                 
-                    dataSource.push(event);
-                }
-                
-                $('#calendar').data('calendar').setDataSource(dataSource);
-                $('#event-modal').modal('hide');
+                newId++;
+                event.id = newId;
+            
+                dataSource.push(event);
             }
-                $(function() {
-                    var currentYear = new Date().getFullYear();
+            
+            $('#calendar').data('calendar').setDataSource(dataSource);
+            $('#event-modal').modal('hide');
+        }
+            $(function() {
+                var currentYear = new Date().getFullYear();
 
-                    $('#calendar').calendar({
-                        enableContextMenu: true,
-                        enableRangeSelection: true,
-                        contextMenuItems:[
-                            {
-                                text: 'Alterar',
-                                click: editEvent
-                            },
-                            {
-                                text: 'Delete',
-                                click: deleteEvent
-                            }
-                        ],
-                        selectRange: function(e) {
-                            editEvent({ startDate: e.startDate, endDate: e.endDate });
+                $('#calendar').calendar({
+                    enableContextMenu: true,
+                    enableRangeSelection: true,
+                    contextMenuItems:[
+                        {
+                            text: 'Alterar',
+                            click: editEvent
                         },
-                        mouseOnDay: function(e) {
-                            if(e.events.length > 0) {
-                                var content = '';
-                                
-                                for(var i in e.events) {
-                                    content += '<div class="event-tooltip-content">'
-                                                    + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
-                                                    + '<div class="event-location">' + e.events[i].location + '</div>'
-                                                + '</div>';
-                                }
+                        {
+                            text: 'Delete',
+                            click: deleteEvent
+                        }
+                    ],
+                    selectRange: function(e) {
+                        editEvent({ startDate: e.startDate, endDate: e.endDate });
+                    },
+                    mouseOnDay: function(e) {
+                        if(e.events.length > 0) {
+                            var content = '';
                             
-                                $(e.element).popover({
-                                    trigger: 'manual',
-                                    container: 'body',
-                                    html:true,
-                                    content: content
-                                });
-                                
-                                $(e.element).popover('show');
+                            for(var i in e.events) {
+                                content += '<div class="event-tooltip-content">'
+                                                + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                                                + '<div class="event-location">' + e.events[i].location + '</div>'
+                                            + '</div>';
                             }
-                        },
-                        mouseOutDay: function(e) {
-                            if(e.events.length > 0) {
-                                $(e.element).popover('hide');
-                            }
-                        },
-                        dayContextMenu: function(e) {
+                        
+                            $(e.element).popover({
+                                trigger: 'manual',
+                                container: 'body',
+                                html:true,
+                                content: content
+                            });
+                            
+                            $(e.element).popover('show');
+                        }
+                    },
+                    mouseOutDay: function(e) {
+                        if(e.events.length > 0) {
                             $(e.element).popover('hide');
+                        }
+                    },
+                    dayContextMenu: function(e) {
+                        $(e.element).popover('hide');
+                    },
+                    dataSource: [
+                        {
+                            id: 0,
+                            name: 'Google I/O',
+                            location: 'San Francisco, CA',
+                            startDate: new Date(currentYear, 4, 28),
+                            endDate: new Date(currentYear, 4, 29)
                         },
-                        dataSource: [
-                            {
-                                id: 0,
-                                name: 'Google I/O',
-                                location: 'San Francisco, CA',
-                                startDate: new Date(currentYear, 4, 28),
-                                endDate: new Date(currentYear, 4, 29)
-                            },
-                            {
-                                id: 1,
-                                name: 'Microsoft Convergence',
-                                location: 'New Orleans, LA',
-                                startDate: new Date(currentYear, 2, 16),
-                                endDate: new Date(currentYear, 2, 19)
-                            },
-                            {
-                                id: 2,
-                                name: 'Microsoft Build Developer Conference',
-                                location: 'San Francisco, CA',
-                                startDate: new Date(currentYear, 3, 29),
-                                endDate: new Date(currentYear, 4, 1)
-                            },
-                            {
-                                id: 3,
-                                name: 'Apple Special Event',
-                                location: 'San Francisco, CA',
-                                startDate: new Date(currentYear, 8, 1),
-                                endDate: new Date(currentYear, 8, 1)
-                            },
-                            {
-                                id: 4,
-                                name: 'Apple Keynote',
-                                location: 'San Francisco, CA',
-                                startDate: new Date(currentYear, 8, 9),
-                                endDate: new Date(currentYear, 8, 9)
-                            },
-                            {
-                                id: 5,
-                                name: 'Chrome Developer Summit',
-                                location: 'Mountain View, CA',
-                                startDate: new Date(currentYear, 10, 17),
-                                endDate: new Date(currentYear, 10, 18)
-                            },
-                            {
-                                id: 6,
-                                name: 'F8 2015',
-                                location: 'San Francisco, CA',
-                                startDate: new Date(currentYear, 2, 25),
-                                endDate: new Date(currentYear, 2, 26)
-                            },
-                            {
-                                id: 7,
-                                name: 'Yahoo Mobile Developer Conference',
-                                location: 'New York',
-                                startDate: new Date(currentYear, 7, 25),
-                                endDate: new Date(currentYear, 7, 26)
-                            },
-                            {
-                                id: 8,
-                                name: 'Android Developer Conference',
-                                location: 'Santa Clara, CA',
-                                startDate: new Date(currentYear, 11, 1),
-                                endDate: new Date(currentYear, 11, 4)
-                            },
-                            {
-                                id: 9,
-                                name: 'LA Tech Summit',
-                                location: 'Los Angeles, CA',
-                                startDate: new Date(currentYear, 10, 17),
-                                endDate: new Date(currentYear, 10, 17)
-                            }
-                        ]
-                    });
-                   
-                    
-                    $('#save-event').click(function() {
-                        saveEvent();
-                    });
+                        {
+                            id: 1,
+                            name: 'Microsoft Convergence',
+                            location: 'New Orleans, LA',
+                            startDate: new Date(currentYear, 2, 16),
+                            endDate: new Date(currentYear, 2, 19)
+                        },
+                        {
+                            id: 2,
+                            name: 'Microsoft Build Developer Conference',
+                            location: 'San Francisco, CA',
+                            startDate: new Date(currentYear, 3, 29),
+                            endDate: new Date(currentYear, 4, 1)
+                        },
+                        {
+                            id: 3,
+                            name: 'Apple Special Event',
+                            location: 'San Francisco, CA',
+                            startDate: new Date(currentYear, 8, 1),
+                            endDate: new Date(currentYear, 8, 1)
+                        },
+                        {
+                            id: 4,
+                            name: 'Apple Keynote',
+                            location: 'San Francisco, CA',
+                            startDate: new Date(currentYear, 8, 9),
+                            endDate: new Date(currentYear, 8, 9)
+                        },
+                        {
+                            id: 5,
+                            name: 'Chrome Developer Summit',
+                            location: 'Mountain View, CA',
+                            startDate: new Date(currentYear, 10, 17),
+                            endDate: new Date(currentYear, 10, 18)
+                        },
+                        {
+                            id: 6,
+                            name: 'F8 2015',
+                            location: 'San Francisco, CA',
+                            startDate: new Date(currentYear, 2, 25),
+                            endDate: new Date(currentYear, 2, 26)
+                        },
+                        {
+                            id: 7,
+                            name: 'Yahoo Mobile Developer Conference',
+                            location: 'New York',
+                            startDate: new Date(currentYear, 7, 25),
+                            endDate: new Date(currentYear, 7, 26)
+                        },
+                        {
+                            id: 8,
+                            name: 'Android Developer Conference',
+                            location: 'Santa Clara, CA',
+                            startDate: new Date(currentYear, 11, 1),
+                            endDate: new Date(currentYear, 11, 4)
+                        },
+                        {
+                            id: 9,
+                            name: 'LA Tech Summit',
+                            location: 'Los Angeles, CA',
+                            startDate: new Date(currentYear, 10, 17),
+                            endDate: new Date(currentYear, 10, 17)
+                        }
+                    ]
                 });
-        }
+                
+                
+                $('#save-event').click(function() {
+                    saveEvent();
+                });
+            });
+    }
 
-        
-        
+    var turmaAtual = 0, anoAtual = <%- anoAtual %>;
+    var aulas;
+    function atualizar() {
+        var turma = parseInt($("#turma").val());
+        var ano = (parseInt($("#ano").val()) || 0);
 
+        if ((turmaAtual === turma && ano === anoAtual) || JsonWebApi.active)
+            return;
 
-        window.prepareCbSearchAllowLower = true;
-        prepareCbSearch(document.getElementById("turma"));
+        Notification.wait();
 
-        var turmaAtual = 0, anoAtual = <%- anoAtual %>;
-        var aulas;
-        function atualizar() {
-            var turma = parseInt($("#turma").val());
-            var ano = (parseInt($("#ano").val()) || 0);
-    
-            if ((turmaAtual === turma && ano === anoAtual) || JsonWebApi.active)
-                return;
-    
-            Notification.wait();
-    
-            JsonWebApi.get("<%- root %>/api/aula/listar", function (response) {
-                if (response.success) {
-                    Notification.hide();
-                    turmaAtual = turma;
-                    anoAtual = ano;
-                    aulas = response.value;
-                    console.log(aulas);
-                    // montarPagina(aulas);
-                } else {
-                    Notification.error(response.value, true);
-                }
-            }, "id_turma", turma, "ano", ano);
-        }
-        // function montarPagina(aulas){
-        //     var body = document.getElementById('body');
-        //     body.innerHTML = "";
+        JsonWebApi.get("<%- root %>/api/aula/listar", function (response) {
+            if (response.success) {
+                Notification.hide();
+                turmaAtual = turma;
+                anoAtual = ano;
+                aulas = response.value;
+                console.log(aulas);
+                // montarPagina(aulas);
+            } else {
+                Notification.error(response.value, true);
+            }
+        }, "id_turma", turma, "ano", ano);
+    }
+    // function montarPagina(aulas){
+    //     var body = document.getElementById('body');
+    //     body.innerHTML = "";
 
-        //     for(var i = 0; i< aulas.length; i++){
-        //         var nome_aula = aulas[i].nome_aula;
-        //         var desc_aula = aulas[i].desc_aula;
-        //         var desc_sala = aulas[i].desc_sala;
-        //         var nome_prof = aulas[i].nome_prof;
-        //         var inicio_aula = aulas[i].inicio_aula;
-        //         var termino_aula = aulas[i].termino_aula;
-        //         body.innerHTML +=  nome_aula +" - " + desc_aula+ "<br> Sala: " + desc_sala+ "<br> Professor: "+ nome_prof+ "<br>" +
-        //         inicio_aula +" - "+ termino_aula + "<hr>";
-        //     }
-        // }
-        gerarCalendario()
-    
-    </script>
-    
+    //     for(var i = 0; i< aulas.length; i++){
+    //         var nome_aula = aulas[i].nome_aula;
+    //         var desc_aula = aulas[i].desc_aula;
+    //         var desc_sala = aulas[i].desc_sala;
+    //         var nome_prof = aulas[i].nome_prof;
+    //         var inicio_aula = aulas[i].inicio_aula;
+    //         var termino_aula = aulas[i].termino_aula;
+    //         body.innerHTML +=  nome_aula +" - " + desc_aula+ "<br> Sala: " + desc_sala+ "<br> Professor: "+ nome_prof+ "<br>" +
+    //         inicio_aula +" - "+ termino_aula + "<hr>";
+    //     }
+    // }
+    gerarCalendario()
+
+</script>
+</body>
+</html>

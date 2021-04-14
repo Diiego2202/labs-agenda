@@ -89,9 +89,9 @@ router.all("/download", wrap(async (req: express.Request, res: express.Response)
 		const hoje = new Date(),
 		anoAtual = hoje.getFullYear(),
 		mesAtual = hoje.getMonth() + 1;
-		console.log(JSON.stringify(await Aula.listar(0, 0, anoAtual, mesAtual)));
 		
 		res.render("aula/download", {
+			layout: "layout-vazio",
 			titulo: "Plano de Aulas",
 			usuario: u,
 			anoAtual: anoAtual,

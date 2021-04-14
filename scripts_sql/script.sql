@@ -28,13 +28,14 @@ CREATE TABLE usuario (
   CONSTRAINT idperfil_FK FOREIGN KEY (idperfil) REFERENCES perfil (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
-INSERT INTO usuario (login, nome, email, idperfil, token, criacao) VALUES ('julia.rolemberg', 'Julia Rolemberg', 'julia@mail.com', 1, NULL, NOW());
-
+INSERT INTO usuario (login, nome, email, idperfil, criacao) VALUES
+('julia.rolemberg', 'Julia Rolemberg', 'julia@mail.com', 1, NOW()),
+('pedro.heck', 'Pedro Heck', 'pedro@mail.com', 1, NOW());
 
 CREATE TABLE aula (
   id_aula int NOT NULL AUTO_INCREMENT,
   nome_aula varchar(50) NOT NULL,
-  desc_aula varchar(50) NOT NULL	,
+  desc_aula varchar(50) NOT NULL,
   inicio_aula datetime NOT NULL,
   termino_aula datetime NOT NULL,
   carga_horaria int NOT NULL,
@@ -42,7 +43,6 @@ CREATE TABLE aula (
   KEY aula_inicio_termino_ix (inicio_aula, termino_aula),
   KEY aula_termino_ix (termino_aula)
 );
-
 
 create table sala(
 	id_sala int primary key auto_increment,
@@ -71,7 +71,6 @@ create table aula_prof(
     primary key (id_prof, id_aula)
 );
 
-
 create table turma(
 	id_turma int primary key auto_increment, 
     desc_turma varchar(45)
@@ -85,30 +84,15 @@ create table aula_turma(
     primary key (id_aula, id_turma)
 );
 
--- COMENTÁRIO AQUI
+insert into aula(nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values
+('aula1', 'Descrição resumida do aula' , '2021-04-01T08:00', '2021-04-01T09:00', 4),
+('aula2', 'Descrição resumida do aula' , '2021-04-01T08:00', '2021-04-01T09:00', 4),
+('aula3', 'Descrição resumida do aula' , '2021-04-01T08:00', '2021-04-01T09:00', 4),
+('aula4', 'Descrição resumida da aula' , '2021-04-01T08:00', '2021-04-01T09:00', 4);
 
-
-
- insert into aula(nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values
- ('aula1', 'Descrição resumida do aula' ,'2020-10-02T08:00', '2020-10-02T09:00', 4),
- ('aula2', 'Descrição resumida do aula' , '2020-10-02T08:00', '2020-10-02T09:00', 4),
- ('aula3', 'Descrição resumida do aula' , '2020-10-02T10:00', '2020-10-02T09:00', 4),
- ('aula4', 'Descrição resumida da aula' ,'2020-10-02T08:00', '2020-10-02T09:00', 4);
- insert into professor(nome_prof) values ('Professor');
- insert into turma(desc_turma) values ('Turma');
- insert into sala(desc_sala, andar_sala) values ('Sala', 1);
- insert into aula_prof(id_prof, id_aula) values (1, 1);
- insert into aula_turma(id_aula, id_turma) values(1, 1);
- insert into aula_sala(id_aula, id_sala) values(1,1);
-
-select * from aula;
-
-delete from aula_turma where id_aula =1;
-delete from aula_prof where id_aula = 1;
-delete from aula_sala where id_aula = 1;
-delete from aula where id_aula=1;
-
-insert into usuario(id, login, nome, email, idperfil, criacao) 
-values(2, 'pedro.heck', 'Pedro Heck', 'pedro@mail.com', 1, now());
-
-select * from usuario;
+insert into professor(nome_prof) values ('Professor 1'), ('Professor 2'), ('Professor 3'), ('Professor 4');
+insert into turma(desc_turma) values ('Turma 1'), ('Turma 2'), ('Turma 3'), ('Turma 4');
+insert into sala(desc_sala, andar_sala) values ('Sala 1', 1), ('Sala 2', 2), ('Sala 3', 3), ('Sala 4', 4);
+insert into aula_prof(id_prof, id_aula) values (1, 1), (2,2), (3,3), (4,4);
+insert into aula_turma(id_aula, id_turma) values (1, 1), (2,2), (3,3), (4,4);
+insert into aula_sala(id_aula, id_sala) values (1,1), (2,2), (3,3), (4,4);
