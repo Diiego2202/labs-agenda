@@ -1,11 +1,11 @@
-<!-- <body class ="A5 "> -->
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-body no-bottom">
                     <h2 class="no-margin-top col-xs-space-bottom text-center"><i class="fa fa-filter"></i>Filtro</h2>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="turma">Turma</label>
                                 <select size="1" id="turma" class="form-control" onchange="atualizar()">
@@ -21,8 +21,8 @@
             </div>
         </div>
     </div>
-<body class ="A4 ">
-    <section class= "sheet padding-10mm">
+<body class ="A4">
+    <section class="sheet" style="padding: 10px; margin: 0 auto">
         <div id="calendar" class="calendar">
 
         </div>
@@ -35,6 +35,11 @@
         "use strict";
         
         function gerarCalendario(){
+
+            var aulas = <%- JSON.stringify(lista) %>;
+            console.log(aulas);
+            console.log(lista);
+
 
             function editEvent(event) {
                 $('#event-modal input[name="event-index"]').val(event ? event.id : '');
@@ -105,7 +110,7 @@
                         enableRangeSelection: true,
                         contextMenuItems:[
                             {
-                                text: 'Update',
+                                text: 'Alterar',
                                 click: editEvent
                             },
                             {
@@ -218,12 +223,18 @@
                             }
                         ]
                     });
+                   
                     
                     $('#save-event').click(function() {
                         saveEvent();
                     });
                 });
         }
+
+        
+        
+
+
         window.prepareCbSearchAllowLower = true;
         prepareCbSearch(document.getElementById("turma"));
 

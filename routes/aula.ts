@@ -89,12 +89,13 @@ router.all("/download", wrap(async (req: express.Request, res: express.Response)
 		const hoje = new Date(),
 		anoAtual = hoje.getFullYear(),
 		mesAtual = hoje.getMonth() + 1;
-
+		console.log(JSON.stringify(await Aula.listar(0, 0, anoAtual, mesAtual)));
+		
 		res.render("aula/download", {
 			titulo: "Plano de Aulas",
 			usuario: u,
 			anoAtual: anoAtual,
-			lista: await Aula.listar(0, 0, anoAtual, mesAtual),
+			lista: JSON.stringify(await Aula.listar(0, 0, anoAtual, mesAtual)),
 			turmas: await Turma.listar()
 		});	
 	}

@@ -252,7 +252,7 @@ export = class Aula {
 				linhas[i] = linhas[i].trim();
 				if (!linhas[i])
 					linhas.splice(i, 1);
-			} else {
+			}else {
 				linhas.splice(i, 1);
 			}
 		}
@@ -261,6 +261,12 @@ export = class Aula {
 			return "CSV vazio";
 
 		const registros: string[][] = new Array(linhas.length);
+		
+		// let dias: string[];
+		// dias[0] = registros[5].split(","); //separando os dias por vírgula
+		// console.log(dias);
+
+
 		for (let i = 0; i < linhas.length; i++) {
 			const registro = linhas[i].split(";");
 			if (registro.length !== 7)
@@ -281,7 +287,7 @@ export = class Aula {
 		}
 
 		let erro: string = null;
-
+		
 		await Sql.conectar(async(sql : Sql) => {
 
 			for (let i = 0; i < registros.length; i++) {
@@ -310,6 +316,13 @@ export = class Aula {
 
 			for (let i = 0; i < registros.length; i++) {
 				// Nome;Descrição;Turma;Sala;Professor;Início;Término
+				// for(let j = 0; j < dias[i][5].length; j++){
+				// 	await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula) values (?,?,?,?)", [registros[i][0], registros[i][1], registros[i][5], registros[i][6]]);
+				// 	const id_aula = await sql.scalar("select last_insert_id()") as number;
+				// 	await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [registros[i][2], id_aula]);
+				// 	await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [registros[i][3], id_aula]);
+				// 	await sql.query(" insert into aula_prof(id_prof, id_aula) values (?, ?)", [registros[i][4], id_aula]);
+				// }
 				await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula) values (?,?,?,?)", [registros[i][0], registros[i][1], registros[i][5], registros[i][6]]);
 				const id_aula = await sql.scalar("select last_insert_id()") as number;
 				await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [registros[i][2], id_aula]);
