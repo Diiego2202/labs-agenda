@@ -467,3 +467,42 @@ label.error {
 .clickable {
 	cursor: pointer;
 }
+
+#container-upload{
+	width: 500px;
+	margin: auto;
+}
+
+#tabela-container .form-group{
+	width: 500px;
+}
+
+#formUpload #arquivoCSV{
+	display: none;
+}
+
+#formUpload label{
+	color: white;
+	background-color: #02617E;
+	padding: 5px 10px;
+	cursor: pointer;
+	margin-bottom: 0;
+}
+
+#formUpload label:hover{
+	background-color: #004a61;
+}
+
+#importar{
+	background-color: #a70230; 
+	color: #fff; 
+	padding: 5px; 
+	margin-left: 20px;
+	border: none;
+	font-weight: 550;
+}
+
+#importar:hover{
+	background-color: #99052a;
+}
+
