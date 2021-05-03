@@ -55,7 +55,7 @@
             <div class="col-md-6 ">
                 <div id="legenda"> 
                     <% for (let i = 0; i < lista.length; i++) { %>
-                        <p><%- lista[i].id_aula %>, <%= lista[i].nome_aula %></p>
+                        <p><%= lista[i].id_aula %>, <%= lista[i].nome_aula %></p>
                     <% } %>
                 </div>
             </div>
@@ -69,216 +69,96 @@
 <script type="text/javascript">
     "use strict";
     
-    function gerarCalendario(){
-
-        var aulas = <%- lista %>;
-        console.log(aulas);
-
-
-        function editEvent(event) {
-            $('#event-modal input[name="event-index"]').val(event ? event.id : '');
-            $('#event-modal input[name="event-name"]').val(event ? event.name : '');
-            $('#event-modal input[name="event-location"]').val(event ? event.location : '');
-            $('#event-modal input[name="event-start-date"]').datepicker('update', event ? event.startDate : '');
-            $('#event-modal input[name="event-end-date"]').datepicker('update', event ? event.endDate : '');
-            $('#event-modal').modal();
-        }
-
-        function deleteEvent(event) {
-            var dataSource = $('#calendar').data('calendar').getDataSource();
-
-            for(var i in dataSource) {
-                if(dataSource[i].id == event.id) {
-                    dataSource.splice(i, 1);
-                    break;
-                }
-            }
-            
-            $('#calendar').data('calendar').setDataSource(dataSource);
-        }
-
-        function saveEvent() {
-            var event = {
-                id_aula: $('#event-modal input[name="id_aula"]').val(),
-                id_sala: $('#event-modal input[name="id_sala"]').val(),
-                id_prof: $('#event-modal input[name="id_prof"]').val(),
-                id_turma: $('#event-modal input[name="id_turma"]').val(),
-                nome_aula: $('#event-modal input[name="nome_aula"]').val(),
-                desc_aula: $('#event-modal input[name="desc_aula"]').val(),
-                // inicio_aula: $('#event-modal input[name="inicio_aula"]').val(),
-                // termino_aula: $('#event-modal input[name="termino_aula"]').val(),
-                startDate: $('#event-modal input[name="inicio_aula"]').val(),
-                endDate: $('#event-modal input[name="termino_aula"]').val(),
-                carga_horaria: $('#event-modal input[name="carga_horaria"]').val(),
-                desc_sala: $('#event-modal input[name="desc_sala"]').val(),
-                desc_turma: $('#event-modal input[name="desc_turma"]').val(),
-                nome_prof: $('#event-modal input[name="nome_prof"]').val()
-                // startDate: new Date(currentYear, 4, 28),
-                // endDate: new Date(currentYear, 4, 29)
-            }
-            
-            var dataSource = $('#calendar').data('calendar').getDataSource();
-
-            if(event.id_aula) {
-                for(var i in dataSource) {
-                    if(dataSource[i].id_aula == event.id) {
-                        dataSource[i].nome_aula = event.nome_aula;
-                        dataSource[i].desc_aula = event.desc_aula;
-                        dataSource[i].inicio_aula = event.inicio_aula;
-                        dataSource[i].termino_aula = event.termino_aula;
-                        dataSource[i].id_sala = event.id_sala;
-                        dataSource[i].id_prof = event.id_prof;
-                        dataSource[i].id_turma = event.id_turma;
-                        dataSource[i].carga_horaria = event.carga_horaria;
-                        dataSource[i].desc_sala = event.desc_sala;
-                        dataSource[i].desc_turma = event.desc_turma;
-                        dataSource[i].nome_prof = event.nome_prof;
-
-                    }
-                }
-            }
-            else
-            {
-                var newId = 0;
-                for(var i in dataSource) {
-                    if(dataSource[i].id_aula > newId) {
-                        newId = dataSource[i].id_aula;
-                    }
-                }
-                
-                newId++;
-                event.id_aula = newId;
-            
-                dataSource.push(event);
-            }
-            
-            $('#calendar').data('calendar').setDataSource(dataSource);
-            $('#event-modal').modal('hide');
-        }
-            $(function() {
-                var currentYear = new Date().getFullYear();
-
-                $('#calendar').calendar({
-                    enableContextMenu: true,
-                    enableRangeSelection: true,
-                    contextMenuItems:[
-                        {
-                            text: 'Alterar',
-                            click: editEvent
-                        },
-                        {
-                            text: 'Delete',
-                            click: deleteEvent
-                        }
-                    ],
-                    selectRange: function(e) {
-                        editEvent({ startDate: e.inicio_aula, endDate: e.termino_aula });
-                    },
-                    mouseOnDay: function(e) {
-                        if(e.events.length > 0) {
-                            var content = '';
-                            
-                            for(var i in e.events) {
-                                content += '<div class="event-tooltip-content">'
-                                                + '<div class="nome_aula" style="color:' + e.events[i].color + '">' + e.events[i].nome_aula + '</div>'
-                                                + '<div class="desc_aula">' + e.events[i].desc_aula + '</div>'
-                                            + '</div>';
-                            }
-                        
-                            $(e.element).popover({
-                                trigger: 'manual',
-                                container: 'body',
-                                html:true,
-                                content: content
-                            });
-                            
-                            $(e.element).popover('show');
-                        }
-                    },
-                    mouseOutDay: function(e) {
-                        if(e.events.length > 0) {
-                            $(e.element).popover('hide');
-                        }
-                    },
-                    dayContextMenu: function(e) {
-                        $(e.element).popover('hide');
-                    },
-                    dataSource: [
-                        {
-                            id_aula: 0,
-                            id_sala: 'Google I/O',
-                            id_prof: 'Google I/O',
-                            id_turma: 'San Francisco, CA',
-                            nome_aula: 'San Francisco, CA',
-                            desc_aula: 'San Francisco, CA',
-                            nome_prof: 'San Francisco, CA',
-                            carga_horaria: 'San Francisco, CA',
-                            desc_sala: 'San Francisco, CA',
-                            desc_turma: 'San Francisco, CA',
-                            startDate: '2021-04-30',
-                            // startDate: new Date(inicio_aula.getYear(), inicio_aula.getMonth(), inicio_aula.getDate()),
-                            endDate: '2021-04-30'
-                        },
-                        {
-                            id_aula: 1,
-                            id_sala: 'oi',
-                            id_prof: 'Google I/O',
-                            id_turma: 'San Francisco, CA',
-                            nome_aula: 'San Francisco, CA',
-                            desc_aula: 'San Francisco, CA',
-                            nome_prof: 'San Francisco, CA',
-                            carga_horaria: 'San Francisco, CA',
-                            desc_sala: 'San Francisco, CA',
-                            desc_turma: 'San Francisco, CA',
-                            startDate: new Date(currentYear, 5, 28),
-                            endDate: new Date(currentYear, 5, 29)
-                        }
-                    ]
-                });
-                
-                
-                $('#save-event').click(function() {
-                    saveEvent();
-                });
-            });
+    function criarDate(dataLocalDMY) {
+        var partes = dataLocalDMY.split("/"),
+            dia = parseInt(partes[0]),
+            mes = parseInt(partes[1]),
+            ano = parseInt(partes[2]);
+        return new Date(ano, mes - 1, dia);
     }
 
-    var turmaAtual = 0, anoAtual = <%- anoAtual %>;
-    function atualizar() {
-        var turma = parseInt($("#turma").val());
-        var ano = (parseInt($("#ano").val()) || 0);
+    function gerarCalendario() {
 
-        if ((turmaAtual === turma && ano === anoAtual) || JsonWebApi.active)
-            return;
+        // https://www.bootstrap-year-calendar.com/#Documentation/Options
+        var aulas = <%- JSON.stringify(lista) %>,
+            anoAtual = <%- anoAtual %>,
+            dataSource = [];
 
-        Notification.wait();
+        for (var i = 0; i < aulas.length; i++) {
+            var aula = {
+                name: aulas[i].nome_aula,
+                desc_aula: aulas[i].desc_aula,
+                startDate: criarDate(aulas[i].inicio_aula),
+                endDate: criarDate(aulas[i].termino_aula),
+            };
+            dataSource.push(aula);
+        }
 
-        JsonWebApi.get("<%- root %>/api/aula/listar", function (response) {
-            if (response.success) {
-                Notification.hide();
-                turmaAtual = turma;
-                anoAtual = ano;
-            } else {
-                Notification.error(response.value, true);
-            }
-        }, "id_turma", turma, "ano", ano);
+        $('#calendar').calendar({
+            enableContextMenu: false,
+            enableRangeSelection: false,
+            mouseOnDay: function(e) {
+                if(e.events.length > 0) {
+                    var content = '';
+                    
+                    for(var i in e.events) {
+                        content += '<div class="event-tooltip-content">'
+                                        + '<div class="nome_aula" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                                        + '<div class="desc_aula">' + e.events[i].desc_aula + '</div>'
+                                    + '</div>';
+                    }
+                
+                    $(e.element).popover({
+                        trigger: 'manual',
+                        container: 'body',
+                        html:true,
+                        content: content
+                    });
+                    
+                    $(e.element).popover('show');
+                }
+            },
+            mouseOutDay: function(e) {
+                if(e.events.length > 0) {
+                    $(e.element).popover('hide');
+                }
+            },
+            dataSource: dataSource
+            /*[
+                {
+                    id_aula: 0,
+                    id_sala: 'Google I/O',
+                    id_prof: 'Google I/O',
+                    id_turma: 'San Francisco, CA',
+                    nome_aula: 'San Francisco, CA',
+                    desc_aula: 'San Francisco, CA',
+                    nome_prof: 'San Francisco, CA',
+                    carga_horaria: 'San Francisco, CA',
+                    desc_sala: 'San Francisco, CA',
+                    desc_turma: 'San Francisco, CA',
+                    startDate: criarDate("30/09/2021"),
+                    // startDate: new Date(inicio_aula.getYear(), inicio_aula.getMonth(), inicio_aula.getDate()),
+                    endDate: criarDate("08/10/2021")
+                },
+                {
+                    id_aula: 1,
+                    id_sala: 'oi',
+                    id_prof: 'Google I/O',
+                    id_turma: 'San Francisco, CA',
+                    nome_aula: 'San Francisco, CA',
+                    desc_aula: 'San Francisco, CA',
+                    nome_prof: 'San Francisco, CA',
+                    carga_horaria: 'San Francisco, CA',
+                    desc_sala: 'San Francisco, CA',
+                    desc_turma: 'San Francisco, CA',
+                    startDate: new Date(currentYear, 5, 28),
+                    endDate: new Date(currentYear, 5, 29)
+                }
+            ]*/
+        });
     }
-    // function montarPagina(aulas){
-    //     var body = document.getElementById('body');
-    //     body.innerHTML = "";
 
-    //     for(var i = 0; i< aulas.length; i++){
-    //         var nome_aula = aulas[i].nome_aula;
-    //         var desc_aula = aulas[i].desc_aula;
-    //         var desc_sala = aulas[i].desc_sala;
-    //         var nome_prof = aulas[i].nome_prof;
-    //         var inicio_aula = aulas[i].inicio_aula;
-    //         var termino_aula = aulas[i].termino_aula;
-    //         body.innerHTML +=  nome_aula +" - " + desc_aula+ "<br> Sala: " + desc_sala+ "<br> Professor: "+ nome_prof+ "<br>" +
-    //         inicio_aula +" - "+ termino_aula + "<hr>";
-    //     }
-    // }
-    gerarCalendario()
+    gerarCalendario();
 
 </script>
 </body>

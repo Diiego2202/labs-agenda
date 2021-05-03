@@ -87,15 +87,14 @@ router.all("/download", wrap(async (req: express.Request, res: express.Response)
 		res.redirect(appsettings.root + "/acesso");
 	else{
 		const hoje = new Date(),
-		anoAtual = hoje.getFullYear(),
-		mesAtual = hoje.getMonth() + 1;
+		anoAtual = hoje.getFullYear();
 		
 		res.render("aula/download", {
 			layout: "layout-vazio",
 			titulo: "Plano de Aulas",
 			usuario: u,
 			anoAtual: anoAtual,
-			lista: JSON.stringify(await Aula.listar(0, 0, anoAtual, mesAtual)),
+			lista: await Aula.listar(0, 0, anoAtual),
 			turmas: await Turma.listar()
 		});	
 	}
