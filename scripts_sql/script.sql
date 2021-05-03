@@ -29,6 +29,7 @@ CREATE TABLE usuario (
 );
 
 INSERT INTO usuario (login, nome, email, idperfil, criacao) VALUES
+('admin', 'admin', 'admin@mail.com', 1, NOW()),
 ('julia.rolemberg', 'Julia Rolemberg', 'julia@mail.com', 1, NOW()),
 ('pedro.heck', 'Pedro Heck', 'pedro@mail.com', 1, NOW());
 
