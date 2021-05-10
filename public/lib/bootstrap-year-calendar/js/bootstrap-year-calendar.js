@@ -357,10 +357,10 @@
 					var weight = 0;
 			
 					if(events.length == 1) {
-						weight = 4;
+						weight = 6;
 					}
-					else if(events.length <= 3) {
-						weight = 2;
+					else if(events.length <= 4) {
+						weight = 6;
 					}
 					else {
 						elt.parent().css('box-shadow', 'inset 0 -4px 0 0 black');
