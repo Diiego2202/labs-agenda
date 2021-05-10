@@ -16,7 +16,20 @@
 		<div class="panel panel-default">
 			<div class="panel-body text-center">
 				<h2 class="no-margin-top col-xs-space-bottom">Download do Plano de Aulas</h2>
-				<a target="_blank" href="aula/download" id="download" class="btn btn-primary btn-copyjs"><i class="fa fa-download"></i>Download</a>
+				<div class="row">
+					<div class="col-sm-6 col-sm-offset-3">
+						<div class="form-group">
+							<label for="turma">Turma</label>
+							<select size="1" id="turmaDownload" class="form-control" onchange="atualizar()">
+								<option value="0">Selecione...</option>
+								<% for (let i = 0; i < turmas.length; i++) { %>
+									<option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
+								<% } %>
+							</select>
+						</div>
+					</div>
+				</div>
+				<a target="_blank" href="aula/download" id="download" class="btn btn-primary hidden"><i class="fa fa-download"></i>Download</a>
 			</div>
 		</div>
 	</div>
@@ -97,7 +110,20 @@
 <script type="text/javascript">
 	"use strict";
 
+	document.getElementById("turmaDownload").onchange = function () {
+		var turmaDownload = document.getElementById("turmaDownload");
+		var download = document.getElementById("download");
+		var idturma = parseInt(turmaDownload.value);
+		if (idturma) {
+			download.href = "aula/download/" + idturma;
+			download.className = "btn btn-primary";
+		} else {
+			download.className = "btn btn-primary hidden";
+		}
+	};
+
 	window.prepareCbSearchAllowLower = true;
+	prepareCbSearch(document.getElementById("turmaDownload"));
 	prepareCbSearch(document.getElementById("turma"));
 	prepareCbSearch(document.getElementById("sala"));
 	prepareCbSearch(document.getElementById("mes"));

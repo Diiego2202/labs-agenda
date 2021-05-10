@@ -81,7 +81,7 @@ router.all("/upload", wrap(async (req: express.Request, res: express.Response) =
 	}
 
 }));
-router.all("/download", wrap(async (req: express.Request, res: express.Response) => {
+router.all("/download/:idturma", wrap(async (req: express.Request, res: express.Response) => {
 	let u = await Usuario.cookie(req);
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
@@ -94,7 +94,7 @@ router.all("/download", wrap(async (req: express.Request, res: express.Response)
 			titulo: "Plano de Aulas",
 			usuario: u,
 			anoAtual: anoAtual,
-			lista: await Aula.listar(0, 0, anoAtual),
+			lista: await Aula.listar(parseInt(req.params["idturma"]), 0, anoAtual),
 			turmas: await Turma.listar()
 		});	
 	}

@@ -12,7 +12,7 @@ export = class Aula {
 	public id_prof:number;
 	public id_turma:number;
 	public id_sala:number;
-
+	public ocorrencias: string[];
 
 	public static async listarHoje(): Promise<Aula[]> {
 		let inicioDiaHoje = DataUtil.hojeISOInicioDoDia();
@@ -35,7 +35,7 @@ export = class Aula {
 		return lista || [];
 	}
 
-	public static  validar(aula: Aula): string{
+	public static validar(aula: Aula): string {
 		
 		if(!aula){
 			return "Dados inválidos";
@@ -59,10 +59,10 @@ export = class Aula {
 			//validação de data será aqui?
 			return "Data de Término inválida"
 		}
-		// aula.carga_horaria = parseInt(aula.carga_horaria as any);
-		// if (isNaN(aula.carga_horaria)){
-		// 	return "Carga horária inválida";
-		// }
+		aula.carga_horaria = parseInt(aula.carga_horaria as any);
+		if (isNaN(aula.carga_horaria)){
+			return "Carga horária inválida";
+		}
 		aula.id_prof = parseInt(aula.id_prof as any);
 		if (isNaN(aula.id_prof)) {
 			return "Professor inválido";
@@ -74,6 +74,30 @@ export = class Aula {
 		aula.id_sala = parseInt(aula.id_sala as any);
 		if (isNaN(aula.id_sala)) {
 			return "Sala inválida";
+		}
+		if (!aula.ocorrencias) {
+			aula.ocorrencias = [];
+		} else {
+			const regexp = /\/\-\:\s/g,
+				inicio = parseInt(aula.inicio_aula.replace(regexp, "")),
+				termino = parseInt(aula.termino_aula.replace(regexp, ""));
+
+			for (let i = aula.ocorrencias.length - 1; i >= 0; i--) {
+				if (!(aula.ocorrencias[i] = DataUtil.converterDataISO(aula.ocorrencias[i])))
+					return "Data da ocorrência inválida";
+				const ocorrencia = parseInt(aula.ocorrencias[i].replace(regexp, ""));
+				if (ocorrencia < inicio)
+					return "Data da ocorrência anterior ao início da aula";
+				if (ocorrencia > termino)
+					return "Data da ocorrência posterior ao término da aula";
+			}
+
+			aula.ocorrencias.sort();
+
+			for (let i = aula.ocorrencias.length - 1; i > 0; i--) {
+				if (aula.ocorrencias[i] === aula.ocorrencias[i - 1])
+					return "Data da ocorrência repetida";
+			}
 		}
 		return null;
 	}
@@ -125,7 +149,7 @@ export = class Aula {
 				parametros.push(fim, inicio);
 			}
 
-			lista = await sql.query(`select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%d/%m/%Y %H:%i') inicio_aula, date_format(e.termino_aula, '%d/%m/%Y %H:%i') termino_aula, e.carga_horaria, ep.id_prof, p.nome_prof, et.id_turma, t.desc_turma, es.id_sala, s.desc_sala from aula e 
+			lista = await sql.query(`select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%d/%m/%Y') inicio_aula, date_format(e.termino_aula, '%d/%m/%Y') termino_aula, e.carga_horaria, ep.id_prof, p.nome_prof, et.id_turma, t.desc_turma, es.id_sala, s.desc_sala from aula e 
 			inner join aula_prof ep on ep.id_aula = e.id_aula
 			inner join aula_turma et on et.id_aula = e.id_aula
 			inner join aula_sala es on es.id_aula = e.id_aula
@@ -156,6 +180,9 @@ export = class Aula {
 				await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [aula.id_turma, id_aula]);
 				await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [aula.id_sala, id_aula]);
 
+				for (let i = aula.ocorrencias.length - 1; i >= 0; i--)
+					await sql.query("insert into ocorrencia_aula (id_aula, inicio_ocorrencia) values (?, ?)", [id_aula, aula.ocorrencias[i]]);
+
 				await sql.commit();
 			} catch (e) {
 				if (e.code && e.code === "ER_DUP_ENTRY")
@@ -174,10 +201,15 @@ export = class Aula {
         let aula: Aula = null;
 
         await Sql.conectar(async(sql)=>{
-			let lista = await sql.query("select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%Y-%m-%dT%H:%i') inicio_aula, date_format(e.termino_aula, '%Y-%m-%dT%H:%i') termino_aula, e.carga_horaria, ep.id_prof, et.id_turma, es.id_sala from aula e inner join aula_prof ep on ep.id_aula = e.id_aula inner join aula_turma et on et.id_aula = e.id_aula inner join aula_sala es on es.id_aula = e.id_aula where e.id_aula = ?",[id_aula]);
+			let lista = await sql.query("select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%Y-%m-%d') inicio_aula, date_format(e.termino_aula, '%Y-%m-%d') termino_aula, e.carga_horaria, ep.id_prof, et.id_turma, es.id_sala from aula e inner join aula_prof ep on ep.id_aula = e.id_aula inner join aula_turma et on et.id_aula = e.id_aula inner join aula_sala es on es.id_aula = e.id_aula where e.id_aula = ?",[id_aula]);
          
             if(lista && lista.length){
                 aula = lista[0];
+
+				let ocorrencias = await sql.query("select date_format(inicio_ocorrencia, '%Y-%m-%d') inicio_ocorrencia from ocorrencia_aula where id_aula = ?",[id_aula]);
+				aula.ocorrencias = new Array(ocorrencias.length);
+				for (let i = ocorrencias.length - 1; i >= 0; i--)
+					aula.ocorrencias[i] = ocorrencias[i].inicio_ocorrencia;
             }
         });
 
@@ -202,6 +234,27 @@ export = class Aula {
 			await sql.query(" update aula_prof set id_prof = ? where id_aula = ?", [aula.id_prof, aula.id_aula]);
 			await sql.query(" update aula_turma set id_turma = ? where id_aula = ?", [aula.id_turma, aula.id_aula]);
 			await sql.query(" update aula_sala set id_sala = ? where id_aula = ?", [aula.id_sala, aula.id_aula]);
+
+			let novasOcorrencias = aula.ocorrencias;
+			let ocorrenciasAntigas: { id_ocorrencia: number, inicio_ocorrencia: string }[] = await sql.query("select id_ocorrencia, date_format(inicio_ocorrencia, '%Y-%m-%d') inicio_ocorrencia from ocorrencia_aula where id_aula = ?", [aula.id_aula]);
+
+			for (let i = ocorrenciasAntigas.length - 1; i >= 0; i--) {
+				const inicio_ocorrencia = ocorrenciasAntigas[i].inicio_ocorrencia;
+
+				for (let j = novasOcorrencias.length - 1; j >= 0; j--) {
+					if (novasOcorrencias[j] === inicio_ocorrencia) {
+						ocorrenciasAntigas.splice(i, 1);
+						novasOcorrencias.splice(j, 1);
+						break;
+					}
+				}
+			}
+
+			for (let i = ocorrenciasAntigas.length - 1; i >= 0; i--)
+				await sql.query("delete from ocorrencia_aula where id_ocorrencia = ? and id_aula = ?", [ocorrenciasAntigas[i].id_ocorrencia, aula.id_aula]);
+
+			for (let i = novasOcorrencias.length - 1; i >= 0; i--)
+				await sql.query("insert into ocorrencia_aula (id_aula, inicio_ocorrencia) values (?, ?)", [aula.id_aula, novasOcorrencias[i]]);
 
 			await sql.commit();
         });
