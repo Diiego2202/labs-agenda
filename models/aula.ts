@@ -78,7 +78,7 @@ export = class Aula {
 		if (!aula.ocorrencias) {
 			aula.ocorrencias = [];
 		} else {
-			const regexp = /\/\-\:\s/g,
+			const regexp = /[\/\-\:\s]/g,
 				inicio = parseInt(aula.inicio_aula.replace(regexp, "")),
 				termino = parseInt(aula.termino_aula.replace(regexp, ""));
 
@@ -180,7 +180,7 @@ export = class Aula {
 				await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [aula.id_turma, id_aula]);
 				await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [aula.id_sala, id_aula]);
 
-				for (let i = aula.ocorrencias.length - 1; i >= 0; i--)
+				for (let i = 0; i < aula.ocorrencias.length; i++)
 					await sql.query("insert into ocorrencia_aula (id_aula, inicio_ocorrencia) values (?, ?)", [id_aula, aula.ocorrencias[i]]);
 
 				await sql.commit();
@@ -210,6 +210,7 @@ export = class Aula {
 				aula.ocorrencias = new Array(ocorrencias.length);
 				for (let i = ocorrencias.length - 1; i >= 0; i--)
 					aula.ocorrencias[i] = ocorrencias[i].inicio_ocorrencia;
+				aula.ocorrencias.sort();
             }
         });
 

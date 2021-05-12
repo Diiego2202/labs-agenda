@@ -101,7 +101,7 @@
 		$("#tabela_container").append('<table class="table table-striped table-hover" id="tabela"></table>');
 
 		tabela = prepareDataTable("tabela", {
-			order: [[6, "asc"], [7, "asc"]],
+			order: [[7, "asc"], [8, "asc"]],
 			deferRender: true,
 			columns: [
 				{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_aula", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/aula/alterar?id_aula=" + row.id_aula + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },

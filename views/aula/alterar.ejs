@@ -73,6 +73,35 @@
 							<% } %>
 						</select>
 					</div>
+
+					<hr />
+
+					<div class="row">
+						<div class="col-xs-6">
+							<label style="height: 34px; line-height: 34px;">Ocorrências</label>
+						</div>
+						<div class="col-xs-6 text-right col-xs-space-bottom">
+							<button class="btn btn-primary" type="button" onclick="adicionarOcorrencia()"><i class="fa fa-plus"></i>Criar Ocorrência</button>
+						</div>
+					</div>
+
+					<table class="table table-striped table-hover no-margin-bottom">
+						<tbody id="bodyOcorrencias">
+							<% if (item && item.ocorrencias && item.ocorrencias.length) { for (let i = 0; i < item.ocorrencias.length; i++) { %>
+								<tr>
+									<td class="col-min">
+										<button title="Excluir" class="btn btn-danger btn-outline" type="button" onclick="removerOcorrencia(this)"><i class="fa fa-nomargin fa-times"></i></button>
+									</td>
+									<td>
+										<input class="form-control" type="date" name="ocorrencias" value="<%- item.ocorrencias[i] %>" />
+									</td>
+								</tr>
+							<% } } else { %>
+								<tr><td class="text-center">Não há ocorrências cadastradas</td></tr>
+							<% } %>
+						</tbody>
+					</table>
+
 				</div>
 			</div>
 
@@ -85,10 +114,32 @@
 	</div>
 </div>
 
+<%- contentFor("styles") %>
+<style type="text/css">
+	.fa-plus:before {
+		color: inherit;
+	}
+</style>
+
 <%- contentFor("scripts") %>
 <script type="text/javascript">
 	//<![CDATA[
 	"use strict";
+
+	function adicionarOcorrencia() {
+		if (!bodyOcorrencias.getElementsByTagName("input").length) {
+			$("#bodyOcorrencias").empty();
+		}
+		$("#bodyOcorrencias").append('<tr><td class="col-min"><button title="Excluir" class="btn btn-danger btn-outline" type="button" onclick="removerOcorrencia(this)"><i class="fa fa-nomargin fa-times"></i></button></td><td><input name="ocorrencias" class="form-control" type="date" /></td></tr>');
+	}
+
+	function removerOcorrencia(button) {
+		var bodyOcorrencias = document.getElementById("bodyOcorrencias");
+		bodyOcorrencias.removeChild(button.parentNode.parentNode);
+		if (!bodyOcorrencias.getElementsByTagName("tr").length) {
+			bodyOcorrencias.innerHTML = '<tr><td class="text-center">Não há ocorrências cadastradas</td></tr>';
+		}
+	}
 
 	$("#form").validate({
 		rules: {
@@ -128,7 +179,6 @@
 
 			JsonWebApi.postFormData("<%- root %>/api/aula/alterar", form, function (response) {
 				if (response.success){
-					
 					Notification.success("Aula alterada com sucesso! " + emoji.happy);
 				}
 				else
@@ -139,6 +189,7 @@
 		
 			JsonWebApi.postFormData("<%- root %>/api/aula/criar", form, function (response) {
 				if (response.success) {
+					document.getElementById("bodyOcorrencias").innerHTML = '<tr><td class="text-center">Não há ocorrências cadastradas</td></tr>';
 					resetForm("#form");
 					Notification.success("Aula criada com sucesso! " + emoji.happy);
 				} else {
