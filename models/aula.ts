@@ -167,6 +167,69 @@ export = class Aula {
         return lista;
 	}
 
+	public static async listarOcorrencias(id_turma?: number, id_sala?: number, ano?: number, mes?: number, dia?: number): Promise<Aula[]>{
+        let lista: Aula[] = null;
+        await Sql.conectar(async (sql) => {
+			let where = "";
+			let parametros: any[] = [];
+
+			if (id_turma > 0) {
+				if (where)
+					where += " and ";
+				where += " et.id_turma = ? ";
+				parametros.push(id_turma);
+			}
+
+			if (id_sala > 0) {
+				if (where)
+					where += " and ";
+				where += " es.id_sala = ? ";
+				parametros.push(id_sala);
+			}
+
+			if (ano > 0) {
+				if (where)
+					where += " and ";
+				let inicio: string, fim: string;
+				if (mes >= 1 && mes <= 12) {
+					if (dia >= 1 && dia <= 31) {
+						inicio = DataUtil.formatar(ano, mes, dia);
+						const dateInicial = new Date(ano, mes - 1, dia),
+							dateFinal = new Date(dateInicial.getTime() + 100800000);
+						fim = DataUtil.formatar(dateFinal.getFullYear(), dateFinal.getMonth() + 1, dateFinal.getDate());
+					} else {
+						inicio = DataUtil.formatar(ano, mes, 1);
+						mes++;
+						if (mes > 12) {
+							mes = 1;
+							ano++;
+						}
+						fim = DataUtil.formatar(ano, mes, 1);
+					}
+				} else {
+					inicio = DataUtil.formatar(ano, 1, 1);
+					fim = DataUtil.formatar(ano + 1, 1, 1);
+				}
+				where += " e.inicio_aula < ? and e.termino_aula >= ?";
+				parametros.push(fim, inicio);
+			}
+
+			lista = await sql.query(`select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%d/%m/%Y') inicio_aula, date_format(e.termino_aula, '%d/%m/%Y') termino_aula, date_format(eo.inicio_ocorrencia, '%d/%m/%Y') inicio_ocorrencia, e.carga_horaria, ep.id_prof, p.nome_prof, et.id_turma, t.desc_turma, es.id_sala, s.desc_sala from aula e 
+			inner join aula_prof ep on ep.id_aula = e.id_aula
+			inner join aula_turma et on et.id_aula = e.id_aula
+			inner join aula_sala es on es.id_aula = e.id_aula
+			inner join professor p on p.id_prof = ep.id_prof
+			inner join turma t on t.id_turma = et.id_turma
+			inner join sala s on s.id_sala = es.id_sala
+			inner join aula_ocorrencia eo on eo.id_aula = e.id_aula ` +
+				(where ?
+					(" where " + where) :
+					""
+				), parametros);
+        });
+        return lista;
+	}
+
 	public static async criar(aula: Aula): Promise<string>{
 
 		let res: string;
@@ -184,7 +247,7 @@ export = class Aula {
 				await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [aula.id_sala, id_aula]);
 
 				for (let i = 0; i < aula.ocorrencias.length; i++)
-					await sql.query("insert into ocorrencia_aula (id_aula, inicio_ocorrencia) values (?, ?)", [id_aula, aula.ocorrencias[i]]);
+					await sql.query("insert into aula_ocorrencia (id_aula, inicio_ocorrencia) values (?, ?)", [id_aula, aula.ocorrencias[i]]);
 
 				await sql.commit();
 			} catch (e) {
@@ -209,7 +272,7 @@ export = class Aula {
             if(lista && lista.length){
                 aula = lista[0];
 
-				let ocorrencias = await sql.query("select date_format(inicio_ocorrencia, '%Y-%m-%d') inicio_ocorrencia from ocorrencia_aula where id_aula = ?",[id_aula]);
+				let ocorrencias = await sql.query("select date_format(inicio_ocorrencia, '%Y-%m-%d') inicio_ocorrencia from aula_ocorrencia where id_aula = ?",[id_aula]);
 				aula.ocorrencias = new Array(ocorrencias.length);
 				for (let i = ocorrencias.length - 1; i >= 0; i--)
 					aula.ocorrencias[i] = ocorrencias[i].inicio_ocorrencia;
@@ -240,7 +303,7 @@ export = class Aula {
 			await sql.query(" update aula_sala set id_sala = ? where id_aula = ?", [aula.id_sala, aula.id_aula]);
 
 			let novasOcorrencias = aula.ocorrencias;
-			let ocorrenciasAntigas: { id_ocorrencia: number, inicio_ocorrencia: string }[] = await sql.query("select id_ocorrencia, date_format(inicio_ocorrencia, '%Y-%m-%d') inicio_ocorrencia from ocorrencia_aula where id_aula = ?", [aula.id_aula]);
+			let ocorrenciasAntigas: { id_ocorrencia: number, inicio_ocorrencia: string }[] = await sql.query("select id_ocorrencia, date_format(inicio_ocorrencia, '%Y-%m-%d') inicio_ocorrencia from aula_ocorrencia where id_aula = ?", [aula.id_aula]);
 
 			for (let i = ocorrenciasAntigas.length - 1; i >= 0; i--) {
 				const inicio_ocorrencia = ocorrenciasAntigas[i].inicio_ocorrencia;
@@ -255,10 +318,10 @@ export = class Aula {
 			}
 
 			for (let i = ocorrenciasAntigas.length - 1; i >= 0; i--)
-				await sql.query("delete from ocorrencia_aula where id_ocorrencia = ? and id_aula = ?", [ocorrenciasAntigas[i].id_ocorrencia, aula.id_aula]);
+				await sql.query("delete from aula_ocorrencia where id_ocorrencia = ? and id_aula = ?", [ocorrenciasAntigas[i].id_ocorrencia, aula.id_aula]);
 
 			for (let i = novasOcorrencias.length - 1; i >= 0; i--)
-				await sql.query("insert into ocorrencia_aula (id_aula, inicio_ocorrencia) values (?, ?)", [aula.id_aula, novasOcorrencias[i]]);
+				await sql.query("insert into aula_ocorrencia (id_aula, inicio_ocorrencia) values (?, ?)", [aula.id_aula, novasOcorrencias[i]]);
 
 			await sql.commit();
         });

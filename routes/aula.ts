@@ -94,7 +94,7 @@ router.all("/download/:idturma", wrap(async (req: express.Request, res: express.
 			titulo: "Plano de Aulas",
 			usuario: u,
 			anoAtual: anoAtual,
-			lista: await Aula.listar(parseInt(req.params["idturma"]), 0, anoAtual),
+			lista: await Aula.listarOcorrencias(parseInt(req.params["idturma"]), 0, anoAtual),
 			turmas: await Turma.listar()
 		});	
 	}

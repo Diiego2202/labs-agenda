@@ -40,11 +40,18 @@
             
         }
         #legenda{
-               background-color: #f2f2f2;
-               margin-top: 20px;
-               width: 50%;
-               height: 300px;
-            }
+            background-color: #f2f2f2;
+            margin-top: 20px;
+            width: 50%;
+            height: 300px;
+        }
+        .item-legenda {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 1px solid #000;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body class ="A4">
@@ -53,11 +60,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 ">
-                <div id="legenda"> 
-                    <% for (let i = 0; i < lista.length; i++) { %>
-                        <p><%= lista[i].id_aula %>, <%= lista[i].nome_aula %></p>
-                    <% } %>
-                </div>
+                <div id="legenda"></div>
             </div>
             <div class="col-md-6 ">
             </div>
@@ -80,19 +83,60 @@
     function gerarCalendario() {
 
         // https://www.bootstrap-year-calendar.com/#Documentation/Options
-        var aulas = <%- JSON.stringify(lista) %>,
+        var ocorrencias = <%- JSON.stringify(lista) %>,
             anoAtual = <%- anoAtual %>,
-            dataSource = [];
+            dataSource = [],
+            corAtual = 0,
+            corPorId = {},
+            htmlLegenda = "",
+            cores = [
+                "#04f",
+                "#090",
+                "#b46b17",
+                "#f00",
+                "#f8f",
+                "#0ff",
+                "#a0a",
+                "#388",
+                "#000",
+                "#999",
+                "#ccc",
+                "#eb5",
+                "#f70",
+                "#9f4",
+                "#07f",
+                "#4db"
+            ];
 
-        for (var i = 0; i < aulas.length; i++) {
-            var aula = {
-                name: aulas[i].nome_aula,
-                desc_aula: aulas[i].desc_aula,
-                startDate: criarDate(aulas[i].inicio_aula),
-                endDate: criarDate(aulas[i].termino_aula),
-            };
-            dataSource.push(aula);
+        ocorrencias.sort(function (a, b) { return a.id_aula - b.id_aula; });
+
+        for (var i = 0; i < ocorrencias.length; i++) {
+            var id_aula = ocorrencias[i].id_aula,
+                corAula = corPorId[id_aula];
+
+            if (!corAula) {
+                corAula = cores[corAtual];
+                corPorId[id_aula] = corAula;
+
+                corAtual++;
+                if (corAtual >= cores.length)
+                    corAtual = 0;
+
+                htmlLegenda += `<div><span class="item-legenda" style="background-color: ${corAula};"></span> ${ocorrencias[i].nome_aula} (${ocorrencias[i].carga_horaria} horas)</div>`;
+            }
+
+            var inicio_ocorrencia = criarDate(ocorrencias[i].inicio_ocorrencia),
+                ocorrencia = {
+                    name: ocorrencias[i].nome_aula,
+                    desc_aula: ocorrencias[i].desc_aula,
+                    startDate: inicio_ocorrencia,
+                    endDate: inicio_ocorrencia,
+                    color: corAula
+                };
+            dataSource.push(ocorrencia);
         }
+
+        $("#legenda").html(htmlLegenda);
 
         $('#calendar').calendar({
             enableContextMenu: false,

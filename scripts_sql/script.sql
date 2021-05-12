@@ -45,12 +45,12 @@ CREATE TABLE aula (
   KEY aula_termino_ix (termino_aula)
 );
 
-CREATE TABLE ocorrencia_aula (
+CREATE TABLE aula_ocorrencia (
   id_ocorrencia int NOT NULL AUTO_INCREMENT,
   id_aula int NOT NULL,
   inicio_ocorrencia datetime NOT NULL,
   PRIMARY KEY (id_ocorrencia),
-  KEY ocorrencia_aula_id_aula_ix (id_aula),
+  KEY aula_ocorrencia_id_aula_ix (id_aula),
   foreign key(id_aula) references aula(id_aula) on delete cascade on update restrict
 );
 
