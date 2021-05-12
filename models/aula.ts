@@ -78,6 +78,9 @@ export = class Aula {
 		if (!aula.ocorrencias) {
 			aula.ocorrencias = [];
 		} else {
+			if (!Array.isArray(aula.ocorrencias))
+				aula.ocorrencias = [ aula.ocorrencias as any ];
+
 			const regexp = /[\/\-\:\s]/g,
 				inicio = parseInt(aula.inicio_aula.replace(regexp, "")),
 				termino = parseInt(aula.termino_aula.replace(regexp, ""));
