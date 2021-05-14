@@ -477,7 +477,7 @@ label.error {
 	width: 500px;
 }
 
-#formUpload #arquivoCSV{
+/* #formUpload #arquivoCSV{
 	display: none;
 }
 
@@ -492,7 +492,7 @@ label.error {
 #formUpload label:hover{
 	background-color: #004a61;
 }
-
+ */
 #importar{
 	background-color: #a70230; 
 	color: #fff; 

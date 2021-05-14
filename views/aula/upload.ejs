@@ -9,7 +9,6 @@
 						<div style="padding: 15px;">
 							<label for="arquivoCSV">Escolher arquivo CSV:</label>
 							<input type="file" accept=".csv" id="arquivoCSV" name="arquivoCSV" />
-						
 							<input id="importar" type="submit" value="Importar"/>
 						</div>
 					</form>
@@ -21,7 +20,7 @@
 
 
 <script type="text/javascript">
-
+	
 
 	$("#formUpload").validate({
 		
@@ -39,26 +38,16 @@
 			if ($.active) {
 				return;
 			}
-			
-			let opcoes = {
-				
-				url: "<%- root %>/aula/importar",
-				method: "POST",
-				data: new FormData(form),
-				processData: false,
-				contentType: false,
+			Notification.wait();
 
-				success: function (dadosDeRetorno) {
+			JsonWebApi.postFormData("<%- root %>/aula/importar", form, function (response) {
+				if (response.success){
 					Notification.success("Upload realizado com sucesso! " + emoji.happy);
-				},
-				
-				error: function () {
-					Notification.error("Ocorreu algum erro...", true);
 				}
-				
-			};
-			
-			$.ajax(opcoes);
+				else
+					Notification.error(response.value, true);
+			});
+
 		}
 		
 	});

@@ -337,6 +337,8 @@ export = class Aula {
 			await sql.query("delete from aula_turma where id_aula=?;",[id_aula]);
 			await sql.query("delete from aula_sala where id_aula=?;",[id_aula]);
 			await sql.query("delete from aula_prof where id_aula=?;",[id_aula]);
+			await sql.query("delete from aula_ocorrencia where id_aula=?;",[id_aula]);
+
             let lista = await sql.query("delete from aula where id_aula=?;",[id_aula]);
 
             if(!sql.linhasAfetadas){
@@ -381,66 +383,87 @@ export = class Aula {
 			return "CSV vazio";
 
 		const registros: string[][] = new Array(linhas.length);
+		let dias_ocorrencias: string[];
+
 		for (let i = 0; i < linhas.length; i++) {
 			const registro = linhas[i].split(";");
-			if (registro.length !== 7)
-				return `Linha ${(i + 2)} não contém 7 campos`;
+			if (registro.length !== 9)
+				return `Linha ${(i + 2)} não contém 9 campos`;
 			for (let c = 0; c < registro.length; c++) {
 				registro[c] = registro[c].normalize().trim();
 				if (!registro[c])
 					return `Linha ${(i + 2)}, coluna ${(c + 1)} em branco`;
 			}
-			// Nome;Descrição;Turma;Sala;Professor;Início;Término
+			//separando as ocorrencias
+			 dias_ocorrencias = registro[8].split(",");
+			//inserção de cada ocorrência
+			for(let o = 0; o < dias_ocorrencias.length;o++){ 
+				dias_ocorrencias[o] = dias_ocorrencias[o].normalize().trim();
+			}
+
+			// Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término; Ocorrências
 			registro[5] = DataUtil.converterDataISO(registro[5]);
-			if (!registro[5])
-				return `Coluna 6 (data e hora de início) da linha ${(i + 2)} inválida`;
-			registro[6] = DataUtil.converterDataISO(registro[5]);
 			if (!registro[6])
-				return `Coluna 7 (data e hora de término) da linha ${(i + 2)} inválida`;
-			if (!registro[7])
-				return `Coluna 8 (carga horária) da linha ${(i + 2)} inválida`;
+				return `Coluna 7 (data e hora de início) da linha ${(i + 2)} inválida`;
+			registro[7] = DataUtil.converterDataISO(registro[5]);
+			if (!registro[6])
+				return `Coluna 8 (data e hora de término) da linha ${(i + 2)} inválida`;
+			if (!registro[2])
+				return `Coluna 3 (carga horária) da linha ${(i + 2)} inválida`;
 			registros[i] = registro;
 		}
 
 		let erro: string = null;
 		
 		await Sql.conectar(async(sql : Sql) => {
-
+			
+			//validações sala, turma e prof existentes
 			for (let i = 0; i < registros.length; i++) {
-				// Nome;Descrição;Turma;Sala;Professor;Início;Término;carga horária
-				let temp = registros[i][2];
-				registros[i][2] = await sql.scalar("select id_turma from turma where desc_turma = ?", [temp]);
-				if (!registros[i][2]) {
+				// Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término; Ocorrências
+				let temp = registros[i][3];
+				registros[i][3] = await sql.scalar("select id_turma from turma where desc_turma = ?", [temp]);
+				if (!registros[i][3]) {
 					erro = `Turma "${temp}", da linha ${(i + 2)}, não encontrada`;
 					return;
 				}
-				temp = registros[i][3];
-				registros[i][3] = await sql.scalar("select id_sala from sala where desc_sala = ?", [temp]);
-				if (!registros[i][3]) {
+				temp = registros[i][4];
+				registros[i][4] = await sql.scalar("select id_sala from sala where desc_sala = ?", [temp]);
+				if (!registros[i][4]) {
 					erro = `Sala "${temp}", da linha ${(i + 2)}, não encontrada`;
 					return;
 				}
-				temp = registros[i][4];
-				registros[i][4] = await sql.scalar("select id_prof from professor where nome_prof = ?", [temp]);
-				if (!registros[i][4]) {
+				temp = registros[i][5];
+				registros[i][5] = await sql.scalar("select id_prof from professor where nome_prof = ?", [temp]);
+				if (!registros[i][5]) {
 					erro = `Professor "${temp}", da linha ${(i + 2)}, não encontrado`;
 					return;
 				}
 			}
-	
-			await sql.beginTransaction();
+		
+				await sql.beginTransaction();
+			
+				for (let i = 0; i < registros.length; i++) {
+					// Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término; Ocorrências
+					try{
+						await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values (?,?,?,?,?)",[registros[i][0], registros[i][1], registros[i][6], registros[i][7], registros[i][2]]);
+						const id_aula = await sql.scalar("select last_insert_id()") as number;
+						await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [registros[i][2], id_aula]);
+						await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [registros[i][3], id_aula]);
+						await sql.query(" insert into aula_prof(id_prof, id_aula) values (?, ?)", [registros[i][4], id_aula]);
 
-			for (let i = 0; i < registros.length; i++) {
-				// Nome;Descrição;Turma;Sala;Professor;Início;Término
-				await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values (?,?,?,?,?)", [registros[i][0], registros[i][1], registros[i][5], registros[i][6], registros[i][7]]);
-				const id_aula = await sql.scalar("select last_insert_id()") as number;
-				await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [registros[i][2], id_aula]);
-				await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [registros[i][3], id_aula]);
-				await sql.query(" insert into aula_prof(id_prof, id_aula) values (?, ?)", [registros[i][4], id_aula]);
-			}
+						for (let i = 0; i < dias_ocorrencias.length; i++)
+							await sql.query("insert into aula_ocorrencia (id_aula, inicio_ocorrencia) values (?, ?)", [id_aula, dias_ocorrencias[i]]);
+							
+						await sql.commit();
+					} catch (e) {
+						if (e.code && e.code === "ER_DUP_ENTRY")
+							erro = `A aula ${registros[i][0]} já existe`; 
+						else
+							throw e;
+					}
+				}
 
-			await sql.commit();
-		})
+		}) // fim sql conectar
 
 		return erro;
 	}

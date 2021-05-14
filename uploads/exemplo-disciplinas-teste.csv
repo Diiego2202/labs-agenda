@@ -1,4 +1,2 @@
-﻿Nome;Descrição;Turma;Sala;Professor;Início;Término;;;;
-CSV 1;Descr 1;Turma;Sala;Professor;02/10/2020  08:00:00, 03/10/2020  08:00:00 ;02/10/2020 13:00;;;;
-;;;;;;;;;;
-;;;;;;;;;;
+﻿Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término;Ocorrências
+CSV 1;Descr 1;60;Turma 1;Sala 1;Professor 1;02/06/2021 08:00;02/12/2020 13:00;11/06,11/07,11/08,11/09,11/10
