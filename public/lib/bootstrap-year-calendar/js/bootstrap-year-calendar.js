@@ -368,18 +368,25 @@
 					
 					if(weight > 0)
 					{
-						var boxShadow = '';
-					
-						for (var i = 0; i < events.length; i++)
-						{
-							if(boxShadow != '') {
-								boxShadow += ",";
+						if(events.length == 1) {
+							elt.css('border-bottom', '5px solid ' + events[0].color);
+							elt.css('padding-bottom', '0');
+							elt.css('border-bottom-left-radius', '0');
+							elt.css('border-bottom-right-radius', '0');
+						} else {
+							var boxShadow = '';
+						
+							for (var i = 0; i < events.length; i++)
+							{
+								if(boxShadow != '') {
+									boxShadow += ",";
+								}
+								
+								boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + events[i].color;
 							}
 							
-							boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + events[i].color;
+							elt.parent().css('box-shadow', boxShadow);
 						}
-						
-						elt.parent().css('box-shadow', boxShadow);
 					}
 					break;
 			
