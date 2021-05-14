@@ -137,10 +137,10 @@
 	// aLink.textContent = url.substr(url.indexOf("://") + 3);
 	// prepareCopyHandler();
 
-	var aulas = <%- JSON.stringify(lista) %>, calendario = null;
+	var ocorrencias = <%- JSON.stringify(lista) %>, calendario = null;
 
 	function desenharCalendario() {
-		converterAulas(aulas);
+		converterAulas(ocorrencias);
 
 		$("#calendarioPlaceholder").html('<div id="calendario"></div>');
 
@@ -158,7 +158,7 @@
 			navLinks: false,
 			editable: false,
 			dayMaxEvents: true,
-			events: aulas
+			events: ocorrencias
 		};
 
 		calendario = new FullCalendar.Calendar(document.getElementById("calendario"), opcoesCalendario);
@@ -177,7 +177,7 @@
 
 		Notification.wait();
 
-		JsonWebApi.get("<%- root %>/api/aula/listar", function (response) {
+		JsonWebApi.get("<%- root %>/api/aula/listar", function (response) { //precisa alterar para listar ocorrências?
 			if (response.success) {
 				Notification.hide();
 				turmaAtual = turma;

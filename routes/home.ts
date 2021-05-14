@@ -17,7 +17,7 @@ router.all("/", wrap(async (req: express.Request, res: express.Response) => {
 		const hoje = new Date(),
 			anoAtual = hoje.getFullYear(),
 			mesAtual = hoje.getMonth() + 1,
-			lista = await Aula.listar(0, 0, anoAtual, mesAtual);
+			lista = await Aula.listarOcorrencias(0, 0, anoAtual, mesAtual);
 
 		let opcoes = {
 			titulo: "Dashboard",
