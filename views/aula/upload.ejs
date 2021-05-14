@@ -40,7 +40,7 @@
 			}
 			Notification.wait();
 
-			JsonWebApi.postFormData("<%- root %>/aula/importar", form, function (response) {
+			JsonWebApi.postFormData("<%- root %>/aula/importar", new FormData(form), function (response) {
 				if (response.success){
 					Notification.success("Upload realizado com sucesso! " + emoji.happy);
 				}

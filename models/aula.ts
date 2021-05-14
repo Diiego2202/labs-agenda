@@ -52,13 +52,20 @@ export = class Aula {
 		aula.inicio_aula = DataUtil.converterDataISO(aula.inicio_aula);
 		if(!aula.inicio_aula) {
 			//validação de data será aqui?
-			return "Data de Início inválida"
+			return "Data de Início inválida";
 		}
 		aula.termino_aula = DataUtil.converterDataISO(aula.termino_aula);
 		if(!aula.termino_aula) {
 			//validação de data será aqui?
-			return "Data de Término inválida"
+			return "Data de Término inválida";
 		}
+
+		const regexp = /[\/\-\:\s]/g,
+			inicio = parseInt(aula.inicio_aula.replace(regexp, "")),
+			termino = parseInt(aula.termino_aula.replace(regexp, ""));
+		if (inicio > termino)
+			return "Data de Início deve ser anterior à Data de Término";
+
 		aula.carga_horaria = parseInt(aula.carga_horaria as any);
 		if (isNaN(aula.carga_horaria)){
 			return "Carga horária inválida";
@@ -80,10 +87,6 @@ export = class Aula {
 		} else {
 			if (!Array.isArray(aula.ocorrencias))
 				aula.ocorrencias = [ aula.ocorrencias as any ];
-
-			const regexp = /[\/\-\:\s]/g,
-				inicio = parseInt(aula.inicio_aula.replace(regexp, "")),
-				termino = parseInt(aula.termino_aula.replace(regexp, ""));
 
 			for (let i = aula.ocorrencias.length - 1; i >= 0; i--) {
 				if (!(aula.ocorrencias[i] = DataUtil.converterDataISO(aula.ocorrencias[i])))
@@ -383,34 +386,63 @@ export = class Aula {
 			return "CSV vazio";
 
 		const registros: string[][] = new Array(linhas.length);
-		let dias_ocorrencias: string[];
+		const dias_ocorrencias: string[][] = new Array(linhas.length);
+		const regexp = /[\/\-\:\s]/g;
 
 		for (let i = 0; i < linhas.length; i++) {
 			const registro = linhas[i].split(";");
 			if (registro.length !== 9)
 				return `Linha ${(i + 2)} não contém 9 campos`;
+
 			for (let c = 0; c < registro.length; c++) {
 				registro[c] = registro[c].normalize().trim();
 				if (!registro[c])
 					return `Linha ${(i + 2)}, coluna ${(c + 1)} em branco`;
 			}
-			//separando as ocorrencias
-			 dias_ocorrencias = registro[8].split(",");
-			//inserção de cada ocorrência
-			for(let o = 0; o < dias_ocorrencias.length;o++){ 
-				dias_ocorrencias[o] = dias_ocorrencias[o].normalize().trim();
-			}
 
 			// Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término; Ocorrências
-			registro[5] = DataUtil.converterDataISO(registro[5]);
+			registro[6] = DataUtil.converterDataISO(registro[6]);
 			if (!registro[6])
-				return `Coluna 7 (data e hora de início) da linha ${(i + 2)} inválida`;
-			registro[7] = DataUtil.converterDataISO(registro[5]);
-			if (!registro[6])
-				return `Coluna 8 (data e hora de término) da linha ${(i + 2)} inválida`;
-			if (!registro[2])
+				return `Coluna 7 (data de início) da linha ${(i + 2)} inválida`;
+
+			let espaco = registro[6].indexOf("T");
+			if (espaco > 0)
+				registro[6] = registro[6].substr(0, espaco);
+
+			registro[7] = DataUtil.converterDataISO(registro[7]);
+			if (!registro[7])
+				return `Coluna 8 (data de término) da linha ${(i + 2)} inválida`;
+
+			espaco = registro[7].indexOf("T");
+			if (espaco > 0)
+				registro[7] = registro[7].substr(0, espaco);
+
+			const carga_horaria = parseInt(registro[2]);
+			if (isNaN(carga_horaria) || carga_horaria <= 0)
 				return `Coluna 3 (carga horária) da linha ${(i + 2)} inválida`;
+			registro[2] = carga_horaria.toString();
+
+			const inicio = parseInt(registro[6].replace(regexp, "")),
+				termino = parseInt(registro[7].replace(regexp, ""));
+			if (inicio > termino)
+				return `Data de início deve ser anterior à data de término na linha ${(i + 2)}`;
+
+			//separando as ocorrencias
+			const ano = "/" + registro[6].substr(0, registro[6].indexOf("-"));
+			const ocorrencias = registro[8].split(",");
+			//inserção de cada ocorrência
+			for(let o = 0; o < ocorrencias.length; o++) {
+				const ocorrencia = ocorrencias[o].normalize().trim();
+				ocorrencias[o] = DataUtil.converterDataISO(ocorrencia);
+				if (!ocorrencias[o]) {
+					ocorrencias[o] = DataUtil.converterDataISO(ocorrencia + ano);
+					if (!ocorrencias[o])
+						return `Ocorrência ${ocorrencia} inválida na linha ${(i + 2)}`;
+				}
+			}
+
 			registros[i] = registro;
+			dias_ocorrencias[i] = ocorrencias;
 		}
 
 		let erro: string = null;
@@ -447,12 +479,12 @@ export = class Aula {
 					try{
 						await sql.query("insert into aula (nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values (?,?,?,?,?)",[registros[i][0], registros[i][1], registros[i][6], registros[i][7], registros[i][2]]);
 						const id_aula = await sql.scalar("select last_insert_id()") as number;
-						await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [registros[i][2], id_aula]);
-						await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [registros[i][3], id_aula]);
-						await sql.query(" insert into aula_prof(id_prof, id_aula) values (?, ?)", [registros[i][4], id_aula]);
+						await sql.query(" insert into aula_turma(id_turma, id_aula) values (?, ?)", [registros[i][3], id_aula]);
+						await sql.query(" insert into aula_sala(id_sala, id_aula) values (?, ?)", [registros[i][4], id_aula]);
+						await sql.query(" insert into aula_prof(id_prof, id_aula) values (?, ?)", [registros[i][5], id_aula]);
 
-						for (let i = 0; i < dias_ocorrencias.length; i++)
-							await sql.query("insert into aula_ocorrencia (id_aula, inicio_ocorrencia) values (?, ?)", [id_aula, dias_ocorrencias[i]]);
+						for (let o = 0; o < dias_ocorrencias[i].length; o++)
+							await sql.query("insert into aula_ocorrencia (id_aula, inicio_ocorrencia) values (?, ?)", [id_aula, dias_ocorrencias[i][o]]);
 							
 						await sql.commit();
 					} catch (e) {
