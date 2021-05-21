@@ -45,6 +45,9 @@
 				}
 				else
 					Notification.error(response.value, true);
+
+				var input = $("#arquivoCSV"); 
+        		input.replaceWith(input.val('').clone(true));
 			});
 
 		}

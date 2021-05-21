@@ -1,17 +1,17 @@
-﻿Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término;Ocorrências;
-Design Thinkin, Gestão da Inovação e Novos Modelos de Negócios;Descr 1;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/10;
-Trabalho de Conclusão - DB Lab - Pós para Empreendedores em Negócios Digitais;Descr 2;60;Turma 1;Sala 3;Professor 3;02/06/2021;02/12/2021;12/06,12/07,12/08,12/09,12/10;
-Content Marketing;Descr 3;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;13/06,13/07,13/08,13/09,13/10;
-Fundamentos de Finanças - Educação a Distância (EAD);Descr 4;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;14/06,14/07,14/08,14/09,14/10;
-Fundamentos de Marketing – Educação a Distância – (EAD);Descr 5;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;15/06,15/07,15/08,15/09,15/10;
-Comportamento do consumidor e Tendências no  Varejo Digital;Descr 6;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;16/06,16/07,16/08,16/09,16/10;
-Tecnologia, Big Data e UX/UI;Descr 7;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;16/06,17/07;
-Marketing e Branding na Moda;Descr 8;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;18/06,18/07;
-SAC 2.0, CRM e Marketing de Relacionamento;Descr 9;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;19/06,19/07;
-Gestão de Produto de Moda;Descr 10;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;20/06,20/07;
-Mídia Online, Mídia de Performance e plataformas digitais para mídia;Descr 11;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;21/06,21/07,21/08,21/09,21/10;
-Planejamento Estratégico do varejo de moda nos multicanais digitais (Omnichannel);Descr 12;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;22/06,22/07,22/08,22/09,22/10;
-Logística, BackOffice e Financeiro;Descr 13;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;23/06,23/07,23/08,23/09,23/10;
-Construção de E-Commerce / Marketplace: Construção de um e-commerce para moda Fase I;Descr 14;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;24/06,24/07,24/08,24/09,24/10;
-Redes Sociais: Estratégia, Gestão e Análise;Descr 15;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;25/06,25/07,25/08,25/09,25/10;
-TCC Aplicando Caso Real (orientação, bancas e elaboração do projeto);Descr 16;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;26/06,26/07,26/08,26/09,26/10;
+﻿Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término;Ocorrências
+Design Thinkin, Gestão da Inovação e Novos Modelos de Negócios;Descr 1;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/10
+Trabalho de Conclusão - DB Lab - Pós para Empreendedores em Negócios Digitais;Descr 2;60;Turma 1;Sala 3;Professor 3;02/06/2021;02/12/2021;12/06,12/07,12/08,12/09,12/10
+Content Marketing;Descr 3;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;13/06,13/07,13/08,13/09,13/10
+Fundamentos de Finanças - Educação a Distância (EAD);Descr 4;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;14/06,14/07,14/08,14/09,14/10
+Fundamentos de Marketing – Educação a Distância – (EAD);Descr 5;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;15/06,15/07,15/08,15/09,15/10
+Comportamento do consumidor e Tendências no  Varejo Digital;Descr 6;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;16/06,16/07,16/08,16/09,16/10
+Tecnologia, Big Data e UX/UI;Descr 7;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;16/06,17/07
+Marketing e Branding na Moda;Descr 8;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;18/06,18/07
+SAC 2.0, CRM e Marketing de Relacionamento;Descr 9;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;19/06,19/07
+Gestão de Produto de Moda;Descr 10;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;20/06,20/07
+Mídia Online, Mídia de Performance e plataformas digitais para mídia;Descr 11;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;21/06,21/07,21/08,21/09,21/10
+Planejamento Estratégico do varejo de moda nos multicanais digitais (Omnichannel);Descr 12;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;22/06,22/07,22/08,22/09,22/10
+Logística, BackOffice e Financeiro;Descr 13;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;23/06,23/07,23/08,23/09,23/10
+Construção de E-Commerce / Marketplace: Construção de um e-commerce para moda Fase I;Descr 14;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;24/06,24/07,24/08,24/09,24/10
+Redes Sociais: Estratégia, Gestão e Análise;Descr 15;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;25/06,25/07,25/08,25/09,25/10
+TCC Aplicando Caso Real (orientação, bancas e elaboração do projeto);Descr 16;60;Turma 1;Sala 2;Professor 2;02/06/2021;02/12/2021;26/06,26/07,26/08,26/09,26/10
