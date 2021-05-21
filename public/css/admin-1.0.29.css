@@ -1,3 +1,7 @@
+html, body{
+	height: 100%;
+}
+
 #wrapper {
 	width: 100%;
 }
@@ -477,27 +481,19 @@ label.error {
 	width: 500px;
 }
 
-/* #formUpload #arquivoCSV{
-	display: none;
+#escolher-arquivo{
+	padding: 15px;
 }
 
-#formUpload label{
-	color: white;
-	background-color: #02617E;
-	padding: 5px 10px;
-	cursor: pointer;
-	margin-bottom: 0;
+#arquivoCSV{
+	margin: 6% 0;
 }
 
-#formUpload label:hover{
-	background-color: #004a61;
-}
- */
 #importar{
 	background-color: #a70230; 
 	color: #fff; 
-	padding: 5px; 
-	margin-left: 20px;
+	padding: 6px; 
+	margin: auto;
 	border: none;
 	font-weight: 550;
 }
@@ -505,4 +501,3 @@ label.error {
 #importar:hover{
 	background-color: #99052a;
 }
-

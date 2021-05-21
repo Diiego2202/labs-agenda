@@ -1,13 +1,12 @@
-
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-lg-12" style="margin-top: 2%;">
 		<div id="container-upload" class="panel panel-default">
 			<div class="panel-heading">Fazer Upload</div>
-			<div id="tabela_container" style="display: flex; justify-content: center; align-items: center; " class="panel-body dataTable_wrapper">
+			<div id="tabela_container" style="display: flex; " class="panel-body dataTable_wrapper">
 				<div class="form-group" style="margin-bottom: 0;">
 					<form id="formUpload" style='display: flex; flex-direction: column; align-items: center; justify-content: center;'>
-						<div style="padding: 15px;">
-							<label for="arquivoCSV">Escolher arquivo CSV:</label>
+						<div id="escolher-arquivo">
+							<label for="arquivoCSV" style="margin-bottom: 0">Escolher arquivo CSV:</label>
 							<input type="file" accept=".csv" id="arquivoCSV" name="arquivoCSV" />
 							<input id="importar" type="submit" value="Importar"/>
 						</div>
