@@ -6,6 +6,8 @@ import Sql = require("../infra/sql");
 import GeradorHash = require("../utils/geradorHash");
 import appsettings = require("../appsettings");
 import intToHex = require("../utils/intToHex");
+import JSONRequest = require("../infra/jsonRequest");
+import emailValido = require("../utils/emailValido");
 
 export = class Usuario {
 
@@ -15,8 +17,8 @@ export = class Usuario {
 	public id: number;
 	public login: string;
 	public nome: string;
+	public email: string;
 	public idperfil: number;
-	public senha: string;
 	public criacao: string;
 
 	// Utilizados apenas através do cookie
@@ -39,8 +41,8 @@ export = class Usuario {
 			let usuario: Usuario = null;
 
 			await Sql.conectar(async (sql: Sql) => {
-				let rows = await sql.query("select id, login, nome, idperfil, token from usuario where id = ?", [id]);
-				let row;
+				let rows = await sql.query("select id, login, nome, email, idperfil, token from usuario where id = ?", [id]);
+				let row: any;
 
 				if (!rows || !rows.length || !(row = rows[0]))
 					return;
@@ -54,6 +56,7 @@ export = class Usuario {
 				u.id = id;
 				u.login = row.login as string;
 				u.nome = row.nome as string;
+				u.email = row.email as string;
 				u.idperfil = row.idperfil as number;
 				u.admin = (u.idperfil === Usuario.IdPerfilAdmin);
 
@@ -78,38 +81,57 @@ export = class Usuario {
 		return [token, cookieStr];
 	}
 
-	public static async efetuarLogin(login: string, senha: string, res: express.Response): Promise<[string, Usuario]> {
-		if (!login || !senha)
-			return ["Usuário ou senha inválidos", null];
-
+	public static async efetuarLogin(token: string, res: express.Response): Promise<[string, Usuario]> {
 		let r: string = null;
 		let u: Usuario = null;
 
-		await Sql.conectar(async (sql: Sql) => {
-			login = login.normalize().trim().toUpperCase();
+		try {
+			const resposta = await JSONRequest.get(appsettings.ssoToken + encodeURIComponent(token));
+			if (!resposta.sucesso)
+				return [resposta.erro || (resposta.resultado && resposta.resultado.toString()) || "Erro de comunicação de rede", null];
+			
+			const json = resposta.resultado;
+			if (json.erro)
+				return [json.erro, null];
 
-			let rows = await sql.query("select id, nome, idperfil, senha from usuario where login = ?", [login]);
-			let row;
-			let ok: boolean;
+			await Sql.conectar(async (sql: Sql) => {
 
-			if (!rows || !rows.length || !(row = rows[0]) || !(ok = await GeradorHash.validarSenha(senha.normalize(), row.senha))) {
-				r = "Usuário ou senha inválidos";
-				return;
-			}
+				let rows = await sql.query("select id, login, nome, email, idperfil from usuario where login = ?", [json.dados.user]);
+				let row: any;
+				let ok: boolean;
+	
+				if (!rows || !rows.length || !(row = rows[0])) {
+					r = "Usuário não está cadastrado. Por favor, entre em contato com o administrador do sistema.";
+					return;
+				}
+	
+				let [token, cookieStr] = Usuario.gerarTokenCookie(row.id);
+	
+				await sql.query("update usuario set token = ? where id = ?", [token, row.id]);
+	
+				u = new Usuario();
+				u.id = row.id;
+				u.login = json.dados.user;
+				u.nome = row.nome as string;
+				u.email = row.email as string;
+				u.idperfil = row.idperfil as number;
+				u.admin = (u.idperfil === Usuario.IdPerfilAdmin);
 
-			let [token, cookieStr] = Usuario.gerarTokenCookie(row.id);
+				if (json.dados.nome && u.nome !== json.dados.nome) {
+					u.nome = json.dados.nome;
+					await sql.query("update usuario set nome = ? where id = ?", [json.dados.nome, u.id]);
+				}
 
-			await sql.query("update usuario set token = ? where id = ?", [token, row.id]);
-
-			u = new Usuario();
-			u.id = row.id;
-			u.login = login;
-			u.nome = row.nome as string;
-			u.idperfil = row.idperfil as number;
-			u.admin = (u.idperfil === Usuario.IdPerfilAdmin);
-
-			res.cookie(appsettings.cookie, cookieStr, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/", secure: appsettings.cookieSecure });
-		});
+				if (json.dados.email && u.email !== json.dados.email) {
+					u.email = json.dados.email;
+					await sql.query("update usuario set email = ? where id = ?", [json.dados.email, u.id]);
+				}
+	
+				res.cookie(appsettings.cookie, cookieStr, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/", secure: appsettings.cookieSecure });
+			});
+		} catch (ex) {
+			return [ex.message || ex.toString(), null];
+		}
 
 		return [r, u];
 	}
@@ -122,47 +144,13 @@ export = class Usuario {
 		});
 	}
 
-	public async alterarPerfil(res: express.Response, nome: string, senhaAtual: string, novaSenha: string): Promise<string> {
-		nome = (nome || "").normalize().trim().toUpperCase();
-		if (nome.length < 3 || nome.length > 100)
-			return "Nome inválido";
-
-		if (!!senhaAtual !== !!novaSenha || (novaSenha && novaSenha.length > 40))
-			return "Senha inválida";
-
-		let r: string = null;
-
-		await Sql.conectar(async (sql: Sql) => {
-			if (senhaAtual) {
-				let hash = await sql.scalar("select senha from usuario where id = ?", [this.id]) as string;
-				if (!await GeradorHash.validarSenha(senhaAtual.normalize(), hash)) {
-					r = "Senha atual não confere";
-					return;
-				}
-
-				hash = await GeradorHash.criarHash(novaSenha.normalize());
-
-				let [token, cookieStr] = Usuario.gerarTokenCookie(this.id);
-
-				await sql.query("update usuario set nome = ?, senha = ?, token = ? where id = ?", [nome, hash, token, this.id]);
-
-				this.nome = nome;
-
-				res.cookie(appsettings.cookie, cookieStr, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: true, path: "/", secure: appsettings.cookieSecure });
-			} else {
-				await sql.query("update usuario set nome = ? where id = ?", [nome, this.id]);
-
-				this.nome = nome;
-			}
-		});
-
-		return r;
-	}
-
 	private static validar(u: Usuario): string {
-		u.nome = (u.nome || "").normalize().trim().toUpperCase();
-		if (u.nome.length < 3 || u.nome.length > 100)
-			return "Nome inválido";
+		if (!u)
+			return "Dados inválidos";
+
+		u.idperfil = parseInt(u.idperfil as any);
+		if (isNaN(u.idperfil))
+			return "Perfil inválido";
 
 		return null;
 	}
@@ -171,7 +159,7 @@ export = class Usuario {
 		let lista: Usuario[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = await sql.query("select u.id, u.login, u.nome, p.nome perfil, date_format(u.criacao, '%d/%m/%Y') criacao from usuario u inner join perfil p on p.id = u.idperfil order by u.login asc") as Usuario[];
+			lista = await sql.query("select u.id, u.login, u.nome, u.email, p.nome perfil, date_format(u.criacao, '%d/%m/%Y') criacao from usuario u inner join perfil p on p.id = u.idperfil order by u.login asc") as Usuario[];
 		});
 
 		return (lista || []);
@@ -181,7 +169,7 @@ export = class Usuario {
 		let lista: Usuario[] = null;
 
 		await Sql.conectar(async (sql: Sql) => {
-			lista = await sql.query("select id, login, nome, idperfil, date_format(criacao, '%d/%m/%Y') criacao from usuario where id = ?", [id]) as Usuario[];
+			lista = await sql.query("select id, login, nome, email, idperfil, date_format(criacao, '%d/%m/%Y') criacao from usuario where id = ?", [id]) as Usuario[];
 		});
 
 		return ((lista && lista[0]) || null);
@@ -192,13 +180,21 @@ export = class Usuario {
 		if ((res = Usuario.validar(u)))
 			return res;
 
-		u.login = (u.login || "").normalize().trim().toUpperCase();
+		u.login = (u.login || "").normalize().trim().toLowerCase();
 		if (u.login.length < 3 || u.login.length > 100)
 			return "Login inválido";
 
+		u.nome = (u.nome || "").normalize().trim();
+		if (u.nome.length < 3 || u.nome.length > 100)
+			return "Nome inválido";
+
+		u.email = (u.email || "").normalize().trim();
+		if (u.email.length < 3 || u.email.length > 100 || !emailValido(u.email))
+			return "E-mail inválido";
+
 		await Sql.conectar(async (sql: Sql) => {
 			try {
-				await sql.query("insert into usuario (login, nome, idperfil, senha, criacao) values (?, ?, ?, ?, now())", [u.login, u.nome, u.idperfil, appsettings.usuarioHashSenhaPadrao]);
+				await sql.query("insert into usuario (login, nome, email, idperfil, criacao) values (?, ?, ?, ?, now())", [u.login, u.nome, u.email, u.idperfil]);
 			} catch (e) {
 				if (e.code) {
 					switch (e.code) {
@@ -230,7 +226,7 @@ export = class Usuario {
 			return "Não é possível editar o usuário administrador principal";
 
 		await Sql.conectar(async (sql: Sql) => {
-			await sql.query("update usuario set nome = ?, idperfil = ? where id = ?", [u.nome, u.idperfil, u.id]);
+			await sql.query("update usuario set idperfil = ? where id = ?", [u.idperfil, u.id]);
 			res = sql.linhasAfetadas.toString();
 		});
 
@@ -246,22 +242,6 @@ export = class Usuario {
 		await Sql.conectar(async (sql: Sql) => {
 			await sql.query("delete from usuario where id = ?", [id]);
 			res = sql.linhasAfetadas.toString();
-		});
-
-		return res;
-	}
-
-	public static async redefinirSenha(id: number): Promise<string> {
-		let res: string = null;
-
-		await Sql.conectar(async (sql: Sql) => {
-			let login = await sql.scalar("select login from usuario where id = ?", [id]) as string;
-			if (!login) {
-				res = "0";
-			} else {
-				await sql.query("update usuario set token = null, senha = ? where id = ?", [appsettings.usuarioHashSenhaPadrao, id]);
-				res = sql.linhasAfetadas.toString();
-			}
 		});
 
 		return res;

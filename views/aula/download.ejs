@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<title><%=((typeof titulo === "undefined" || !titulo) ? "Agenda da Pós" : (titulo + " - Agenda da Pós")) %></title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet" />
+    <link rel="stylesheet" href="<%- root %>/lib/bootstrap/css/bootstrap-1.0.28.min.css" />
+    <link rel="stylesheet" href="<%- root %>/lib/font-awesome/css/font-awesome-1.0.2.min.css" />
+    <link rel="stylesheet" href="<%- root %>/lib/paper-css/paper.css" />
+    <link rel="stylesheet" href="<%- root %>/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
+    <script type="text/javascript" src="<%- root %>/lib/jquery/js/jquery-1.0.1.min.js"></script>
+    <script type="text/javascript" src="<%- root %>/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.js"></script>
+    <script type="text/javascript" src="<%- root %>/lib/bootstrap-year-calendar/js/languages/bootstrap-year-calendar.pt.js"></script>
+
+    <style type="text/css">
+        #btnImprimir {
+            position: fixed;
+            left: 10px;
+            top: 10px;
+            box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+        }
+
+        @media print {
+            body {
+                background: #fff;
+            }
+
+            th.prev, th.next {
+                color: #fff;
+            }
+
+            #btnImprimir {
+                display: none;
+            }
+            
+        }
+        .item-legenda {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            font-size: 22px;
+            vertical-align: middle;
+        }
+        #tabela{
+            margin-left: 20px;
+            max-width: 50%;
+        }
+        #tabela tr, #tabela td{
+            font-size: 12px;
+            padding-top: 1px;
+            padding-bottom: 1px;
+
+        }
+
+    </style>
+</head>
+<body class ="A4">
+<section class="sheet" style="padding: 10px; margin: 0 auto">
+    <div id="calendar" class="calendar"></div>
+        <table id="tabela" class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 18px;">Cor</th>
+                    <th scope="col">Aula</th>
+                    <th scope="col" style="width: 18px;">CH</th>
+                </tr>
+            </thead>
+            <tbody id="legenda">
+
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-primary" id="btnImprimir" onclick="window.print()"><i class="fa fa-print"></i> Imprimir / PDF</button>
+</section>
+<script type="text/javascript" src="<%- root %>/lib/bootstrap/js/bootstrap-1.0.1.min.js"></script>
+<script type="text/javascript">
+    "use strict";
+    
+    function criarDate(dataLocalDMY) {
+        var partes = dataLocalDMY.split("/"),
+            dia = parseInt(partes[0]),
+            mes = parseInt(partes[1]),
+            ano = parseInt(partes[2]);
+        return new Date(ano, mes - 1, dia);
+    }
+
+    function gerarCalendario() {
+
+        // https://www.bootstrap-year-calendar.com/#Documentation/Options
+        var ocorrencias = <%- JSON.stringify(lista) %>,
+            anoAtual = <%- anoAtual %>,
+            dataSource = [],
+            corAtual = 0,
+            corPorId = {},
+            htmlLegenda = "",
+            cores = [
+                "#04f",
+                "#090",
+                "#b46b17",
+                "#f00",
+                "#f8f",
+                "#0ff",
+                "#a0a",
+                "#388",
+                "#000",
+                "#999",
+                "#ccc",
+                "#eb5",
+                "#f70",
+                "#9f4",
+                "#07f",
+                "#4db"
+            ];
+
+        ocorrencias.sort(function (a, b) { return a.id_aula - b.id_aula; });
+
+        for (var i = 0; i < ocorrencias.length; i++) {
+            var id_aula = ocorrencias[i].id_aula,
+                corAula = corPorId[id_aula];
+
+            if (!corAula) {
+                corAula = cores[corAtual];
+                corPorId[id_aula] = corAula;
+
+                corAtual++;
+                if (corAtual >= cores.length)
+                    corAtual = 0;
+
+                htmlLegenda += `<tr>
+                                    <td style="background-color: ${corAula};"></td>
+                                    <td>${ocorrencias[i].nome_aula} </td>
+                                    <td>${ocorrencias[i].carga_horaria}</td>
+                                </tr>`;
+            }
+
+            var inicio_ocorrencia = criarDate(ocorrencias[i].inicio_ocorrencia),
+                ocorrencia = {
+                    name: ocorrencias[i].nome_aula,
+                    desc_aula: ocorrencias[i].desc_aula,
+                    startDate: inicio_ocorrencia,
+                    endDate: inicio_ocorrencia,
+                    color: corAula
+                };
+            dataSource.push(ocorrencia);
+        }
+
+        $("#legenda").html(htmlLegenda);
+
+        $('#calendar').calendar({
+            enableContextMenu: false,
+            enableRangeSelection: false,
+            mouseOnDay: function(e) {
+                if(e.events.length > 0) {
+                    var content = '';
+                    
+                    for(var i in e.events) {
+                        content += '<div class="event-tooltip-content">'
+                                        + '<div class="nome_aula" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                                        + '<div class="desc_aula">' + e.events[i].desc_aula + '</div>'
+                                    + '</div>';
+                    }
+                   
+                    $(e.element).popover({
+                        trigger: 'manual',
+                        container: 'body',
+                        html:true,
+                        content: content
+                    });
+                    
+                    $(e.element).popover('show');
+                }
+            },
+            mouseOutDay: function(e) {
+                if(e.events.length > 0) {
+                    $(e.element).popover('hide');
+                }
+            },
+            dataSource: dataSource
+        });
+    }
+
+    gerarCalendario();
+
+</script>
+</body>
+</html>

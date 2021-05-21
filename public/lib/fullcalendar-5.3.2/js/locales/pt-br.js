@@ -17,7 +17,7 @@ FullCalendar.globalLocales.push(function () {
     moreLinkText: function(n) {
       return "mais +" + n;
     },
-    noEventsText: "Não há eventos para mostrar"
+    noEventsText: "Não há aulas para mostrar"
   };
 
   return ptBr;

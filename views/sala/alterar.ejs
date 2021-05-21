@@ -1,0 +1,77 @@
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+		<form id="form" class="panel panel-default" action="#">
+			<div class="panel-heading">Informações da Sala</div>
+			<div class="panel-body no-bottom">
+				<input type="hidden" id="id_sala" name="id_sala" value="<%=(item ? item.id_sala : 0) %>" />
+				<div class="form-group">
+					<div style = "
+						margin-bottom: 2.5vh;
+					" >
+						<label for="desc_sala">Nome da sala</label>
+						<input id="desc_sala" name="desc_sala" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.desc_sala : '') %>" />
+                    </div>
+                    <div style = "
+						margin-bottom: 2.5vh;
+					" >
+						<label for="andar_sala">Andar</label>
+						<input type="number" id="andar_sala" name="andar_sala" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.andar_sala : '') %>" />
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<input value="<%=(item ? 'Salvar Alterações' : 'Adicionar sala') %>" class="btn btn-primary btn-lg btn-block" type="submit" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<%- contentFor("scripts") %>
+<script type="text/javascript">
+	//<![CDATA[
+	"use strict";
+
+	$("#form").validate({
+		rules: {
+			desc_sala: {
+				required: true,
+				minlength: 3,
+				maxlength: 100
+			},
+			andar_sala:{
+				required: true,
+				maxlength: 100
+			},
+		},
+
+		submitHandler: function (form) {
+			if (JsonWebApi.active)
+				return;
+
+			Notification.wait();
+
+			//<% if (item) { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/sala/alterar", form, function (response) {
+				if (response.success)
+					Notification.success("Sala alterada com sucesso! " + emoji.happy);
+				else
+					Notification.error(response.value, true);
+			});
+
+			//<% } else { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/sala/criar", form, function (response) {
+				if (response.success) {
+					resetForm("#form");
+					Notification.success("Sala criada com sucesso! " + emoji.happy);
+				} else {
+					Notification.error(response.value, true);
+				}
+			});
+
+			//<% } %>
+		}
+	});
+	//]]>
+</script>

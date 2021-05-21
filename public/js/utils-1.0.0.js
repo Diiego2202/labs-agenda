@@ -1,31 +1,31 @@
-function converterEventos(eventos) {
-	if (!eventos)
+function converterAulas(ocorrencias) {
+	if (!ocorrencias)
 		return null;
-	for (var i = 0; i < eventos.length; i++) {
-		eventos[i].title = eventos[i].nome;
-		eventos[i].start = eventos[i].inicio;
-		eventos[i].end = eventos[i].termino;
+	for (var i = 0; i < ocorrencias.length; i++) {
+		ocorrencias[i].title = ocorrencias[i].nome_aula;
+		ocorrencias[i].start = converterDataISO(ocorrencias[i].inicio_ocorrencia);
+		ocorrencias[i].end = converterDataISO(ocorrencias[i].inicio_ocorrencia);
 	}
 }
 
-function converterDataISO(data) {
-	if (!data || !(data = trim(data)) || data.length > 10)
+function converterDataISO(dataComOuSemHorario) {
+	if (!dataComOuSemHorario || !(dataComOuSemHorario = trim(dataComOuSemHorario)))
 		return null;
-	var b1 = data.indexOf("/");
-	var b2 = data.lastIndexOf("/");
+	var b1 = dataComOuSemHorario.indexOf("/");
+	var b2 = dataComOuSemHorario.lastIndexOf("/");
 	var dia, mes, ano;
 	if (b1 <= 0 || b2 <= b1) {
-		var b1 = data.indexOf("-");
-		var b2 = data.lastIndexOf("-");
+		var b1 = dataComOuSemHorario.indexOf("-");
+		var b2 = dataComOuSemHorario.lastIndexOf("-");
 		if (b1 <= 0 || b2 <= b1)
 			return null;
-		ano = parseInt(data.substring(0, b1));
-		mes = parseInt(data.substring(b1 + 1, b2));
-		dia = parseInt(data.substring(b2 + 1));
+		ano = parseInt(dataComOuSemHorario.substring(0, b1));
+		mes = parseInt(dataComOuSemHorario.substring(b1 + 1, b2));
+		dia = parseInt(dataComOuSemHorario.substring(b2 + 1));
 	} else {
-		dia = parseInt(data.substring(0, b1));
-		mes = parseInt(data.substring(b1 + 1, b2));
-		ano = parseInt(data.substring(b2 + 1));
+		dia = parseInt(dataComOuSemHorario.substring(0, b1));
+		mes = parseInt(dataComOuSemHorario.substring(b1 + 1, b2));
+		ano = parseInt(dataComOuSemHorario.substring(b2 + 1));
 	}
 	if (isNaN(dia) || isNaN(mes) || isNaN(ano) ||
 		dia < 1 || mes < 1 || ano < 1 ||
@@ -48,6 +48,20 @@ function converterDataISO(data) {
 			if (dia > 30)
 				return null;
 			break;
+	}
+	var sepHorario = dataComOuSemHorario.indexOf(" ");
+	if (sepHorario < 0)
+		sepHorario = dataComOuSemHorario.indexOf("T");
+	if (sepHorario >= 0) {
+		var horario = dataComOuSemHorario.substr(sepHorario + 1);
+		var sepMinuto = horario.indexOf(":");
+		if (sepMinuto >= 0) {
+			var hora = parseInt(horario);
+			var minuto = parseInt(horario.substr(sepMinuto + 1));
+			if (hora >= 0 && hora <= 23 && minuto >= 0 && minuto <= 59)
+				return ano + "-" + ((mes < 10) ? ("0" + mes) : mes) + "-" + ((dia < 10) ? ("0" + dia) : dia) + "T" + ((hora < 10) ? ("0" + hora) : hora) + ":" + ((minuto < 10) ? ("0" + minuto) : minuto) + ":00";
+		}
+		return null;
 	}
 	return ano + "-" + ((mes < 10) ? ("0" + mes) : mes) + "-" + ((dia < 10) ? ("0" + dia) : dia);
 }
