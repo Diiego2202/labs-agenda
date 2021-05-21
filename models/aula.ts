@@ -42,11 +42,11 @@ export = class Aula {
 		}
 
 		aula.nome_aula = (aula.nome_aula || "").normalize().trim();
-		if(!aula.nome_aula || aula.nome_aula.length>50){
+		if(!aula.nome_aula || aula.nome_aula.length>100){
 			return "Nome inválido";
 		}
 		aula.desc_aula = (aula.desc_aula || "").normalize().trim();
-		if(!aula.desc_aula || aula.desc_aula.length>50){
+		if(!aula.desc_aula || aula.desc_aula.length>100){
 			return "Descrição Inválida";
 		}
 		aula.inicio_aula = DataUtil.converterDataISO(aula.inicio_aula);

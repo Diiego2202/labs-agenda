@@ -39,12 +39,6 @@
             }
             
         }
-        #legenda{
-            background-color: #f2f2f2;
-            margin-top: 20px;
-            width: 50%;
-            height: 300px;
-        }
         .item-legenda {
             display: inline-block;
             width: 16px;
@@ -53,19 +47,34 @@
             font-size: 22px;
             vertical-align: middle;
         }
+        #tabela{
+            margin-left: 20px;
+            max-width: 50%;
+        }
+        #tabela tr, #tabela td{
+            font-size: 12px;
+            padding-top: 1px;
+            padding-bottom: 1px;
+
+        }
+
     </style>
 </head>
 <body class ="A4">
 <section class="sheet" style="padding: 10px; margin: 0 auto">
     <div id="calendar" class="calendar"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 ">
-                <div id="legenda"></div>
-            </div>
-            <div class="col-md-6 ">
-            </div>
-        </div>
+        <table id="tabela" class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 18px;">Cor</th>
+                    <th scope="col">Aula</th>
+                    <th scope="col" style="width: 18px;">CH</th>
+                </tr>
+            </thead>
+            <tbody id="legenda">
+
+            </tbody>
+        </table>
     </div>
     <button type="button" class="btn btn-primary" id="btnImprimir" onclick="window.print()"><i class="fa fa-print"></i> Imprimir / PDF</button>
 </section>
@@ -123,7 +132,11 @@
                 if (corAtual >= cores.length)
                     corAtual = 0;
 
-                htmlLegenda += `<div><span class="item-legenda" style="color: ${corAula};">■</span> ${ocorrencias[i].nome_aula} (${ocorrencias[i].carga_horaria} horas)</div>`;
+                htmlLegenda += `<tr>
+                                    <td style="background-color: ${corAula};"></td>
+                                    <td>${ocorrencias[i].nome_aula} </td>
+                                    <td>${ocorrencias[i].carga_horaria}</td>
+                                </tr>`;
             }
 
             var inicio_ocorrencia = criarDate(ocorrencias[i].inicio_ocorrencia),
@@ -152,7 +165,7 @@
                                         + '<div class="desc_aula">' + e.events[i].desc_aula + '</div>'
                                     + '</div>';
                     }
-                
+                   
                     $(e.element).popover({
                         trigger: 'manual',
                         container: 'body',
@@ -169,37 +182,6 @@
                 }
             },
             dataSource: dataSource
-            /*[
-                {
-                    id_aula: 0,
-                    id_sala: 'Google I/O',
-                    id_prof: 'Google I/O',
-                    id_turma: 'San Francisco, CA',
-                    nome_aula: 'San Francisco, CA',
-                    desc_aula: 'San Francisco, CA',
-                    nome_prof: 'San Francisco, CA',
-                    carga_horaria: 'San Francisco, CA',
-                    desc_sala: 'San Francisco, CA',
-                    desc_turma: 'San Francisco, CA',
-                    startDate: criarDate("30/09/2021"),
-                    // startDate: new Date(inicio_aula.getYear(), inicio_aula.getMonth(), inicio_aula.getDate()),
-                    endDate: criarDate("08/10/2021")
-                },
-                {
-                    id_aula: 1,
-                    id_sala: 'oi',
-                    id_prof: 'Google I/O',
-                    id_turma: 'San Francisco, CA',
-                    nome_aula: 'San Francisco, CA',
-                    desc_aula: 'San Francisco, CA',
-                    nome_prof: 'San Francisco, CA',
-                    carga_horaria: 'San Francisco, CA',
-                    desc_sala: 'San Francisco, CA',
-                    desc_turma: 'San Francisco, CA',
-                    startDate: new Date(currentYear, 5, 28),
-                    endDate: new Date(currentYear, 5, 29)
-                }
-            ]*/
         });
     }
 

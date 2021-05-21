@@ -35,8 +35,8 @@ INSERT INTO usuario (login, nome, email, idperfil, criacao) VALUES
 
 CREATE TABLE aula (
   id_aula int NOT NULL AUTO_INCREMENT,
-  nome_aula varchar(50) NOT NULL,
-  desc_aula varchar(50) NOT NULL,
+  nome_aula varchar(100) NOT NULL,
+  desc_aula varchar(100) NOT NULL,
   inicio_aula datetime NOT NULL,
   termino_aula datetime NOT NULL,
   carga_horaria int NOT NULL,
