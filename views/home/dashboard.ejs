@@ -184,7 +184,9 @@
 				salaAtual = sala;
 				anoAtual = ano;
 				mesAtual = mes;
-				aulas = response.value;
+				ocorrencias = response.value;
+				console.log(ocorrencias);
+				
 				desenharCalendario();
 			} else {
 				Notification.error(response.value, true);
