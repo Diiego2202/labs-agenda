@@ -213,7 +213,7 @@ export = class Aula {
 					inicio = DataUtil.formatar(ano, 1, 1);
 					fim = DataUtil.formatar(ano + 1, 1, 1);
 				}
-				where += " e.inicio_aula < ? and e.termino_aula >= ?";
+				where += " eo.inicio_ocorrencia >= ? and eo.inicio_ocorrencia < ?";
 				parametros.push(fim, inicio);
 			}
 

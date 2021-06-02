@@ -50,7 +50,8 @@ CREATE TABLE aula_ocorrencia (
   id_aula int NOT NULL,
   inicio_ocorrencia datetime NOT NULL,
   PRIMARY KEY (id_ocorrencia),
-  KEY aula_ocorrencia_id_aula_ix (id_aula),
+  KEY aula_ocorrencia_id_aula_ix (id_aula, inicio_ocorrencia),
+  KEY aula_ocorrencia_inicio_ocorrencia_ix (inicio_ocorrencia),
   foreign key(id_aula) references aula(id_aula) on delete cascade on update restrict
 );
 
