@@ -177,7 +177,7 @@
 
 		Notification.wait();
 
-		JsonWebApi.get("<%- root %>/api/aula/listar", function (response) { //precisa alterar para listar ocorrências?
+		JsonWebApi.get("<%- root %>/api/aula/listarOcorrencias", function (response) {
 			if (response.success) {
 				Notification.hide();
 				turmaAtual = turma;
@@ -185,7 +185,6 @@
 				anoAtual = ano;
 				mesAtual = mes;
 				ocorrencias = response.value;
-				console.log(ocorrencias);
 				
 				desenharCalendario();
 			} else {
