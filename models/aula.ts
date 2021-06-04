@@ -214,7 +214,7 @@ export = class Aula {
 					fim = DataUtil.formatar(ano + 1, 1, 1);
 				}
 				where += " eo.inicio_ocorrencia >= ? and eo.inicio_ocorrencia < ?";
-				parametros.push(fim, inicio);
+				parametros.push(inicio,fim);
 			}
 
 			lista = await sql.query(`select e.id_aula, e.nome_aula, e.desc_aula, date_format(e.inicio_aula, '%d/%m/%Y') inicio_aula, date_format(e.termino_aula, '%d/%m/%Y') termino_aula, date_format(eo.inicio_ocorrencia, '%d/%m/%Y') inicio_ocorrencia, e.carga_horaria, ep.id_prof, p.nome_prof, et.id_turma, t.desc_turma, es.id_sala, s.desc_sala from aula e 
