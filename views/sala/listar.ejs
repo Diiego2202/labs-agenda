@@ -56,8 +56,7 @@
 		var sala = tabela.row(trClicada = this.parentNode.parentNode).data();
 
 		if (this.getAttribute("data-excluir")) {
-			$("#lblDescricao").text(sala.desc_sala);
-			$("#lblAndar").text(sala.andar_sala);
+			$("#lblNome").text(sala.desc_sala);
 
 			$("#modalExcluir").modal({
 				backdrop: "static",

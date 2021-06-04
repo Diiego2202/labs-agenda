@@ -71,7 +71,7 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					Tem certeza que deseja excluir a aula <span id="lblNome"></span>? Esta operação <b class="col-h">NÃO</b> pode ser desfeita, e <b class="col-h">TODAS OS DADOS</b> desta aula serão excluídos!
+					Tem certeza que deseja excluir a aula <span id="lblNome"></span>? Esta operação <b class="col-h">NÃO</b> pode ser desfeita, e <b class="col-h">TODOS OS DADOS</b> desta aula serão excluídos!
 				</p>
 				
 			</div>
@@ -126,13 +126,6 @@
 
 			if (this.getAttribute("data-excluir")) {
 				$("#lblNome").text(aula.nome_aula);
-				$("#lblDescricao").text(aula.desc_aula);
-				$("#lblTurma").text(turma.desc_turma);
-				$("#lblSala").text(sala.desc_sala);
-				// $("#lblProfessor").text(professor.nome_prof);
-				$("#lblCarga").text(aula.carga_horaria);
-				$("#lblInicio").text(aula.inicio_aula);
-				$("#lblTermino").text(aula.termino_aula);
 
 				$("#modalExcluir").modal({
 					backdrop: "static",

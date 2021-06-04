@@ -55,7 +55,7 @@
 		var turma = tabela.row(trClicada = this.parentNode.parentNode).data();
 
 		if (this.getAttribute("data-excluir")) {
-			$("#lblDescricao").text(turma.desc_turma);
+			$("#lblNome").text(turma.desc_turma);
 
 			$("#modalExcluir").modal({
 				backdrop: "static",
