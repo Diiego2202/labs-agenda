@@ -6,12 +6,12 @@ export = class Turma {
 	public desc_turma: string;
 	
 	public static  validar(turma: Turma): string{
-		// if(!turma){
-		// 	return "Dados inválidos";
-		// }
-		// if(!turma.desc_turma || turma.desc_turma.length>45){
-		// 	return "Descrição inválida";
-		// }
+		if(!turma){
+			return "Dados inválidos";
+		}
+		if(!turma.desc_turma || turma.desc_turma.length>45){
+			return "Descrição inválida";
+		}
 		
 		
 		 return null;
