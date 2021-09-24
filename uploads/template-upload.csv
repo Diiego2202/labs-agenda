@@ -1,2 +1,12 @@
-﻿Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término;Ocorrências
-Exemplo;Descrição;60;Turma Existente;Sala Existente;Professor Existente;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/10
+﻿Nome;Descrição;Carga Horária;Turma;Sala;Professor;Início;Término;Ocorrências;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/10;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/11;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/12;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/13;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/14;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/15;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/16;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/17;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/18;
+Exemplo;Descrição;60;Turma 3;Sala 1;Professor 1;02/06/2021;02/12/2021;11/06,11/07,11/08,11/09,11/19;
+

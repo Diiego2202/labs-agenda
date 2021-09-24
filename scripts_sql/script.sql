@@ -95,6 +95,42 @@ create table aula_turma(
     primary key (id_aula, id_turma)
 );
 
+DROP TABLE IF EXISTS `agendapos`.`calendario` ;
+
+CREATE TABLE IF NOT EXISTS `agendapos`.`calendario` (
+  `id_calendario` INT NOT NULL,
+  `id_turma` INT NOT NULL,
+  `url_calendario` TEXT NOT NULL,
+  PRIMARY KEY (`id_calendario`),
+  INDEX `id_turma_FK_idx` (`id_turma` ASC) VISIBLE,
+  CONSTRAINT `id_turma_FK`
+    FOREIGN KEY (`id_turma`)
+    REFERENCES `agendapos`.`turma` (`id_turma`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `agendapos`.`aluno`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `agendapos`.`aluno` ;
+
+CREATE TABLE IF NOT EXISTS `agendapos`.`aluno` (
+  `id_aluno` INT NOT NULL,
+  `nome_aluno` VARCHAR(45) NOT NULL,
+  `e-mail_aluno` VARCHAR(45) NOT NULL,
+  `RA_aluno` DECIMAL(10) NOT NULL,
+  `id_calendario` INT NOT NULL,
+  PRIMARY KEY (`id_aluno`),
+  INDEX `id_calendario_fk_idx` (`id_calendario` ASC) VISIBLE,
+  CONSTRAINT `id_calendario_fk`
+    FOREIGN KEY (`id_calendario`)
+    REFERENCES `agendapos`.`calendario` (`id_calendario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 insert into aula(nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values
 ('aula1', 'Descrição resumida do aula' , '2021-04-01T08:00', '2021-04-01T09:00', 4),
 ('aula2', 'Descrição resumida do aula' , '2021-04-01T08:00', '2021-04-01T09:00', 4),
