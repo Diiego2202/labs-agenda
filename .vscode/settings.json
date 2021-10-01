@@ -204,5 +204,6 @@
 		"**/deploy/": true,
 		"**/_misc/": true,
 		"**/dados/": true
-	}
+	},
+	"liveServer.settings.port": 5501
 }
