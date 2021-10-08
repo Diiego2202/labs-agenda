@@ -119,7 +119,7 @@ DROP TABLE IF EXISTS `agendapos`.`aluno` ;
 CREATE TABLE IF NOT EXISTS `agendapos`.`aluno` (
   `id_aluno` INT NOT NULL,
   `nome_aluno` VARCHAR(45) NOT NULL,
-  `e-mail_aluno` VARCHAR(45) NOT NULL,
+  `email_aluno` VARCHAR(45) NOT NULL,
   `RA_aluno` DECIMAL(10) NOT NULL,
   `id_calendario` INT NOT NULL,
   PRIMARY KEY (`id_aluno`),

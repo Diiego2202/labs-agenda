@@ -76,4 +76,11 @@ router.get("/logout", wrap(async (req: express.Request, res: express.Response) =
 	res.redirect(appsettings.root + "/");
 }));
 
+router.all("/login-aluno", wrap(async (req: express.Request, res: express.Response) => {
+  let u = await Usuario.cookie(req);
+	if (u)
+	res.render("home/login-aluno",{ titulo: "login_aluno"})
+
+}));
+
 export = router;
