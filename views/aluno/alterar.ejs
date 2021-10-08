@@ -1,0 +1,68 @@
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+		<form id="form" class="panel panel-default" action="#">
+			<div class="panel-heading">Informações do Aluno</div>
+			<div class="panel-body no-bottom">
+				<input type="hidden" id="id_aluno" name="id_aluno" value="<%=(item ? item.id_aluno : 0) %>" />
+				<div class="form-group">
+					<div style = "
+						margin-bottom: 2.5vh;
+					" >
+						<label for="nome_aluno">Nome</label>
+						<input id="nome_aluno" name="nome_aluno" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.nome_aluno : '') %>" />
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<input value="<%=(item ? 'Salvar Alterações' : 'Adicionar alunos') %>" class="btn btn-primary btn-lg btn-block" type="submit" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<%- contentFor("scripts") %>
+<script type="text/javascript">
+	//<![CDATA[
+	"use strict";
+
+	$("#form").validate({
+		rules: {
+			nome_aluno: {
+				required: true,
+				minlength: 3,
+				maxlength: 100
+			}
+		},
+
+		submitHandler: function (form) {
+			if (JsonWebApi.active)
+				return;
+
+			Notification.wait();
+
+			//<% if (item) { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/aluno/alterar", form, function (response) {
+				if (response.success)
+					Notification.success("Aluno alterado com sucesso! " + emoji.happy);
+				else
+					Notification.error(response.value, true);
+			});
+
+			//<% } else { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/aluno/criar", form, function (response) {
+				if (response.success) {
+					resetForm("#form");
+					Notification.success("Aluno cadastrado com sucesso! " + emoji.happy);
+				} else {
+					
+					Notification.error(response.value, true);
+				}
+			});
+
+			//<% } %>
+		}
+	});
+	//]]>
+</script>
