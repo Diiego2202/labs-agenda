@@ -17,21 +17,29 @@
 			<div class="panel-body text-center">
 				<h2 class="no-margin-top col-xs-space-bottom">Download do Plano de Aulas</h2>
 				<div class="row">
-					<div class="col-sm-6 col-sm-offset-3">
+					<div class="col-sm-3 col-sm-offset-3">
 						<div class="form-group">
 							<label for="turma">Turma</label>
-							<select size="1" id="turmaDownload" class="form-control" onchange="atualizar()">
+							<select size="1" id="turmaDownload" class="form-control" onchange="atualizarDownload()">
 								<option value="0">Selecione...</option>
 								<% for (let i = 0; i < turmas.length; i++) { %>
 									<option value="<%- turmas[i].id_turma %>"><%= turmas[i].desc_turma %></option>
 								<% } %>
 							</select>
 						</div>
+						<!--
 						<label>Observações:</label>
 						<input id="obs" type="text" class="form-control">
+						-->
+					</div>
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="anoDownload">Ano</label>
+							<input id="anoDownload" type="number" class="form-control" onchange="atualizarDownload()" value="<%- anoAtual %>" />
+						</div>
 					</div>
 				</div>
-				<a target="_blank" href="aula/download" id="download" class="btn btn-primary hidden"><i class="fa fa-download"></i>Download</a>
+				<a target="_blank" href="calendario" id="download" class="btn btn-primary hidden"><i class="fa fa-download"></i>Download</a>
 			</div>
 		</div>
 	</div>
@@ -112,12 +120,14 @@
 <script type="text/javascript">
 	"use strict";
 
-	document.getElementById("turmaDownload").onchange = function () {
+	function atualizarDownload() {
 		var turmaDownload = document.getElementById("turmaDownload");
+		var anoDownload = document.getElementById("anoDownload");
 		var download = document.getElementById("download");
 		var idturma = parseInt(turmaDownload.value);
-		if (idturma) {
-			download.href = "aula/download/" + idturma;
+		var ano = parseInt(anoDownload.value);
+		if (idturma && ano) {
+			download.href = "calendario/" + ano + "/" + idturma;
 			download.className = "btn btn-primary";
 		} else {
 			download.className = "btn btn-primary hidden";

@@ -431,27 +431,31 @@ export = class Aula {
 			const ano = "/" + registro[6].substr(0, registro[6].indexOf("-"));
 			const ocorrencias = registro[8].split(",");
 			//inserção de cada ocorrência
-			ocorrencias.sort();
 			for(let o = 0; o < ocorrencias.length; o++) {
-				const ocorrencia = ocorrencias[o].normalize().trim();
+				let ocorrencia = ocorrencias[o].normalize().trim();
+
+				const partes = ocorrencia.split("/");
+				if (partes.length < 2 || partes.length > 3)
+					return `Data da ocorrência inválida "${ocorrencia}" (linha ${i + 2})`;
+
+				if (partes.length === 2)
+					ocorrencia += ano;
+
 				ocorrencias[o] = DataUtil.converterDataISO(ocorrencia);
-				if (!ocorrencias[o]) {
-					ocorrencias[o] = DataUtil.converterDataISO(ocorrencia + ano);
-					if (!ocorrencias[o]){
-						return `Ocorrência inválida na linha ${(i + 2)}`;
-					}
-					const ocorrenciaNum = parseInt(ocorrencias[o].replace(regexp, ""));
-					if (ocorrenciaNum < inicio)
-						return `Data da ocorrência anterior ao início da aula (linha ${i + 2})`;
-					if (ocorrenciaNum > termino)
-						return `Data da ocorrência posterior ao término da aula (linha ${i + 2})`;
-						
-				}
-				
-				for (let l = ocorrencias.length - 1; l > 0; l--) {
-					if (ocorrencias[l] === ocorrencias[l-1])
-						return `Data da ocorrência repetida (linha ${i + 2})`;
-				}
+				if (!ocorrencias[o])
+					return `Ocorrência inválida na linha ${(i + 2)}`;
+
+				const ocorrenciaNum = parseInt(ocorrencias[o].replace(regexp, ""));
+				if (ocorrenciaNum < inicio)
+					return `Data da ocorrência anterior ao início da aula (linha ${i + 2})`;
+				if (ocorrenciaNum > termino)
+					return `Data da ocorrência posterior ao término da aula (linha ${i + 2})`;
+			}
+
+			ocorrencias.sort();
+			for (let l = ocorrencias.length - 1; l > 0; l--) {
+				if (ocorrencias[l] === ocorrencias[l-1])
+					return `Data da ocorrência repetida (linha ${i + 2})`;
 			}
 
 			registros[i] = registro;

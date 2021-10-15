@@ -81,24 +81,6 @@ router.all("/upload", wrap(async (req: express.Request, res: express.Response) =
 	}
 
 }));
-router.all("/download/:idturma", wrap(async (req: express.Request, res: express.Response) => {
-	let u = await Usuario.cookie(req);
-	if (!u || !u.admin)
-		res.redirect(appsettings.root + "/acesso");
-	else{
-		const hoje = new Date(),
-		anoAtual = hoje.getFullYear();
-		
-		res.render("aula/download", {
-			layout: "layout-vazio",
-			titulo: "Plano de Aulas",
-			usuario: u,
-			anoAtual: anoAtual,
-			lista: await Aula.listarOcorrencias(parseInt(req.params["idturma"]), 0, anoAtual),
-			turmas: await Turma.listar()
-		});	
-	}
-}));
 
 router.post('/importar', multer().single("arquivoCSV"), wrap(async (req: express.Request, res: express.Response) => {
 	let u = await Usuario.cookie(req, res, true);

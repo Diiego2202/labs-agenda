@@ -25,16 +25,23 @@
             box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
         }
 
+        #btnLink {
+            position: fixed;
+            left: 10px;
+            top: 54px;
+            box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+        }
+
         @media print {
             body {
                 background: #fff;
             }
 
             th.prev, th.next {
-                color: #fff;
+                visibility: hidden;
             }
 
-            #btnImprimir {
+            #btnImprimir, #btnLink {
                 display: none;
             }
             
@@ -77,11 +84,19 @@
         </table>
     </div>
     <button type="button" class="btn btn-primary" id="btnImprimir" onclick="window.print()"><i class="fa fa-print"></i> Imprimir / PDF</button>
+    <button type="button" class="btn btn-primary btn-copyjs" id="btnLink"><i class="fa fa-share-alt"></i> Copiar Link</button>
 </section>
 <script type="text/javascript" src="<%- root %>/lib/bootstrap/js/bootstrap-1.0.1.min.js"></script>
+<script type="text/javascript" src="<%- root %>/lib/clipboardjs/js/clipboard.min.js"></script>
+<script type="text/javascript" src="<%- root %>/js/main-1.0.10.js"></script>
 <script type="text/javascript">
     "use strict";
-    
+
+    var btnLink = document.getElementById("btnLink");
+    btnLink.setAttribute("data-clipboard-text", window.location.href);
+
+    prepareCopyHandler();
+
     function criarDate(dataLocalDMY) {
         var partes = dataLocalDMY.split("/"),
             dia = parseInt(partes[0]),
@@ -181,7 +196,10 @@
                     $(e.element).popover('hide');
                 }
             },
-            dataSource: dataSource
+            dataSource: dataSource,
+            startYear: anoAtual,
+            maxDate: new Date(anoAtual, 11, 31),
+            minDate: new Date(anoAtual, 0, 1),
         });
     }
 

@@ -83,4 +83,23 @@ router.all("/login-aluno", wrap(async (req: express.Request, res: express.Respon
 
 }));
 
+router.all("/calendario/:ano/:idturma", wrap(async (req: express.Request, res: express.Response) => {
+	let u = await Usuario.cookie(req);
+	//if (!u || !u.admin)
+	//	res.redirect(appsettings.root + "/acesso");
+	//else{
+		const hoje = new Date(),
+		anoAtual = parseInt(req.params["ano"]) || hoje.getFullYear();
+		
+		res.render("aula/download", {
+			layout: "layout-vazio",
+			titulo: "Plano de Aulas",
+			usuario: u,
+			anoAtual: anoAtual,
+			lista: await Aula.listarOcorrencias(parseInt(req.params["idturma"]), 0, anoAtual),
+			turmas: await Turma.listar()
+		});	
+	//}
+}));
+
 export = router;
