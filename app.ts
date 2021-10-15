@@ -104,6 +104,7 @@ app.use("/usuario", require("./routes/usuario"));
 app.use("/professor", require("./routes/professor"));
 app.use("/sala", require("./routes/sala"));
 app.use("/turma", require("./routes/turma"));
+app.use("/aluno", require("./routes/aluno"));
 // API
 app.use("/api/aula", require("./routes/api/aula"));
 app.use("/api/usuario", require("./routes/api/usuario"));
