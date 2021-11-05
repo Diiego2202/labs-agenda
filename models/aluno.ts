@@ -6,6 +6,7 @@ export = class Aluno {
 	public nome_aluno: string;
 	public email_aluno: string;
 	public RA_aluno: number;
+	public id_turma: number;
 	
 	public static  validar(aluno: Aluno): string{
 		if(!aluno){
@@ -40,7 +41,7 @@ export = class Aluno {
         }
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("insert into aluno (nome_aluno, email_aluno, RA_aluno, id_calendario) values (?, ?, ?, ?)",[aluno.nome_aluno]);
+            let lista = await sql.query("insert into aluno (nome_aluno, RA_aluno, email_aluno, id_turma) values (?, ?, ?, ?)",[aluno.nome_aluno, aluno.RA_aluno, aluno.email_aluno, aluno.id_turma]);
         });
 
         return erro;
@@ -69,7 +70,7 @@ export = class Aluno {
         }
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("update aluno set nome_aluno = ?, email_aluno = ?, RA_aluno = ? where id_aluno = ?",[aluno.nome_aluno, aluno.id_aluno]);
+            let lista = await sql.query("update aluno set nome_aluno = ?, email_aluno = ?, RA_aluno = ?, id_turma where id_aluno = ?",[aluno.nome_aluno,aluno.email_aluno, aluno.RA_aluno, aluno.id_turma, aluno.id_aluno]);
         });
 
         return erro;

@@ -77,9 +77,10 @@ router.get("/logout", wrap(async (req: express.Request, res: express.Response) =
 }));
 
 router.all("/login-aluno", wrap(async (req: express.Request, res: express.Response) => {
-  let u = await Usuario.cookie(req);
-	if (u)
-	res.render("home/login-aluno",{ titulo: "login_aluno"})
+	let u = await Usuario.cookie(req);
+	if (u) {
+		res.render("home/login-aluno", { titulo: "login_aluno",usuario:u })
+	}
 
 }));
 

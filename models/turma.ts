@@ -5,15 +5,20 @@ export = class Turma {
 	public id_turma: number;
 	public desc_turma: string;
 	
-	public static  validar(turma: Turma): string{
+	public static async validar(turma: Turma): Promise<string>{
 		if(!turma){
 			return "Dados inválidos";
 		}
 		if(!turma.desc_turma || turma.desc_turma.length>45){
 			return "Descrição inválida";
 		}
-		
-		
+        let lista = await Turma.listar();
+        for (var t of lista) {
+            if (turma.desc_turma === t.desc_turma)
+               return "Turma já existente"
+        }
+
+      		
 		 return null;
 	}
 
@@ -26,7 +31,7 @@ export = class Turma {
 	}
 
 	public static async criar(turma: Turma): Promise<string>{
-        let erro: string = Turma.validar(turma);
+        let erro  = Turma.validar(turma);
 
         if(erro){
             return erro;
@@ -55,7 +60,7 @@ export = class Turma {
     }
 
 	public static async alterar(turma: Turma): Promise<string>{
-        let erro: string = Turma.validar(turma);
+        let erro = Turma.validar(turma);
 
         if(erro){
             return erro;
@@ -82,3 +87,5 @@ export = class Turma {
 
     }
 }
+
+

@@ -85,6 +85,7 @@ create table aula_prof(
 create table turma(
 	id_turma int primary key auto_increment, 
     desc_turma varchar(45)
+
 );
 
 create table aula_turma(
@@ -117,18 +118,19 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `agendapos`.`aluno` ;
 
 CREATE TABLE IF NOT EXISTS `agendapos`.`aluno` (
-  `id_aluno` INT NOT NULL,
+  `id_aluno` INT NOT NULL auto_increment,
   `nome_aluno` VARCHAR(45) NOT NULL,
   `email_aluno` VARCHAR(45) NOT NULL,
   `RA_aluno` DECIMAL(10) NOT NULL,
-  `id_calendario` INT NOT NULL,
+  `id_turma`int NOT NULL,
   PRIMARY KEY (`id_aluno`),
-  INDEX `id_calendario_fk_idx` (`id_calendario` ASC) VISIBLE,
-  CONSTRAINT `id_calendario_fk`
-    FOREIGN KEY (`id_calendario`)
-    REFERENCES `agendapos`.`calendario` (`id_calendario`)
+INDEX `id_turma_FK_idx` (`id_turma` ASC) VISIBLE,
+  CONSTRAINT `id_turma_FK2`
+    FOREIGN KEY (`id_turma`)
+    REFERENCES `agendapos`.`turma` (`id_turma`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+
 ENGINE = InnoDB;
 
 insert into aula(nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values
