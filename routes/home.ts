@@ -6,6 +6,7 @@ import Usuario = require("../models/usuario");
 import appsettings = require("../appsettings");
 import Turma = require("../models/turma");
 import Sala = require("../models/sala");
+import Calendario = require("../models/calendario");
 
 const router = express.Router();
 
@@ -76,13 +77,14 @@ router.get("/logout", wrap(async (req: express.Request, res: express.Response) =
 	res.redirect(appsettings.root + "/");
 }));
 
-router.all("/login-aluno", wrap(async (req: express.Request, res: express.Response) => {
-	let u = await Usuario.cookie(req);
-	if (u) {
-		res.render("home/login-aluno", { titulo: "login_aluno",usuario:u })
-	}
+router.all("/loginAluno", wrap(async (req: express.Request, res: express.Response) => {
+	;
+	
+		res.render("home/login-aluno", { titulo: "login_aluno",layout: "layout-externo" })
+	
 
 }));
+
 
 router.all("/calendario/:ano/:idturma", wrap(async (req: express.Request, res: express.Response) => {
 	let u = await Usuario.cookie(req);

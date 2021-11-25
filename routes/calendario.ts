@@ -1,17 +1,17 @@
 import express = require("express");
 import wrap = require("express-async-error-wrapper");
-import Aluno = require("../models/aluno");
+import Calendario = require("../models/calendario");
 import Usuario = require("../models/usuario");
 import appsettings = require("../appsettings");
-import Turma = require("../models/turma");
 
 const router = express.Router();
+
 router.all("/criar", wrap(async (req: express.Request, res: express.Response) => {
 	let u = await Usuario.cookie(req);
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else
-		res.render("aluno/alterar", { titulo: "Cadastrar Aluno", usuario: u, item: null, 	turma: await Turma.listar()});
+		res.render("calendario/alterar", { titulo: "Cadastrar Calendario", usuario: u, item: null });
 }));
 
 router.all("/alterar", wrap(async (req: express.Request, res: express.Response) => {
@@ -19,16 +19,15 @@ router.all("/alterar", wrap(async (req: express.Request, res: express.Response) 
 	if (!u || !u.admin) {
 		res.redirect(appsettings.root + "/acesso");
 	} else {
-		let id = parseInt(req.query["id_aluno"] as string);
-		let item: Aluno = null;
-		if (isNaN(id) || !(item = await Aluno.obter(id)))
+		let id = parseInt(req.query["id_calendario"] as string);
+		let item: Calendario = null;
+		if (isNaN(id) || !(item = await Calendario.obter(id)))
 			res.render("home/nao-encontrado", { usuario: u });
 		else
-			res.render("aluno/alterar", {
-				titulo: "Editar Aluno",
+			res.render("calendario/alterar", {
+				titulo: "Editar Calendario",
 				usuario: u,
-				item: item,
-				turma: await Turma.listar()
+				item: item
 			});
 	}
 }));
@@ -38,9 +37,8 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else
-		res.render("aluno/listar", { titulo: "Gerenciar Alunos", usuario: u, lista: JSON.stringify(await Aluno.listar()) });
+		res.render("calendario/listar", { titulo: "Gerenciar Calendarioes", usuario: u, lista: JSON.stringify(await Calendario.listar()) });
 }));
-
 
 
 export = router;

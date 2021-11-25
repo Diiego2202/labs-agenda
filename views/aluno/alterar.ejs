@@ -16,6 +16,13 @@
 						
 						<label for="email_aluno">Email</label>
 						<input id="email_aluno" name="email_aluno" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.email_aluno : '') %>" />
+						<label for="turma">Turma</label>
+							<select size="1" id="id_turma" name="id_turma" class="form-control"  >
+								<option value="0">Selecione...</option>
+								<% for (let i = 0; i < turma.length; i++) { %>
+									<option value="<%- turma[i].id_turma %>"><%= turma[i].desc_turma %></option>
+								<% } %>
+							</select>
 					</div>
 				</div>
 			</div>
