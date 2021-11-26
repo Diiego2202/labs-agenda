@@ -5,7 +5,7 @@ export = class Turma {
 	public id_turma: number;
 	public desc_turma: string;
 	
-	public static async validar(turma: Turma): Promise<string>{
+	public static  async validar(turma: Turma):Promise<string> {
 		if(!turma){
 			return "Dados inválidos";
 		}
@@ -30,10 +30,10 @@ export = class Turma {
         return lista;
 	}
 
-	public static async criar(turma: Turma): Promise<string>{
-        let erro = null /*Turma.validar(turma)*/;
+	public static async criar(turma: Turma) :Promise<string>{
+        let erro =  Turma.validar(turma);
 
-        if(erro){
+        if(await erro){
             return erro;
         }
 
@@ -62,7 +62,7 @@ export = class Turma {
 	public static async alterar(turma: Turma): Promise<string>{
         let erro = Turma.validar(turma);
 
-        if(erro){
+        if(await erro){
             return erro;
         }
 
