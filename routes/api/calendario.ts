@@ -7,9 +7,7 @@ import Usuario = require("../../models/usuario");
 const router = express.Router();
 
 router.post("/criar", wrap(async (req: express.Request, res: express.Response) => {
-	let u = await Usuario.cookie(req, res, true);
-	if (!u)
-		return;
+	
 	let p = req.body as Calendario;
 	jsonRes(res, 400, p ? await Calendario.criar(p) : "Dados inválidos");
 }));

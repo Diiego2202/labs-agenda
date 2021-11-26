@@ -31,7 +31,7 @@ export = class Turma {
 	}
 
 	public static async criar(turma: Turma): Promise<string>{
-        let erro  = Turma.validar(turma);
+        let erro = null /*Turma.validar(turma)*/;
 
         if(erro){
             return erro;

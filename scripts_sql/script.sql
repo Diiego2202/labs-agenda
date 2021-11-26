@@ -99,7 +99,7 @@ create table aula_turma(
 DROP TABLE IF EXISTS `agendapos`.`calendario` ;
 
 CREATE TABLE IF NOT EXISTS `agendapos`.`calendario` (
-  `id_calendario` INT NOT NULL,
+  `id_calendario` INT NOT NULL auto_increment,
   `id_turma` INT NOT NULL,
   `url_calendario` TEXT NOT NULL,
   PRIMARY KEY (`id_calendario`),
