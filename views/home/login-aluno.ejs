@@ -1,4 +1,4 @@
-<form method="get" action="<%root%>/calendario/:id_turma" style="height: 100%;">
+<form method="get" action="<%root%>/calendario/obter/:id_turma" style="height: 100%;">
 	<div id="container-login-maior">
 		<div id="container-login-medio" class="panel panel-default no-margin-bottom">
 			<div id="container-login-menor" class="panel-body">
@@ -21,43 +21,7 @@
 		</div>
 	</div>
 </form>
-<%- contentFor("scripts") %>
-	
-<script>
-	function calendario(){
-		var ra = document.getElementById("ra");
-		var email = document.getElementById("email");
-		var login = document.getElementById("botao-login");
-		
-		 for (let index = 0; index < aluno.length; index++) {
-			if(aluno[index].Ra_aluno  == ra || aluno[index].email_aluno == email){
-				var id = aluno[index].id_turma;
-				break;
-			}else{
-				id = 0;
-			}
-			
-		}
-		if (id > 0 ) {
-			for (let index = 0; index < url.length; index++) {
-				if(id == url.id_turma){
-					var link = url.url_calendario;
-					break;
-				}
-				
-			}
-			if(!link){
-				link = "<%root%>/home/nao-encontrado.ejs"
-					Notification.error(response.value, true);
-				}
-			login.href = link;
-			
-		} else {
-			Notification.error(response.value, true);
-		}
-		return link;
-	}
-</script>
+
 
 <style>
 	#container-login-maior{

@@ -42,13 +42,13 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 		res.render("calendario/listar", { titulo: "Gerenciar Calendarios", usuario: u, lista: JSON.stringify(await Calendario.listar()) });
 }));
 
-router.get("/listar/:idturma", wrap(async (req: express.Request, res: express.Response) => {
-	let id = parseInt(req.query["id_turma"] as string);
+router.get("obter/:id_turma", wrap(async (req: express.Request, res: express.Response) => {
+	let ra = req.query["ra"] as string;
 	let u = await Usuario.cookie(req);
 	if (!u || !u.admin)
 		res.redirect(appsettings.root + "/acesso");
 	else
-		res.render("calendario/listar", {	layout: "layout-vazio", titulo: "Calendarios", usuario: u, lista: JSON.stringify(await Calendario.listarDeTurma(parseInt(req.params["idturma"]))) });
+		res.render("calendario/listarTurma", {	layout: "layout-vazio", titulo: "Calendarios", usuario: u, lista: JSON.stringify(await Calendario.obterTurma(ra)) });
 }));
 
 

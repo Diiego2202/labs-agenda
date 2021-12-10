@@ -57,6 +57,21 @@ public static  validar(calendario: Calendario): string{
     return calendario;
 
   }
+  public static async obterTurma(ra:string): Promise<Calendario>{
+    let calendario: Calendario = null;
+
+      await Sql.conectar(async (sql) => {
+        let aluno = await sql.query("select  id_turma from aluno where Ra_aluno=?",[ra])
+        let lista = await sql.query("select  id_calendario, id_turma, url_calendario from calendario where id_turma=?",[aluno]);
+     
+        if(lista && lista.length){
+            calendario = lista[0];
+        }
+    });
+
+    return calendario;
+
+  }
   public static async alterar(calendario: Calendario): Promise<string>{
     let erro: string = Calendario.validar(calendario);
 
