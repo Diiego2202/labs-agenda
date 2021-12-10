@@ -65,7 +65,7 @@ public static  validar(calendario: Calendario): string{
     }
 
     await Sql.conectar(async(sql)=>{
-        let lista = await sql.query("update calendario set id_turma = ?, url_calendario = ? where id_calendario = ?",[calendario.id_turma,calendario.url_calendario]);
+        let lista = await sql.query("update url_calendario = ?,calendario set id_turma = ?  where id_calendario = ?",[calendario.id_turma,calendario.url_calendario]);
     });
 
     return erro;

@@ -1,0 +1,77 @@
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+		<form id="form" class="panel panel-default" action="#">
+			<div class="panel-heading">Informações do Aluno</div>
+			<div class="panel-body no-bottom">
+				<input type="hidden" id="id_aluno" name="id_aluno" value="<%=(item ? item.id_aluno : 0) %>" />
+				<div class="form-group">
+					<div style = "
+						margin-bottom: 2.5vh;
+					" >
+						<label for="url_calendario">Url</label>
+						<input id="url_calendario" name="url_calendario" maxlength="100" class="form-control" type="text" spellcheck="false" value="<%=(item ? item.url_calendario : '') %>" />
+						
+										
+						<label for="turma">Turma</label>
+							<select size="1" id="id_turma" name="id_turma" class="form-control"  >
+								<option value="0">Selecione...</option>
+								<% for (let i = 0; i < turma.length; i++) { %>
+									<option value="<%- turma[i].id_turma %>"><%= turma[i].desc_turma %></option>
+								<% } %>
+							</select>
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<input value="<%=(item ? 'Salvar Alterações' : 'Adicionar calendário') %>" class="btn btn-primary btn-lg btn-block" type="submit" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<%- contentFor("scripts") %>
+<script type="text/javascript">
+	//<![CDATA[
+	"use strict";
+
+	$("#form").validate({
+		rules: {
+			Url: {
+				required: true,
+				minlength: 3,
+				maxlength: 100
+			}
+		},
+
+		submitHandler: function (form) {
+			if (JsonWebApi.active)
+				return;
+
+			Notification.wait();
+
+			//<% if (item) { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/calendario/alterar", form, function (response) {
+				if (response.success)
+					Notification.success("Calendário alterado com sucesso! " + emoji.happy);
+				else
+					Notification.error(response.value, true);
+			});
+
+			//<% } else { %>
+
+			JsonWebApi.postFormData("<%- root %>/api/calendario/criar", form, function (response) {
+				if (response.success) {
+					resetForm("#form");
+					Notification.success("Calendário cadastrado com sucesso! " + emoji.happy);
+				} else {
+					
+					Notification.error(response.value, true);
+				}
+			});
+
+			//<% } %>
+		}
+	});
+	//]]>
+</script>

@@ -7,6 +7,7 @@ import appsettings = require("../appsettings");
 import Turma = require("../models/turma");
 import Sala = require("../models/sala");
 import Calendario = require("../models/calendario");
+import Aluno = require("../models/aluno");
 
 const router = express.Router();
 
@@ -80,7 +81,7 @@ router.get("/logout", wrap(async (req: express.Request, res: express.Response) =
 router.all("/loginAluno", wrap(async (req: express.Request, res: express.Response) => {
 	;
 	
-		res.render("home/login-aluno", { titulo: "login_aluno",layout: "layout-externo" })
+		res.render("home/login-aluno", { titulo: "login_aluno",layout: "layout-externo", url: await Calendario.listar(), aluno: await Aluno.listar() })
 	
 
 }));
