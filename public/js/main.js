@@ -1,19 +1,16 @@
 ﻿"use strict";
 
+// Promise polyfill
+if (!("Promise" in window)) {
+	!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):t.ES6Promise=e()}(this,function(){"use strict";function t(t){var e=typeof t;return null!==t&&("object"===e||"function"===e)}function e(t){return"function"==typeof t}function n(t){W=t}function r(t){z=t}function o(){return function(){return process.nextTick(a)}}function i(){return"undefined"!=typeof U?function(){U(a)}:c()}function s(){var t=0,e=new H(a),n=document.createTextNode("");return e.observe(n,{characterData:!0}),function(){n.data=t=++t%2}}function u(){var t=new MessageChannel;return t.port1.onmessage=a,function(){return t.port2.postMessage(0)}}function c(){var t=setTimeout;return function(){return t(a,1)}}function a(){for(var t=0;t<N;t+=2){var e=Q[t],n=Q[t+1];e(n),Q[t]=void 0,Q[t+1]=void 0}N=0}function f(){try{var t=Function("return this")().require("vertx");return U=t.runOnLoop||t.runOnContext,i()}catch(e){return c()}}function l(t,e){var n=this,r=new this.constructor(p);void 0===r[V]&&x(r);var o=n._state;if(o){var i=arguments[o-1];z(function(){return T(o,r,i,n._result)})}else j(n,r,t,e);return r}function h(t){var e=this;if(t&&"object"==typeof t&&t.constructor===e)return t;var n=new e(p);return w(n,t),n}function p(){}function v(){return new TypeError("You cannot resolve a promise with itself")}function d(){return new TypeError("A promises callback cannot return that same promise.")}function _(t,e,n,r){try{t.call(e,n,r)}catch(o){return o}}function y(t,e,n){z(function(t){var r=!1,o=_(n,e,function(n){r||(r=!0,e!==n?w(t,n):A(t,n))},function(e){r||(r=!0,S(t,e))},"Settle: "+(t._label||" unknown promise"));!r&&o&&(r=!0,S(t,o))},t)}function m(t,e){e._state===Z?A(t,e._result):e._state===$?S(t,e._result):j(e,void 0,function(e){return w(t,e)},function(e){return S(t,e)})}function b(t,n,r){n.constructor===t.constructor&&r===l&&n.constructor.resolve===h?m(t,n):void 0===r?A(t,n):e(r)?y(t,n,r):A(t,n)}function w(e,n){if(e===n)S(e,v());else if(t(n)){var r=void 0;try{r=n.then}catch(o){return void S(e,o)}b(e,n,r)}else A(e,n)}function g(t){t._onerror&&t._onerror(t._result),E(t)}function A(t,e){t._state===X&&(t._result=e,t._state=Z,0!==t._subscribers.length&&z(E,t))}function S(t,e){t._state===X&&(t._state=$,t._result=e,z(g,t))}function j(t,e,n,r){var o=t._subscribers,i=o.length;t._onerror=null,o[i]=e,o[i+Z]=n,o[i+$]=r,0===i&&t._state&&z(E,t)}function E(t){var e=t._subscribers,n=t._state;if(0!==e.length){for(var r=void 0,o=void 0,i=t._result,s=0;s<e.length;s+=3)r=e[s],o=e[s+n],r?T(n,r,o,i):o(i);t._subscribers.length=0}}function T(t,n,r,o){var i=e(r),s=void 0,u=void 0,c=!0;if(i){try{s=r(o)}catch(a){c=!1,u=a}if(n===s)return void S(n,d())}else s=o;n._state!==X||(i&&c?w(n,s):c===!1?S(n,u):t===Z?A(n,s):t===$&&S(n,s))}function M(t,e){try{e(function(e){w(t,e)},function(e){S(t,e)})}catch(n){S(t,n)}}function P(){return tt++}function x(t){t[V]=tt++,t._state=void 0,t._result=void 0,t._subscribers=[]}function C(){return new Error("Array Methods must be provided an Array")}function O(t){return new et(this,t).promise}function k(t){var e=this;return new e(L(t)?function(n,r){for(var o=t.length,i=0;i<o;i++)e.resolve(t[i]).then(n,r)}:function(t,e){return e(new TypeError("You must pass an array to race."))})}function F(t){var e=this,n=new e(p);return S(n,t),n}function Y(){throw new TypeError("You must pass a resolver function as the first argument to the promise constructor")}function q(){throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.")}function D(){var t=void 0;if("undefined"!=typeof global)t=global;else if("undefined"!=typeof self)t=self;else try{t=Function("return this")()}catch(e){throw new Error("polyfill failed because global object is unavailable in this environment")}var n=t.Promise;if(n){var r=null;try{r=Object.prototype.toString.call(n.resolve())}catch(e){}if("[object Promise]"===r&&!n.cast)return}t.Promise=nt}var K=void 0;K=Array.isArray?Array.isArray:function(t){return"[object Array]"===Object.prototype.toString.call(t)};var L=K,N=0,U=void 0,W=void 0,z=function(t,e){Q[N]=t,Q[N+1]=e,N+=2,2===N&&(W?W(a):R())},B="undefined"!=typeof window?window:void 0,G=B||{},H=G.MutationObserver||G.WebKitMutationObserver,I="undefined"==typeof self&&"undefined"!=typeof process&&"[object process]"==={}.toString.call(process),J="undefined"!=typeof Uint8ClampedArray&&"undefined"!=typeof importScripts&&"undefined"!=typeof MessageChannel,Q=new Array(1e3),R=void 0;R=I?o():H?s():J?u():void 0===B&&"function"==typeof require?f():c();var V=Math.random().toString(36).substring(2),X=void 0,Z=1,$=2,tt=0,et=function(){function t(t,e){this._instanceConstructor=t,this.promise=new t(p),this.promise[V]||x(this.promise),L(e)?(this.length=e.length,this._remaining=e.length,this._result=new Array(this.length),0===this.length?A(this.promise,this._result):(this.length=this.length||0,this._enumerate(e),0===this._remaining&&A(this.promise,this._result))):S(this.promise,C())}return t.prototype._enumerate=function(t){for(var e=0;this._state===X&&e<t.length;e++)this._eachEntry(t[e],e)},t.prototype._eachEntry=function(t,e){var n=this._instanceConstructor,r=n.resolve;if(r===h){var o=void 0,i=void 0,s=!1;try{o=t.then}catch(u){s=!0,i=u}if(o===l&&t._state!==X)this._settledAt(t._state,e,t._result);else if("function"!=typeof o)this._remaining--,this._result[e]=t;else if(n===nt){var c=new n(p);s?S(c,i):b(c,t,o),this._willSettleAt(c,e)}else this._willSettleAt(new n(function(e){return e(t)}),e)}else this._willSettleAt(r(t),e)},t.prototype._settledAt=function(t,e,n){var r=this.promise;r._state===X&&(this._remaining--,t===$?S(r,n):this._result[e]=n),0===this._remaining&&A(r,this._result)},t.prototype._willSettleAt=function(t,e){var n=this;j(t,void 0,function(t){return n._settledAt(Z,e,t)},function(t){return n._settledAt($,e,t)})},t}(),nt=function(){function t(e){this[V]=P(),this._result=this._state=void 0,this._subscribers=[],p!==e&&("function"!=typeof e&&Y(),this instanceof t?M(this,e):q())}return t.prototype["catch"]=function(t){return this.then(null,t)},t.prototype["finally"]=function(t){var n=this,r=n.constructor;return e(t)?n.then(function(e){return r.resolve(t()).then(function(){return e})},function(e){return r.resolve(t()).then(function(){throw e})}):n.then(t,t)},t}();return nt.prototype.then=l,nt.all=O,nt.race=k,nt.resolve=h,nt.reject=F,nt._setScheduler=n,nt._setAsap=r,nt._asap=z,nt.polyfill=D,nt.Promise=nt,nt.polyfill(),nt});
+}
+
 window.emoji = {
 	happy: "\uD83D\uDE04",
 	sad: "\uD83D\uDE22"
 };
 window.isEmpty = function (x) {
 	return (x === undefined || x === null);
-};
-window.isEmail = function (x) {
-	var email = trim(x),
-		at = email.indexOf('@'),
-		at2 = email.lastIndexOf('@'),
-		dot = email.lastIndexOf('.');
-
-	return (at > 0 && dot > (at + 1) && dot !== (email.length - 1) && at2 === at);
 };
 window.seal$ = function (obj) {
 	if (Object.seal)
@@ -106,7 +103,7 @@ window.customFilterHandler = function (table, input) {
 };
 window.customFilterHandlerPlain = function (table, input) {
 	var lastSearch = "", handler = function () {
-		var s = input.value;
+		var s = trim(input.value.normalize());
 		if (lastSearch !== s) {
 			lastSearch = s;
 			table.search(s).draw();
@@ -203,7 +200,7 @@ window.maskHour = function (field) {
 	$(field).mask("00:00");
 };
 window.maskTextId = function (field) {
-	$(field).mask("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ", { translation: { Z: { pattern: /[A-Za-z0-9\.]/, optional: true } } });
+	$(field).mask("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ", { translation: { Z: { pattern: /[A-Za-z0-9\-]/, optional: true } } });
 };
 window.maskMobilePhone = function (field) {
 	var reg = /\D/g, behavior = function (val) {
@@ -214,6 +211,17 @@ window.maskMobilePhone = function (field) {
 		}
 	};
 	$(field).mask(behavior, opt);
+};
+window.checkPasswordComplexity = function (password) {
+	if (!password || password.length < 6)
+		return false;
+	var i, delta, initialDelta = Math.abs(password.charCodeAt(1) - password.charCodeAt(0));
+	for (i = 2; i < password.length; i++) {
+		delta = Math.abs(password.charCodeAt(i) - password.charCodeAt(i - 1));
+		if (delta !== initialDelta)
+			return true;
+	}
+	return false;
 };
 window.addFilterButton = function (parent, icon, text, handler, title, btnClass) {
 	var p = _(parent), label, btn, i;
@@ -409,7 +417,7 @@ window.prepareDataTableMain = (function () {
 								shiftKey: true
 							}));
 						} else if (("createEvent" in document) &&
-							(a = document.createEvent("MouseEvent")) &&
+							(a = document.createEvent("MouseEvents")) &&
 							("initMouseEvent" in a)) {
 							a.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
 							ul[0].dispatchEvent(a);
@@ -611,19 +619,39 @@ window.trim = (function () {
 window.trimValue = function (input) {
 	return trim(_(input).value);
 };
-window.endsWith = function (str, end) {
-	// Try to simulate the actual behavior of endsWith()
-	if (str === "")
-		return (end === "");
-	if (!str)
-		return false;
-	if (end === "")
-		return true;
-	if (!end || end.length > str.length)
-		return false;
-	var i = str.lastIndexOf(end);
-	return (i >= 0 && i === (str.length - end.length));
-};
+window.startsWith = (function () {
+	if (window.String && window.String.prototype && window.String.prototype.startsWith)
+		return function (str, start) { return str.startsWith(start); };
+	return function (str, start) {
+		// Try to simulate the actual behavior of startsWith()
+		if (str === "")
+			return (start === "");
+		if (!str)
+			return false;
+		if (start === "")
+			return true;
+		if (!start || start.length > str.length)
+			return false;
+		return (str.indexOf(start) === 0);
+	};
+})();
+window.endsWith = (function () {
+	if (window.String && window.String.prototype && window.String.prototype.endsWith)
+		return function (str, end) { return str.endsWith(end); };
+	return function (str, end) {
+		// Try to simulate the actual behavior of endsWith()
+		if (str === "")
+			return (end === "");
+		if (!str)
+			return false;
+		if (end === "")
+			return true;
+		if (!end || end.length > str.length)
+			return false;
+		var i = str.lastIndexOf(end);
+		return (i >= 0 && i === (str.length - end.length));
+	};
+})();
 window.resetForm = function (f) {
 	var $form = $(f), i, validator;
 	if (!$form || !$form.length)
@@ -639,13 +667,50 @@ window.resetForm = function (f) {
 		validator.formSubmitted = false;
 	}
 };
-window.validateCPF = function (cpf) {
-	cpf = trim(cpf || "").replace(/\./g, "").replace(/\-/g, "");
-	if (cpf.length !== 11)
-		return null;
+window.validateCNPJ = function (cnpj) {
+	if (!cnpj || !(cnpj = trim(cnpj.replace(/\./g, "").replace(/\-/g, "").replace(/\//g, ""))) || cnpj.length !== 14)
+		return false;
 
 	var i, sum = 0, modulus;
 
+	for (i = 0; i < 12; i++)
+		sum += (cnpj.charCodeAt(i) - 0x30) * (((i < 4) ? 5 : 13) - i);
+	modulus = sum % 11;
+	if (modulus < 2)
+		modulus = 0;
+	else
+		modulus = 11 - modulus;
+
+	if ((cnpj.charCodeAt(12) - 0x30) !== modulus)
+		return false;
+
+	sum = 0;
+	for (i = 0; i < 13; i++)
+		sum += (cnpj.charCodeAt(i) - 0x30) * (((i < 5) ? 6 : 14) - i);
+	modulus = sum % 11;
+	if (modulus < 2)
+		modulus = 0;
+	else
+		modulus = 11 - modulus;
+
+	return ((cnpj.charCodeAt(13) - 0x30) === modulus);
+};
+window.validateCPF = function (cpf) {
+	if (!cpf || !(cpf = trim(cpf.replace(/\./g, "").replace(/\-/g, ""))) || cpf.length !== 11)
+		return false;
+
+	var i, sum = 1, modulus = cpf.charCodeAt(0);
+
+	for (i = 1; i < 9; i++) {
+		if (cpf.charCodeAt(i) !== modulus) {
+			sum = 0;
+			break;
+		}
+	}
+	if (sum)
+		return false;
+
+	sum = 0;
 	for (i = 0; i < 9; i++)
 		sum += (cpf.charCodeAt(i) - 0x30) * (10 - i);
 	modulus = sum % 11;
@@ -655,7 +720,7 @@ window.validateCPF = function (cpf) {
 		modulus = 11 - modulus;
 
 	if ((cpf.charCodeAt(9) - 0x30) !== modulus)
-		return null;
+		return false;
 
 	sum = modulus * 2;
 	for (i = 0; i < 9; i++)
@@ -666,17 +731,17 @@ window.validateCPF = function (cpf) {
 	else
 		modulus = 11 - modulus;
 
-	return ((cpf.charCodeAt(10) - 0x30) === modulus) ? cpf : null;
+	return ((cpf.charCodeAt(10) - 0x30) === modulus);
 };
 window.validateEmail = function (email) {
-	if (!email)
+	if (!email || !(email = trim(email)))
 		return false;
 
 	var at = email.indexOf("@"),
 		at2 = email.lastIndexOf("@"),
 		dot = email.lastIndexOf(".");
 
-	return (at > 0 && dot > (at + 1) && dot !== (email.length - 1) && at2 === at);
+	return (email.indexOf(":") < 0 && at > 0 && dot > (at + 1) && dot !== (email.length - 1) && at2 === at);
 };
 window.createItem = function (parent, icon, className, text, badge, clickHandler, name0, value0) {
 	var i, btn = document.createElement("button"), c = (className || "btn-outline btn-default");
@@ -1046,6 +1111,27 @@ window.capitalizarFrase = function (s, classe, tag) {
 
 			return sendRequest(true, "get", (arguments.length > 2) ? buildFullUrl(url, arguments, 2) : url, callback);
 		},
+		deleteSync: function (url, name0, value0) {
+			if (!url)
+				throw JsonWebApi.messages.invalidURL;
+
+			if (!(arguments.length & 1))
+				throw JsonWebApi.messages.invalidArgumentCount;
+
+			return sendRequest(false, "delete", (arguments.length > 1) ? buildFullUrl(url, arguments, 1) : url, null);
+		},
+		delete: function (url, callback, name0, value0) {
+			if (!url)
+				throw JsonWebApi.messages.invalidURL;
+
+			if (!callback)
+				throw JsonWebApi.messages.invalidCallback;
+
+			if ((arguments.length & 1))
+				throw JsonWebApi.messages.invalidArgumentCount;
+
+			return sendRequest(true, "delete", (arguments.length > 2) ? buildFullUrl(url, arguments, 2) : url, callback);
+		},
 		postSync: function (url, bodyObject, name0, value0) {
 			if (!url)
 				throw JsonWebApi.messages.invalidURL;
@@ -1220,16 +1306,16 @@ window.Notification = {
 		return Notification.show(span, "default", -1);
 	},
 	success: function (message, important) {
-		return Notification.show(message, "success", important ? 5000 : 2500, true);
+		return Notification.show(message, "success", important ? 7500 : 3500, true);
 	},
 	error: function (message, important) {
-		return Notification.show(message, "danger", important ? 5000 : 2500, true);
+		return Notification.show(message, "danger", important ? 7500 : 3500, true);
 	},
 	default: function (message, important) {
-		return Notification.show(message, "default", important ? 5000 : 2500, true);
+		return Notification.show(message, "default", important ? 7500 : 3500, true);
 	},
 	warning: function (message, important) {
-		return Notification.show(message, "warning", important ? 5000 : 2500, true);
+		return Notification.show(message, "warning", important ? 7500 : 3500, true);
 	},
 	show: function (message, type, timeout, closeable) {
 		if (!Notification.div) {
@@ -1362,7 +1448,14 @@ window.BlobDownloader = {
 		BlobDownloader.blobURL = URL.createObjectURL(blob);
 		a.href = BlobDownloader.blobURL;
 		a.download = filename;
-		if (document.createEvent && (window.MouseEvent || window.MouseEvents)) {
+		if (("MouseEvent" in window)) {
+			try {
+				a.dispatchEvent(new MouseEvent("click"));
+				return;
+			} catch (ex) {
+			}
+		}
+		if (("createEvent" in document)) {
 			try {
 				evt = document.createEvent("MouseEvents");
 				evt.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -1381,12 +1474,19 @@ window.BlobDownloader = {
 
 	function cbSearch_SetValue(select, value) {
 		select.value = value;
-		if ("createEvent" in document) {
+		if (("Event" in window)) {
+			select.dispatchEvent(new Event("change", {
+				bubbles: false,
+				cancelable: true
+			}));
+		} else if (("createEvent" in document)) {
 			var evt = document.createEvent("HTMLEvents");
 			evt.initEvent("change", false, true);
 			select.dispatchEvent(evt);
-		} else {
+		} else if (("fireEvent" in select)) {
 			select.fireEvent("onchange");
+		} else if (select.onchange) {
+			select.onchange();
 		}
 	}
 
@@ -1394,15 +1494,19 @@ window.BlobDownloader = {
 		return x.toUpperCase().replace(regSlash, " ").replace(regTrim, "").replace(regA, "A").replace(regE, "E").replace(regI, "I").replace(regO, "O").replace(regU, "U").replace(regC, "C");
 	}
 
+	window.normalizeAccent = function (x) {
+		return (x ? x.toUpperCase().replace(regTrim, "").replace(regA, "A").replace(regE, "E").replace(regI, "I").replace(regO, "O").replace(regU, "U").replace(regC, "C") : "");
+	};
+
 	function cbSearch_Change() {
 		var i, opt = this.selectedOptions, v;
 		if (opt) {
 			opt = opt[0];
-			this.cbSearchInput.value = ((opt && opt.value && parseInt(opt.value)) ? opt.textContent : "");
+			this.cbSearchInput.value = ((opt && opt.value && opt.value != "0") ? opt.textContent : "");
 		} else {
 			opt = this.options;
 			v = this.value;
-			if (v && parseInt(v)) {
+			if (v && v != "0") {
 				for (i = opt.length - 1; i >= 0; i--) {
 					if (opt[i].value == v) {
 						this.cbSearchInput.value = opt[i].textContent;
@@ -1417,7 +1521,7 @@ window.BlobDownloader = {
 	function cbSearch_MouseDown(e) {
 		if (e.button)
 			return;
-		if (e.offsetX < 38) { //(this.offsetWidth - 25)) {
+		if (e.offsetX >= 0 && e.offsetX < 38 && e.offsetY >= 0 && (!e.target || e.target.tagName !== "OPTION")) { //(this.offsetWidth - 25)) {
 			this.cbSearchFocusByMouse = false;
 			this.cbSearchInput.focus();
 			if (this.cbSearchInput.setSelectionRange)
@@ -1467,8 +1571,8 @@ window.BlobDownloader = {
 			$(this.cbSearchInput).addClass("forced-focus");
 			if (this.cbSearchFocusByMouse)
 				this.cbSearchFocusByMouse = false;
-			else
-				this.cbSearchInput.focus();
+			//else
+			//	this.cbSearchInput.focus();
 		}
 	}
 
@@ -1567,6 +1671,10 @@ window.BlobDownloader = {
 			case 27: // escape
 				if (data.menuVisible) {
 					data.close();
+					return cancelEvent(e);
+				} else if (this.cbSearchSelect) {
+					this.cbSearchSelect.cbSearchFocusByMouse = true;
+					this.cbSearchSelect.focus();
 					return cancelEvent(e);
 				}
 				break;
@@ -1685,10 +1793,10 @@ window.BlobDownloader = {
 			this.selection = this.menu.childNodes.length - 1;
 		var i, c;
 		for (i = this.menu.childNodes.length - 1; i >= 0; i--)
-			this.menu.childNodes[i].style.background = "";
+			this.menu.childNodes[i].firstChild.style.background = "";
 		c = this.menu.childNodes[this.selection];
 		this.menu.scrollTop = c.offsetTop - 5;
-		c.style.background = "rgba(102,175,233,.75)";
+		c.firstChild.style.background = "rgba(102,175,233,.75)";
 	}
 
 	function cbSearch_DataOpen(normalized) {
@@ -1699,7 +1807,7 @@ window.BlobDownloader = {
 
 		for (i = 0; i < list.length; i++) {
 			li = list[i];
-			if (!(value = li.value) || !parseInt(value))
+			if (!(value = li.value) || value == "0")
 				continue;
 			txt = li.textContent;
 			norm = li.cbSearchNormalized;
@@ -1711,9 +1819,10 @@ window.BlobDownloader = {
 				li = document.createElement("li");
 				if (value)
 					li.cbSearchValue = value;
-				if (!ok)
-					li.style.background = "rgba(102,175,233,.75)";
 				a = document.createElement("a");
+				if (!ok)
+					a.style.background = "rgba(102,175,233,.75)";
+				a.className = "dropdown-item";
 				a.setAttribute("href", "#");
 				a.cbSearchData = this;
 				a.onclick = cbSearch_AClick;
@@ -1770,19 +1879,14 @@ window.BlobDownloader = {
 		this.selection = -1;
 	}
 
+	window.getCbSearchRoot = function (select) {
+		return (select ? _(select).parentNode : null);
+	};
+
 	window.setCbSearch = function (select, value) {
 		if (!select)
 			return;
-		select.value = value;
-		if (("createEvent" in document)) {
-			var e = document.createEvent("HTMLEvents");
-			e.initEvent("change", false, true);
-			select.dispatchEvent(e);
-		} else if (("fireEvent" in select)) {
-			select.fireEvent("onchange");
-		} else if (select.onchange) {
-			select.onchange();
-		}
+		cbSearch_SetValue(select, value);
 		if (select.cbSearchChange)
 			select.cbSearchChange();
 	};
@@ -1820,14 +1924,20 @@ window.BlobDownloader = {
 		select.onmousedown = cbSearch_MouseDown;
 		select.addEventListener("change", cbSearch_Change);
 		select.cbSearchChange = cbSearch_Change;
+		select.setAttribute("tabindex", "-1");
+		select.style.height = "34px";
 		outerdiv.className = "dropdown";
+		outerdiv.style.height = "34px";
 		groupdiv.className = "form-group input-group";
 		groupdiv.style.position = "absolute";
 		groupdiv.style.left = "0";
 		groupdiv.style.top = "0";
 		groupdiv.style.pointerEvents = "none";
+		groupdiv.style.height = "34px";
 		span.className = "input-group-btn";
+		span.style.height = "34px";
 		button.className = "btn btn-default btn-force-border";
+		button.style.height = "34px";
 		button.setAttribute("type", "button");
 		button.setAttribute("aria-label", "Pesquisar");
 		button.setAttribute("tabindex", "-1");
@@ -1837,9 +1947,9 @@ window.BlobDownloader = {
 			input.className = "form-control select-arrow" + ((select.className.indexOf("upper") >= 0) ? " upper" : "");
 		else
 			input.className = "form-control upper select-arrow";
+		input.style.height = "34px";
 		input.setAttribute("type", "text");
 		input.setAttribute("spellcheck", "false");
-		input.setAttribute("tabindex", "-1");
 		// In order to disable address autofill/autocomplete
 		// https://stackoverflow.com/a/30976223
 		input.setAttribute("autocomplete", "new-password");
@@ -1859,6 +1969,7 @@ window.BlobDownloader = {
 		data.menu.style.right = "auto";
 		data.menu.style.bottom = "auto";
 		data.menu.style.display = "block";
+		data.menu.style.zIndex = "9999999";
 
 		button.appendChild(i);
 		span.appendChild(button);
@@ -1875,7 +1986,7 @@ window.BlobDownloader = {
 
 		parent.appendChild(outerdiv);
 
-		if (select.value && parseInt(select.value))
+		if (select.value && select.value != "0")
 			cbSearch_Change.apply(select);
 	};
 
@@ -1910,3 +2021,64 @@ window.BlobDownloader = {
 		});
 	};
 })();
+
+function fixMessage(message, obj) {
+	if (message) {
+		if (message.html)
+			obj.html = message.html;
+		else
+			obj.text = message;
+	} else {
+		obj.text = "";
+	}
+	return obj;
+}
+
+Notification.success = function (message, title) {
+	Notification.hide();
+
+	return swal(fixMessage(message, {
+		title: ((title && title !== true) ? title : "Sucesso!"),
+		type: "success",
+		buttonsStyling: false,
+		confirmButtonClass: "btn btn-success"
+	}));
+};
+
+Notification.info = function (message, title) {
+	Notification.hide();
+
+	return swal(fixMessage(message, {
+		title: ((title && title !== true) ? title : "Informação"),
+		type: "info",
+		buttonsStyling: false,
+		confirmButtonClass: "btn btn-default"
+	}));
+};
+
+Notification.error = function (message, title) {
+	Notification.hide();
+
+	return swal(fixMessage(message, {
+		title: ((title && title !== true) ? title : "Oops..."),
+		type: "error",
+		buttonsStyling: false,
+		confirmButtonClass: "btn btn-danger"
+	}));
+};
+
+Notification.okcancel = function (message, title, danger, confirmButtonText) {
+	Notification.hide();
+
+	return swal(fixMessage(message, {
+		title: ((title && title !== true) ? title : (danger ? "Oops..." : "Confirmação")),
+		type: (danger ? "warning" : "question"),
+		buttonsStyling: false,
+		showCancelButton: true,
+		confirmButtonClass: (danger ? "btn btn-danger" : "btn btn-primary"),
+		confirmButtonText: (confirmButtonText || "OK"),
+		cancelButtonClass: "btn btn-default",
+		cancelButtonText: "Cancelar",
+		focusCancel: true
+	}));
+};

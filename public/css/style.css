@@ -1,0 +1,58 @@
+html, body{
+	height: 100%;
+}
+
+.nav>li>a:focus, .nav>li>a:hover, .nav>li.active>a {
+	background-color: #700020;
+}
+
+.nav>li>a.dropdown-toggle {
+	color: black;
+}
+
+.nav>li>a.dropdown-toggle:focus, .nav>li>a.dropdown-toggle:hover, .nav>li.active>a.dropdown-toggle {
+	color: #fff;
+}
+
+.nav-second-level>li>a {
+	color: black;
+}
+
+.nav-second-level>li>a:focus, .nav-second-level>li>a:hover, .nav-second-level>li.active>a {
+	color: black;
+	background-color: #c2c2c2;
+}
+
+.collapse-sidebar{
+	color: black;
+}
+
+#container-upload{
+	width: 500px;
+	margin: auto;
+}
+
+#tabela-container .form-group{
+	width: 500px;
+}
+
+#escolher-arquivo{
+	padding: 15px;
+}
+
+#arquivoCSV{
+	margin: 6% 0;
+}
+
+#importar{
+	background-color: #a70230; 
+	color: #fff; 
+	padding: 6px; 
+	margin: auto;
+	border: none;
+	font-weight: 550;
+}
+
+#importar:hover{
+	background-color: #99052a;
+}
