@@ -2,7 +2,6 @@ drop database agendapos;
 CREATE DATABASE IF NOT EXISTS agendapos;
 USE agendapos;
 
--- DROP TABLE IF EXISTS perfil;
 CREATE TABLE perfil (
   id int NOT NULL AUTO_INCREMENT,
   nome varchar(50) NOT NULL,
@@ -13,7 +12,6 @@ CREATE TABLE perfil (
 
 INSERT INTO perfil (nome) VALUES ('Administrador'), ('Comum');
 
--- DROP TABLE IF EXISTS usuario;
 CREATE TABLE usuario (
   id int NOT NULL AUTO_INCREMENT,
   login varchar(100) NOT NULL,
@@ -66,7 +64,8 @@ create table aula_sala(
     foreign key(id_aula) references aula(id_aula),
     id_sala int not null,
     foreign key(id_sala) references sala(id_sala),
-    primary key (id_aula, id_sala)
+    primary key (id_aula, id_sala),
+    KEY aula_sala_id_sala_ix (id_sala)
 );
 
 create table professor(
@@ -79,7 +78,8 @@ create table aula_prof(
 	foreign key(id_prof) references professor(id_prof),
     id_aula int not null,
     foreign key(id_aula) references aula(id_aula),
-    primary key (id_prof, id_aula)
+    primary key (id_prof, id_aula),
+    KEY aula_prof_id_aula_ix (id_aula)
 );
 
 create table turma(
@@ -93,34 +93,26 @@ create table aula_turma(
     foreign key(id_aula) references aula(id_aula),
     id_turma int not null,
     foreign key(id_turma) references turma(id_turma),
-    primary key (id_aula, id_turma)
+    primary key (id_aula, id_turma),
+    KEY aula_turma_id_turma_ix (id_turma)
 );
 
-DROP TABLE IF EXISTS `agendapos`.`calendario` ;
-
-CREATE TABLE IF NOT EXISTS `agendapos`.`calendario` (
+CREATE TABLE `agendapos`.`calendario` (
   `id_calendario` INT NOT NULL auto_increment,
   `id_turma` INT NOT NULL,
-  `url_calendario` TEXT NOT NULL,
+  `url_calendario` varchar(200) NOT NULL,
   PRIMARY KEY (`id_calendario`),
   INDEX `id_turma_FK_idx` (`id_turma` ASC) VISIBLE,
   CONSTRAINT `id_turma_FK`
     FOREIGN KEY (`id_turma`)
     REFERENCES `agendapos`.`turma` (`id_turma`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
-
--- -----------------------------------------------------
--- Table `agendapos`.`aluno`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `agendapos`.`aluno` ;
-
-CREATE TABLE IF NOT EXISTS `agendapos`.`aluno` (
+CREATE TABLE `agendapos`.`aluno` (
   `id_aluno` INT NOT NULL auto_increment,
   `nome_aluno` VARCHAR(45) NOT NULL,
-  `email_aluno` VARCHAR(45) NOT NULL,
+  `email_aluno` VARCHAR(100) NOT NULL,
   `RA_aluno` DECIMAL(10) NOT NULL,
   `id_turma`int NOT NULL,
   PRIMARY KEY (`id_aluno`),
@@ -129,9 +121,7 @@ INDEX `id_turma_FK_idx` (`id_turma` ASC) VISIBLE,
     FOREIGN KEY (`id_turma`)
     REFERENCES `agendapos`.`turma` (`id_turma`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 insert into aula(nome_aula, desc_aula, inicio_aula, termino_aula, carga_horaria) values
 ('aula1', 'Descrição resumida do aula' , '2021-04-01T08:00', '2021-04-01T09:00', 4),

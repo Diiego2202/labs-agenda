@@ -40,7 +40,8 @@
 		deferRender: true,
 		columns: [
 			{ title: "", "class": "col-min", searchable: false, orderable: false, data: "id_calendario", render: function (v, type, row) { return "<a target=\"_blank\" title=\"Editar\" href=\"<%- root %>/calendario/alterar?id_calendario=" + row.id_calendario + "\" class=\"btn btn-outline btn-primary\"><i class=\"fa fa-nomargin fa-edit\"></i></a> <button title=\"Excluir\" type=\"button\" data-excluir=\"1\" class=\"btn btn-outline btn-danger\"><i class=\"fa fa-nomargin fa-times\"></i></button>"; } },
-			{ title: "url", render: encode, data: "url_calendario" },
+			{ title: "URL", render: encode, data: "url_calendario" },
+			{ title: "Turma", render: encode, data: "desc_turma" },
 		],
 		data: <%- lista %>,
 		export: { title: "Calendário" }

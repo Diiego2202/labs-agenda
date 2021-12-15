@@ -31,9 +31,9 @@ export = class Turma {
 	}
 
 	public static async criar(turma: Turma) :Promise<string>{
-        let erro =  Turma.validar(turma);
+        let erro = await Turma.validar(turma);
 
-        if(await erro){
+        if(erro){
             return erro;
         }
 
@@ -60,14 +60,18 @@ export = class Turma {
     }
 
 	public static async alterar(turma: Turma): Promise<string>{
-        let erro = Turma.validar(turma);
+        let erro = await Turma.validar(turma);
 
-        if(await erro){
+        if (erro){
             return erro;
         }
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("update turma set desc_turma = ? where id_turma = ?",[turma.desc_turma, turma.id_turma]);
+            await sql.query("update turma set desc_turma = ? where id_turma = ?",[turma.desc_turma, turma.id_turma]);
+
+            if(!sql.linhasAfetadas){
+                erro = 'Turma não encontrada';
+            }
         });
 
         return erro;
@@ -77,11 +81,25 @@ export = class Turma {
         let erro: string = null;
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("delete from turma where id_turma=?;",[id_turma]);
-         
-            if(!sql.linhasAfetadas){
-                erro = 'Turma não encontrada';
-            }
+            try {
+                await sql.query("delete from turma where id_turma=?;",[id_turma]);
+                if(!sql.linhasAfetadas){
+                    erro = 'Turma não encontrada';
+                }
+            } catch (e) {
+				if (e.code) {
+					switch (e.code) {
+						case "ER_ROW_IS_REFERENCED":
+						case "ER_ROW_IS_REFERENCED_2":
+							erro = "Não é possível excluir uma turma que possua calendários ou alunos associados";
+							break;
+						default:
+							throw e;
+					}
+				} else {
+					throw e;
+				}
+			}
         });
         return erro;
 

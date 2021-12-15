@@ -15,10 +15,10 @@ export = class Aluno {
 		if(!aluno.nome_aluno || aluno.nome_aluno.length>45){
 			return "Nome inválido";
 		}
-		if(!aluno.email_aluno || aluno.email_aluno.length>45){
+		if(!aluno.email_aluno || aluno.email_aluno.length>100){
 			return "E-mail inválido inválido";
 		}
-		if(!aluno.RA_aluno){
+		if(!(aluno.RA_aluno = parseInt(aluno.RA_aluno as any))){
 			return "RA inválido";
 		}
 		
@@ -28,7 +28,7 @@ export = class Aluno {
 	public static async listar(): Promise<Aluno[]>{
         let lista: Aluno[] = null;
         await Sql.conectar(async (sql) =>{
-            lista = await sql.query("select id_aluno, nome_aluno, email_aluno, RA_aluno from aluno");
+            lista = await sql.query("select a.id_aluno, a.nome_aluno, a.email_aluno, a.RA_aluno, t.desc_turma from aluno a inner join turma t on t.id_turma = a.id_turma");
         });
         return lista;
 	}
@@ -51,7 +51,7 @@ export = class Aluno {
         let aluno: Aluno = null;
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("select  id_aluno, nome_aluno, email_aluno, RA_aluno from aluno where id_aluno=?",[id_aluno]);
+            let lista = await sql.query("select  id_aluno, nome_aluno, email_aluno, RA_aluno, id_turma from aluno where id_aluno=?",[id_aluno]);
          
             if(lista && lista.length){
                 aluno = lista[0];
@@ -70,7 +70,11 @@ export = class Aluno {
         }
 
         await Sql.conectar(async(sql)=>{
-            let lista = await sql.query("update aluno set nome_aluno = ?, email_aluno = ?, RA_aluno = ?, id_turma where id_aluno = ?",[aluno.nome_aluno,aluno.email_aluno, aluno.RA_aluno, aluno.id_turma, aluno.id_aluno]);
+            await sql.query("update aluno set nome_aluno = ?, email_aluno = ?, RA_aluno = ?, id_turma = ? where id_aluno = ?",[aluno.nome_aluno,aluno.email_aluno, aluno.RA_aluno, aluno.id_turma, aluno.id_aluno]);
+
+            if(!sql.linhasAfetadas){
+                erro = 'Aluno não encontrado';
+            }
         });
 
         return erro;

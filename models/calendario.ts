@@ -3,12 +3,12 @@ export = class Calendario {
 
   id_calendario: number;
   id_turma: number;
-  url_calendario: number;
+  url_calendario: string;
 
   public static async listar(): Promise<Calendario[]>{
     let lista: Calendario[] = null;
     await Sql.conectar(async (sql) =>{
-        lista = await sql.query("select id_calendario, id_turma, url_calendario from calendario");
+        lista = await sql.query("select c.id_calendario, c.id_turma, c.url_calendario, t.desc_turma from calendario c inner join turma t on t.id_turma = c.id_turma");
     });
     return lista;
 }
@@ -39,7 +39,12 @@ public static  validar(calendario: Calendario): string{
 			return "Dados inválidos";
 	
 		}
-		
+		if(!calendario.url_calendario || calendario.url_calendario.length>200){
+			return "E-mail inválido inválido";
+		}
+		if(!(calendario.id_turma = parseInt(calendario.id_turma as any))){
+			return "RA inválido";
+		}
 		return null;
   }
   
@@ -80,7 +85,11 @@ public static  validar(calendario: Calendario): string{
     }
 
     await Sql.conectar(async(sql)=>{
-        let lista = await sql.query("update url_calendario = ?,calendario set id_turma = ?  where id_calendario = ?",[calendario.id_turma,calendario.url_calendario]);
+        await sql.query("update calendario set url_calendario = ?, id_turma = ?  where id_calendario = ?",[calendario.url_calendario, calendario.id_turma, calendario.id_calendario]);
+
+        if(!sql.linhasAfetadas){
+            erro = 'Calendário não encontrado';
+        }
     });
 
     return erro;
@@ -91,20 +100,10 @@ public static async excluir(id_calendario:number): Promise<string>{
     let erro: string = null;
 
     await Sql.conectar(async(sql)=>{
-  await sql.beginTransaction();
-  await sql.query("delete from calendario where id_calendario=?;",[id_calendario]);
-  // await sql.query("delete from aula_calendario where id_calendario=?;",[id_calendario]);
-  
-        let lista = await sql.query("delete from calendario where id_calendario=?;",[id_calendario]);
-       
-        
-        if(lista.length == 0){ // não reconhece o !sql.linhasAfetadas quando é uma transação incompleta, então joga o erro
+        await sql.query("delete from calendario where id_calendario=?;",[id_calendario]);
+        if(!sql.linhasAfetadas){
             erro = 'Calendario não encontrado';
-  }
-  
-        await sql.commit();
-  
-
+        }
     });
 
     return erro;
