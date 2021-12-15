@@ -79,31 +79,23 @@ router.get("/logout", wrap(async (req: express.Request, res: express.Response) =
 }));
 
 router.all("/loginAluno", wrap(async (req: express.Request, res: express.Response) => {
-	;
-	
-		res.render("home/login-aluno", { titulo: "login_aluno",layout: "layout-externo", url: await Calendario.listar(), aluno: await Aluno.listar() })
-	
-
+	res.render("home/login-aluno", { titulo: "Login de Aluno",layout: "layout-externo", anoAtual: (new Date()).getFullYear() })
 }));
 
 
-router.all("/calendario/:ano/:idturma", wrap(async (req: express.Request, res: express.Response) => {
-	let u = await Usuario.cookie(req);
-	//if (!u || !u.admin)
-	//	res.redirect(appsettings.root + "/acesso");
-	//else{
-		const hoje = new Date(),
-		anoAtual = parseInt(req.params["ano"]) || hoje.getFullYear();
-		
-		res.render("aula/download", {
-			layout: "layout-vazio",
-			titulo: "Plano de Aulas",
-			usuario: u,
-			anoAtual: anoAtual,
-			lista: await Aula.listarOcorrencias(parseInt(req.params["idturma"]), 0, anoAtual),
-			turmas: await Turma.listar()
-		});	
-	//}
+router.all("/calendario/:ano/:id_turma", wrap(async (req: express.Request, res: express.Response) => {
+	const hoje = new Date(),
+	anoAtual = parseInt(req.params["ano"]) || hoje.getFullYear(),
+	id_turma = parseInt(req.params["id_turma"]);
+
+	res.render("aula/download", {
+		layout: "layout-vazio",
+		titulo: "Plano de Aulas",
+		anoAtual: anoAtual,
+		id_turma: id_turma,
+		lista: await Aula.listarOcorrencias(id_turma, 0, anoAtual),
+		turmas: await Turma.listar()
+	});	
 }));
 
 export = router;

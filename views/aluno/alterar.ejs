@@ -17,7 +17,7 @@
 					<input id="email_aluno" name="email_aluno" maxlength="100" class="form-control" type="email" spellcheck="false" value="<%=(item ? item.email_aluno : '') %>" />
 				</div>
 				<div class="form-group">
-					<label for="turma">Turma</label>
+					<label for="id_turma">Turma</label>
 					<select size="1" id="id_turma" name="id_turma" class="form-control"  >
 						<option value="">Selecione...</option>
 						<% for (let i = 0; i < turma.length; i++) { %>
@@ -37,6 +37,9 @@
 <script type="text/javascript">
 	//<![CDATA[
 	"use strict";
+
+	window.prepareCbSearchAllowLower = true;
+	prepareCbSearch(document.getElementById("id_turma"));
 
 	$("#form").validate({
 		rules: {

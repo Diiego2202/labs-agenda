@@ -32,6 +32,20 @@
             box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
         }
 
+        #btnAnterior {
+            position: fixed;
+            left: 10px;
+            top: 98px;
+            box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+        }
+
+        #btnProximo {
+            position: fixed;
+            left: 10px;
+            top: 142px;
+            box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+        }
+
         @media print {
             body {
                 background: #fff;
@@ -41,7 +55,7 @@
                 visibility: hidden;
             }
 
-            #btnImprimir, #btnLink {
+            #btnImprimir, #btnLink, #btnAnterior, #btnProximo {
                 display: none;
             }
             
@@ -85,6 +99,8 @@
     </div>
     <button type="button" class="btn btn-primary" id="btnImprimir" onclick="window.print()"><i class="fa fa-print"></i> Imprimir / PDF</button>
     <button type="button" class="btn btn-primary btn-copyjs" id="btnLink"><i class="fa fa-share-alt"></i> Copiar Link</button>
+    <a href="<%- root %>/calendario/<%- (anoAtual - 1) %>/<%- id_turma %>" class="btn btn-primary btn-copyjs" id="btnAnterior"><i class="fa fa-calendar"></i> Ir para <%- (anoAtual - 1) %></a>
+    <a href="<%- root %>/calendario/<%- (anoAtual + 1) %>/<%- id_turma %>" class="btn btn-primary btn-copyjs" id="btnProximo"><i class="fa fa-calendar"></i> Ir para <%- (anoAtual + 1) %></a>
 </section>
 <script type="text/javascript" src="<%- root %>/lib/bootstrap/js/bootstrap-1.0.1.min.js"></script>
 <script type="text/javascript" src="<%- root %>/lib/clipboardjs/js/clipboard.min.js"></script>

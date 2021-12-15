@@ -4,6 +4,7 @@ import Calendario = require("../models/calendario");
 import Usuario = require("../models/usuario");
 import appsettings = require("../appsettings");
 import Turma = require("../models/turma");
+import { SIGTERM } from "constants";
 
 const router = express.Router();
 
@@ -42,14 +43,21 @@ router.get("/listar", wrap(async (req: express.Request, res: express.Response) =
 		res.render("calendario/listar", { titulo: "Gerenciar Calendarios", usuario: u, lista: JSON.stringify(await Calendario.listar()) });
 }));
 
-router.get("obter/:id_turma", wrap(async (req: express.Request, res: express.Response) => {
-	let ra = req.query["ra"] as string;
-	let u = await Usuario.cookie(req);
-	if (!u || !u.admin)
-		res.redirect(appsettings.root + "/acesso");
-	else
-		res.render("calendario/listarTurma", {	layout: "layout-vazio", titulo: "Calendarios", usuario: u, lista: JSON.stringify(await Calendario.obterTurma(ra)) });
-}));
+router.get("/obter", wrap(async (req: express.Request, res: express.Response) => {
+	let ano = parseInt(req.query["ano"] as string);
+	let email = req.query["email"] as string;
+	let ra = parseInt(req.query["matricula"] as string);
 
+	if (!ano || (!email && !ra)) {
+		res.render("shared/erro", { layout: "layout-externo", mensagem: "Por favor, forneça o ano e ou o e-mail ou a matrícula do aluno" });
+	} else {
+		let id_turma = await Calendario.obterTurma(ra, email);
+
+		if (!id_turma)
+			res.render("shared/erro", { layout: "layout-externo", mensagem: "Não foi possível encontrar a turma do aluno com os dados fornecidos" });
+		else
+			res.redirect(appsettings.root + "/calendario/" + ano + "/" + id_turma);
+	}
+}));
 
 export = router;

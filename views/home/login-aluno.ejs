@@ -1,28 +1,3 @@
-<form method="get" action="<%root%>/calendario/obter/:id_turma" style="height: 100%;">
-	<div id="container-login-maior">
-		<div id="container-login-medio" class="panel panel-default no-margin-bottom">
-			<div id="container-login-menor" class="panel-body">
-				<div class="col-xs-space-bottom" id="container-titulo">
-					<h1 id="titulo-login">Agenda</h1>
-					<!-- <p id="barra">|</p> -->
-					<img alt="Agenda da Pós" id="logo-login" src="<%- root %>/imagens/logo-espm.png" style="max-width: 100%;" />
-				</div>
-		
-				<label for="email">E-mail</label>
-                <input id="email" name="email" maxlength="100" class="form-control" type="email" spellcheck="false"/>
-
-				<p>ou</p>
-
-                <label for="ra">Matrícula</label>
-				<input id="ra" name="ra" maxlength="100" class="form-control" type="text" spellcheck="false"/>
-
-				<button  id="botao-login" onclick="" class="btn btn-primary btn-block">Entrar</button>
-			</div>
-		</div>
-	</div>
-</form>
-
-
 <style>
 	#container-login-maior{
 		max-width: 400px; 
@@ -71,3 +46,60 @@
         padding-top: 10px;
 	}
 </style>
+
+<form id="form" method="get" action="<%- root %>/calendario/obter" style="height: 100%;">
+	<div id="container-login-maior">
+		<div id="container-login-medio" class="panel panel-default no-margin-bottom">
+			<div id="container-login-menor" class="panel-body">
+				<div class="col-xs-space-bottom" id="container-titulo">
+					<h1 id="titulo-login">Agenda</h1>
+					<!-- <p id="barra">|</p> -->
+					<img alt="Agenda da Pós" id="logo-login" src="<%- root %>/imagens/logo-espm.png" style="max-width: 100%;" />
+				</div>
+
+				<p>Para acessar seu calendário, por favor, forneça o ano juntamente com seu e-mail ou com sua matrícula.</p>
+
+				<div class="form-group">
+					<label for="ano">Ano do Calendário</label>
+					<input id="ano" name="ano" class="form-control" type="number" min="2000" max="9999" value="<%= anoAtual %>" />
+				</div>
+
+				<p>e</p>
+
+				<div class="form-group">
+					<label for="email">E-mail do Aluno</label>
+	                <input id="email" name="email" maxlength="100" class="form-control" type="email" spellcheck="false" />
+				</div>
+
+				<p>ou</p>
+
+				<div class="form-group">
+					<label for="matricula">Matrícula do Aluno</label>
+					<input id="matricula" name="matricula" class="form-control" type="number" />
+				</div>
+
+				<button type="submit" id="botao-login" class="btn btn-primary btn-block">Entrar</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+<script type="text/javascript">
+$("#form").validate({
+		rules: {
+			ano: {
+				required: true
+			},
+			email: {
+				required: function(element) {
+					return !$('#matricula').val();
+				}
+			},
+			matricula: {
+				required: function(element) {
+					return !$('#email').val();
+				}
+			}
+		}
+	});
+</script>
