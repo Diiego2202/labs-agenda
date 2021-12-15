@@ -43,7 +43,7 @@ public static  validar(calendario: Calendario): string{
 			return "E-mail inválido inválido";
 		}
 		if(!(calendario.id_turma = parseInt(calendario.id_turma as any))){
-			return "RA inválido";
+			return "Turma inválida";
 		}
 		return null;
   }

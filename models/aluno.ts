@@ -19,7 +19,7 @@ export = class Aluno {
 			return "E-mail inválido inválido";
 		}
 		if(!(aluno.RA_aluno = parseInt(aluno.RA_aluno as any))){
-			return "RA inválido";
+			return "Matrícula inválida";
 		}
 		
 		return null;
