@@ -19,7 +19,7 @@
 	}
 
 	#container-titulo{
-		width: 400px;
+		max-width: 400px;
 	}
 
 	#titulo-login{
@@ -27,7 +27,7 @@
 	}
 
 	#logo-login{
-		width: 25%;
+		width: 30%;
 		margin-bottom: 8px;
 	}
 
@@ -59,21 +59,21 @@
 
 				<p>Para acessar seu calendário, por favor, forneça o ano juntamente com seu e-mail ou com sua matrícula.</p>
 
-				<div class="form-group">
+				<div>
 					<label for="ano">Ano do Calendário</label>
 					<input id="ano" name="ano" class="form-control" type="number" min="2000" max="9999" value="<%= anoAtual %>" />
 				</div>
 
 				<p>e</p>
 
-				<div class="form-group">
+				<div>
 					<label for="email">E-mail do Aluno</label>
 	                <input id="email" name="email" maxlength="100" class="form-control" type="email" spellcheck="false" />
 				</div>
 
 				<p>ou</p>
 
-				<div class="form-group">
+				<div>
 					<label for="matricula">Matrícula do Aluno</label>
 					<input id="matricula" name="matricula" class="form-control" type="number" />
 				</div>
