@@ -77,15 +77,11 @@
 }
 
 #side-menu i.fa-plus, #side-menu i.fa-link {
-	color: #5f5;
+	color: #54b354;
 }
 
 #side-menu i.fa-tasks {
-	color: #6bf;
-}
-
-#side-menu a:hover > i, #side-menu a:focus > i, #side-menu a:active > i, #side-menu a.active > i, #side-menu > li.active > a > i {
-	color: #fff;
+	color: #02617e;
 }
 
 #side-menu > li > a {
@@ -466,4 +462,8 @@ label.error {
 
 .swal2-cancel {
 	margin-left: 8px;
+}
+
+.btn > i {
+	pointer-events: none;
 }

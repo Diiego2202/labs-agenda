@@ -1521,7 +1521,7 @@ window.BlobDownloader = {
 	function cbSearch_MouseDown(e) {
 		if (e.button)
 			return;
-		if (e.offsetX >= 0 && e.offsetX < 38 && e.offsetY >= 0 && (!e.target || e.target.tagName !== "OPTION")) { //(this.offsetWidth - 25)) {
+		if (e.offsetX >= 0 && e.offsetX < ((this.cbSearchSpan && this.cbSearchSpan.clientWidth) || 38) && e.offsetY >= 0 && (!e.target || e.target.tagName !== "OPTION")) { //(this.offsetWidth - 25)) {
 			this.cbSearchFocusByMouse = false;
 			this.cbSearchInput.focus();
 			if (this.cbSearchInput.setSelectionRange)
@@ -1919,6 +1919,7 @@ window.BlobDownloader = {
 
 		select.cbSearchData = data;
 		select.cbSearchInput = input;
+		select.cbSearchSpan = span;
 		select.onfocus = cbSearch_Focus;
 		select.onblur = cbSearch_Blur;
 		select.onmousedown = cbSearch_MouseDown;
